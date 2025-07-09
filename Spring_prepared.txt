@@ -1,0 +1,206 @@
+Spring tutorials
+
+Model-View-Controller (MVC) is a software architectural pattern for implementing user interfaces. It divides a given software application into three interconnected parts, so as to separate internal representations of information from the ways that information is presented to or accepted from the user.
+
+Model
+The Model component corresponds to all the data-related logic that the user works with. This can represent either the data that is being transferred between the View and Controller components or any other business logic-related data. For example, a Customer object will retrieve the customer information from the database, manipulate it and update it data back to the database or use it to render data.
+
+View
+The View component is used for all the UI logic of the application. For example, the Customer view will include all the UI components such as text boxes, dropdowns, etc. that the final user interacts with.
+
+Controller
+Controllers act as an interface between Model and View components to process all the business logic and incoming requests, manipulate data using the Model component and interact with the Views to render the final output. For example, the Customer controller will handle all the interactions and inputs from the Customer View and update the database using the Customer Model. The same controller will be used to view the Customer data.
+
+
+Spring is an open source framework created to address the complexity of enterprise application development. One of the chief advantages of the Spring framework is its layered architecture, which allows developer to be selective about which of its components you use while also providing a cohesive framework for J2EE application development. It allows the developer to use only the required component and ignore the other.
+Spring is modular, allowing you to use only those parts that
+you need, without having to bring in the rest
+
+Advantages:
+Light weight- because if POJO's. it will not force developer to extend or implement an interface
+It has Predefined template- example JDBC,JPA,Hibernate which require less coding
+Removes dependencies between class making them independent (Loose coupling)
+Easy to test- it has test module 
+Fast development, as developer concentrates only on required modules.
+JDBC exception handling internally
+IOC
+DI
+AOP
+Transaction management-This allowing the developer to add the pluggable transaction managers
+MVC framework
+
+
+Spring framework is arranged in modular fashion, mw this has many modules and user/developer may use only the required module and ignore about the other
+Modules in Spring
+
+Spring core
+ORM
+DAO
+Spring WEB
+Spring context
+AOP
+Spring WEB MVC
+
+AOP and DI are core concepts of spring
+
+Spring Core:
+this is the major module of spring and it provides IoC container and DI features
+Spring core provides DI and IoC container features.
+
+IoC & DI are used to acheive loose coupling bw objects there by makig the code maintainable.
+Reduces the dependencies bw them so that they can be tested independently.
+
+IoC container-Invertion of Control-- inverting the control of creating the object to container instead of User using new and IOC controls the created object.
+instead of you are creating an object using the new operator, let the container do that for you. Inversion of control relies on dependency injection because a mechanism is needed in order to activate the components providing the specific functionality
+
+IoC container will create objects, congigure them and manages the complete life cycle of objet from creation to destruction.
+
+The container get the instructions on, what objects needs to be instantiated, managed etc from the metadata, here the mete data can be XML file or annotations
+
+Matadata+java POJO's are passed to IoC container to create the objects and which are ready to use.
+
+The IoC container is responsible to instantiate, configure and assemble the objects. The IoC container gets informations from the XML file and works accordingly. The main tasks performed by IoC container are:
+
+to instantiate the application class
+to configure the object
+to assemble the dependencies between the objects
+
+There are two types of IoC containers. They are:
+
+1. Spring BeanFactory container
+2. Spring ApplicationContext container
+
+1. Spring BeanFactory container
+The XmlBeanFactory is the implementation class for the BeanFactory interface. To use the BeanFactory, we need to create the instance of XmlBeanFactory class as given below:
+
+Resource resource=new ClassPathResource("applicationContext.xml");  
+BeanFactory factory=new XmlBeanFactory(resource); 
+ 
+The constructor of XmlBeanFactory class receives the Resource object so we need to pass the resource object to create the object of BeanFactory
+
+The ClassPathXmlApplicationContext class is the implementation class of ApplicationContext interface. We need to instantiate the ClassPathXmlApplicationContext class to use the ApplicationContext as given below:
+
+ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");  
+The constructor of ClassPathXmlApplicationContext class receives string, so we can pass the name of the xml file to create the instance of ApplicationContext.
+
+The ApplicationContext container includes all functionality of the BeanFactorycontainer, so it is generally recommended over BeanFactory. BeanFactory can still be used for lightweight applications like mobile devices or applet-based applications where data volume and speed is significant.
+
+Sample xml file
+<?xml version = "1.0" encoding = "UTF-8"?>
+
+<beans xmlns = "http://www.springframework.org/schema/beans"
+   xmlns:xsi = "http://www.w3.org/2001/XMLSchema-instance"
+   xsi:schemaLocation = "http://www.springframework.org/schema/beans
+   http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+   <bean id = "helloWorld" class = "com.tutorialspoint.HelloWorld"> id is unique which is used to identify the class
+      <property name = "message" value = "Hello World!"/> property is the variable in the class and value is settings its value
+   </bean>
+</beans>
+
+
+The org.springframework.beans.factory.BeanFactory and the org.springframework.context.ApplicationContext interfaces acts as the IoC container. The ApplicationContext interface is built on top of the BeanFactory interface. It adds some extra functionality than BeanFactory such as simple integration with Spring's AOP, message resource handling (for I18N), event propagation, application layer specific context (e.g. WebApplicationContext) for web application. So it is better to use ApplicationContext than BeanFactory.
+
+
+Spring Configuration Metadata:
+this is nothing but the instructions provided to IoC container in form of xml to create/manage beans. XML is metadata
+Metadata means set of data which gives indrmation about other data. This meta data contains the instructions on how to create beans, manage bean life cycle etc.
+
+Beans: Bean is nothing but the object created by spring IOC Container and it is the backbone of application. this beans are created by IOC using the metadata instructions (according to instruction in xml file)
+
+<bean id = "helloWorld" class = "com.tutorialspoint.HelloWorld"> id is unique which is used to identify the class
+      <property name = "message" value = "Hello World!"/> property is the variable in the class and value is settings its value
+   </bean>
+   
+Bean-- which means asking ioc to create bean 
+Calss- This attribute is mandatory and specifies the bean class to be used to create the bean.
+id/name-- This attribute specifies the bean identifier uniquely. In XMLbased configuration metadata, you use the id and/or name attributes to specify the bean identifies
+Scope--This attribute specifies the scope of the objects created from a particular bean definition
+constructor-arg--This is used to inject the dependencies
+properties--This is used to inject the dependencies
+autowiring modE--This is used to inject the dependencies
+lazy-initialization mode--A lazy-initialized bean tells the IoC container to create a bean instance when it is first requested, rather than at the startup.
+initialization method--A callback to be called just after all necessary properties on the bean have been set by the container.
+destruction method--A callback to be used when the container containing the bean is destroyed
+
+
+There are 3 ways in which we can provide metadata to IOC Container
+1. XML based configuration
+2. Annotation based configuration
+3. Java-based configuration
+
+XML based
+<beans xmlns = "http://www.springframework.org/schema/beans"
+   xmlns:xsi = "http://www.w3.org/2001/XMLSchema-instance"
+   xsi:schemaLocation = "http://www.springframework.org/schema/beans
+   http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+   <!-- A simple bean definition -->
+   <bean id = "..." class = "...">
+      <!-- collaborators and configuration for this bean go here -->
+   </bean>
+
+   <!-- A bean definition with lazy init set on -->
+   <bean id = "..." class = "..." lazy-init = "true">
+      <!-- collaborators and configuration for this bean go here -->
+   </bean>
+
+   <!-- A bean definition with initialization method -->
+   <bean id = "..." class = "..." init-method = "...">
+      <!-- collaborators and configuration for this bean go here -->
+   </bean>
+
+   <!-- A bean definition with destruction method -->
+   <bean id = "..." class = "..." destroy-method = "...">
+      <!-- collaborators and configuration for this bean go here -->
+   </bean>
+
+   <!-- more bean definitions go here -->
+   
+</beans>
+
+
+Scope:
+When defining a <bean> you have the option of declaring a scope for that bean. For example, to force Spring to produce a new bean instance each time one is needed, you should declare the bean's scope attribute to be prototype. Similarly, if you want Spring to return the same bean instance each time one is needed, you should declare the bean's scope attribute to be singleton.
+The Spring Framework supports the following five scopes, three of which are available only if you use a web-aware ApplicationContext.
+
+prototype: creates new instance of the bean each time when needed
+Singleton: Cretae instance of the bean only once and the same instance is returned when needed.
+
+singleton--This scopes the bean definition to a single instance per Spring IoC container (default).
+prototype--This scopes a single bean definition to have any number of object instances.
+request--This scopes a bean definition to an HTTP request. Only valid in the context of a web-aware Spring ApplicationContext.
+session--This scopes a bean definition to an HTTP session. Only valid in the context of a web-aware Spring ApplicationContext.
+global-session--This scopes a bean definition to a global HTTP session. Only valid in the context of a web-aware Spring ApplicationContext.
+
+
+If a scope is set to singleton, the Spring IoC container creates exactly one instance of the object defined by that bean definition. This single instance is stored in a cache of such singleton beans, and all subsequent requests and references for that named bean return the cached object.
+
+The default scope is always singleton. However, when you need one and only one instance of a bean, you can set the scope property to singleton
+
+<bean id = "..." class = "..." scope = "singleton">
+   <!-- collaborators and configuration for this bean go here -->
+</bean>
+
+If the scope is set to prototype, the Spring IoC container creates a new bean instance of the object every time a request for that specific bean is made. As a rule, use the prototype scope for all state-full beans and the singleton scope for stateless beans.
+
+<bean id = "..." class = "..." scope = "prototype">
+   <!-- collaborators and configuration for this bean go here -->
+</bean>
+
+
+Dependency Injection: (Injecting the dependent object into another)
+DI is a design pattern which is used to remove the dependencies between objects there by making the classes loosely coupled and independent, so that they can be reused and tested seprately.
+DI is a design pattern by which we will inject the dependency of one object to other there by making both objects loosely couple and the dependent object is created by the framework at run time when needed.(Using IOC)
+
+DI can be acheived in 2 ways
+1. Constructor injection
+2. Setter injection
+
+Constructor Injection
+Constructor-based DI is accomplished when the IoC container invokes a class constructor with a number of arguments, each representing a dependency on the other class.
+
+
+the basic concept here in Core is beanFactory which is used to remove the dependencies bw classes.
+
+

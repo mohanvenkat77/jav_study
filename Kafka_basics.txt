@@ -1,0 +1,247 @@
+New spring boot microservice setup with kafka
+
+*********************************************************************************************************************
+*************************					Spring boot application with Kafka				*************************
+*********************************************************************************************************************
+
+
+Java Guides, youtube
+
+
+
+
+----------------------------------------------------------------------------------------------------------------
+1. Kafka basics
+----------------------------------------------------------------------------------------------------------------
+Kafka cluster: It consists of set kafka brokers, 1 or more kafka broker (idel is min 3 brokers)
+Kafka Broker: it is a kafka server which acts as a broker b/w producer and consumer. Producer and Consumer don't interact directly, they use kafka server as an agent or broker for communication and exchange messages.
+Producer: it is an application which sends messages and this application does not send messages directly to the client, it will send messages only to kafka server.
+Consumer: it is an application which reveives messages for kafka service provided having necessary premissions to read data from the kafka server.
+
+Kafka Topic: Producer sends data to kafka broker and consumer consumes data from the kafka server, but which data kafka consumer consumer? so here we need to have a mechanism to identify which data should the consumer read from the kafka server. Here topic helps for consumer to read data of particular topic from the server.
+Topic is nothing but a category in a kafka server where the messages of particukar topic are stored
+Topic is just like a DB Table or folder name
+topic is identified by name, we can have multiple topics.
+Data published by producer can be in multiple formats (json, string, text, byte etc..), but here the consumer should have a mechanism to identify which type of data is consumed.
+each topic has unique name so that the consumer can consume by subscribing to that particular topic.
+
+
+Kafka Partitions: Kafka topics are further divided into partitions which contains the records in unchangable sequences. As kafka is distributed system, when the data to be stored for single topic is enormous and it may not be possible to store all data on single computer, so the data is partitioned into multiple partitions and then stored on different systems.
+How the messages are stored in partitions?  and how the messages are identified?
+Here comes the concept of Offest.
+Offset: offset is a sequence of ids given to messages as they arrive at the partitions and this ids cannot be changes once set. the 1st message get offset-0 and then next message offset-1 and so on
+
+Consumer groups: Consumer groups contains one or more consumers working together to process the messages.
+
+
+
+----------------------------------------------------------------------------------------------------------------
+2.Install and set-up apache kafka.
+----------------------------------------------------------------------------------------------------------------
+
+Download Apache kafka from apcahe kafka site, quickstart is very helpful (https://kafka.apache.org/quickstart)
+
+On windows system: move to folder where kafka is downloaded then run command ./bin/windows/zookeeper-server-start.bat ./config/zookeeper.properties
+./ means current folder
+
+similarly create a topic, post to topic, read from topic... from (https://kafka.apache.org/quickstart)
+STEP 1: DOWNLOAD AND INSTALL KAFKA
+https://dlcdn.apache.org/kafka/3.2.0/...
+
+STEP 2: START THE KAFKA ENVIRONMENT
+# Start the ZooKeeper service
+.\bin\windows\zookeeper-server-start.bat .\config\zookeeper.properties
+
+# Start the Kafka broker service
+.\bin\windows\kafka-server-start.bat .\config\server.properties
+
+STEP 3: CREATE A TOPIC TO STORE YOUR EVENTS
+.\bin\windows\kafka-topics.bat --create --topic topic_demo --bootstrap-server localhost:9092
+
+STEP 4: WRITE SOME EVENTS INTO THE TOPIC
+.\bin\windows\kafka-console-producer.bat --topic topic_demo --bootstrap-server localhost:9092
+
+STEP 5:  READ THE EVENTS
+.\bin\windows\kafka-console-consumer.bat --topic topic_demo --from-beginning --bootstrap-server localhost:9092
+hello world
+topic demo
+
+
+----------------------------------------------------------------------------------------------------------------
+3.Create and setup springboot project in intellij
+----------------------------------------------------------------------------------------------------------------
+create spring boot project by spring initializr
+open start.spring.io
+add groupId, name etc and also the initial dependencies
+then generate and then open the project.
+Then run the application
+
+
+----------------------------------------------------------------------------------------------------------------
+4. Configure Kafka Producer and Consumer in Spring boot application
+----------------------------------------------------------------------------------------------------------------
+Spring kafka documentation in google
+
+without spring boot, we need to write lot of configuration properties like 
+
+public class Sender {
+
+	public static void main(String[] args) {
+		AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(Config.class);
+		context.getBean(Sender.class).send("test", 42);
+	}
+
+	private final KafkaTemplate<Integer, String> template;
+
+	public Sender(KafkaTemplate<Integer, String> template) {
+		this.template = template;
+	}
+
+	public void send(String toSend, int key) {
+		this.template.send("topic1", key, toSend);
+	}
+
+}
+
+public class Listener {
+
+    @KafkaListener(id = "listen1", topics = "topic1")
+    public void listen1(String in) {
+        System.out.println(in);
+    }
+
+}
+
+@Configuration
+@EnableKafka
+public class Config {
+
+    @Bean
+    ConcurrentKafkaListenerContainerFactory<Integer, String>
+                        kafkaListenerContainerFactory(ConsumerFactory<Integer, String> consumerFactory) {
+        ConcurrentKafkaListenerContainerFactory<Integer, String> factory =
+                                new ConcurrentKafkaListenerContainerFactory<>();
+        factory.setConsumerFactory(consumerFactory);
+        return factory;
+    }
+
+    @Bean
+    public ConsumerFactory<Integer, String> consumerFactory() {
+        return new DefaultKafkaConsumerFactory<>(consumerProps());
+    }
+
+    private Map<String, Object> consumerProps() {
+        Map<String, Object> props = new HashMap<>();
+        props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
+        props.put(ConsumerConfig.GROUP_ID_CONFIG, "group");
+        props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, IntegerDeserializer.class);
+        props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
+        props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
+        // ...
+        return props;
+    }
+
+    @Bean
+    public Sender sender(KafkaTemplate<Integer, String> template) {
+        return new Sender(template);
+    }
+
+    @Bean
+    public Listener listener() {
+        return new Listener();
+    }
+
+    @Bean
+    public ProducerFactory<Integer, String> producerFactory() {
+        return new DefaultKafkaProducerFactory<>(senderProps());
+    }
+
+    private Map<String, Object> senderProps() {
+        Map<String, Object> props = new HashMap<>();
+        props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
+        props.put(ProducerConfig.LINGER_MS_CONFIG, 10);
+        props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, IntegerSerializer.class);
+        props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+        //...
+        return props;
+    }
+
+    @Bean
+    public KafkaTemplate<Integer, String> kafkaTemplate(ProducerFactory<Integer, String> producerFactory) {
+        return new KafkaTemplate<Integer, String>(producerFactory);
+    }
+
+}
+
+
+in spring boot, it can be done by the properties files
+
+application.properties
+spring.kafka.consumer.bootstrap-server=localhost:9092 -- this is the consumer server from which server the consumer should reads
+spring.kafka.consume.group-id=myGroup -- this helps the consumer to read from which group (group is nothing but the group of consumers)
+spring.kafka.consumer.auto-offset-reset=earliest -- this specifies what to do when there is no initial offset, or if current offset does not exists on server. Earliest resets the offset to earliest
+spring.kafka.consumer.key-deserializer=org.apache.kafka.common.serialization.StringDeserializer  --this is used to deserialize the key from the message
+#spring.kafka.consumer.value-deserializer=org.apache.kafka.common.serialization.StringDeserializer -- this is used to deserialize the value from the message
+spring.kafka.consumer.value-deserializer=org.springframework.kafka.support.serializer.JsonDeserializer
+spring.kafka.consumer.properties.spring.json.trusted.packages=*
+
+
+producer values
+spring.kafka.producer.bootstrap-servers: localhost:9092
+spring.kafka.producer.key-serializer: org.apache.kafka.common.serialization.StringSerializer
+# spring.kafka.producer.value-serializer: org.apache.kafka.common.serialization.StringSerializer
+spring.kafka.producer.value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+
+spring.kafka.topic.name=test-topic
+
+
+----------------------------------------------------------------------------------------------------------------
+Create kafka topic
+----------------------------------------------------------------------------------------------------------------
+
+new class KafkaConfiguration with @Configuration then create the topic by alread available spring boot configurations for kafak
+
+@Configuration
+public class KafkaTopicConfig {
+    @Value("${spring.kafka.topic.name}")
+    private String topicName;
+    @Value("${spring.kafka.topic-json.name}")
+    private String topicJsonName;
+    @Bean
+    public NewTopic testTopic(){
+        return TopicBuilder.name(topicName)
+                .build();
+    }
+    @Bean
+    public NewTopic testJsonTopic(){
+        return TopicBuilder.name(topicJsonName)
+                .build();
+    }
+}
+
+----------------------------------------------------------------------------------------------------------------
+Create kafka consumer and producer
+----------------------------------------------------------------------------------------------------------------
+@Service
+public class KafkaConsumer {
+    private static final Logger LOGGER = LoggerFactory.getLogger(KafkaConsumer.class);
+    @KafkaListener(topics = "${spring.kafka.topic.name}", groupId = "${spring.kafka.consumer.group-id}")
+    public void consume(String message){
+        LOGGER.info(String.format("Message received -> %s", message));
+    }
+}
+
+@Service
+public class KafkaProducer {
+    @Value("${spring.kafka.topic.name}")
+    private String topicName;
+    private static final Logger LOGGER = LoggerFactory.getLogger(KafkaProducer.class);
+    private KafkaTemplate<String, String> kafkaTemplate;
+    public KafkaProducer(KafkaTemplate<String, String> kafkaTemplate) {
+        this.kafkaTemplate = kafkaTemplate;
+    }
+    public void sendMessage(String message){
+        LOGGER.info(String.format("Message sent %s", message));
+        kafkaTemplate.send(topicName, message);
+    }
+}

@@ -1,0 +1,492 @@
+
+1. configuration file (contains Env, Mapper, transactionManager, alias, datasources etc..)
+2. mapper xml, which contains the sql statements and we have to use the mapper path in config file unnder mappers tag
+3. java classes
+4. if we are using Annotation based mapping, then instead of having mapper config resource, we need to use name instead of resource and the path of interface which has the annotations (@Insert, @Select,@Update...)
+
+
+
+
+
+
+MYBATIS:
+
+it is a persistance framework that automates the mapping between sql db and java objects,.net obj.
+MYBATIS makes it easier to build better database oriented-applications more quickly and with less code.
+It is an alternative to JDBC and Hibernate. It automates the mapping between SQL databases and objects in Java, .NET, and Ruby on Rails. The mappings are decoupled from the application logic by packaging the SQL statements in XML configuration files.
+actually the mappings are removed from the application login and the sql mappings are placed in the config file (XML configuration)
+
+Simplicity - MyBatis is widely regarded as one of the simplest persistence frameworks available today.
+Fast Development - MyBatis does all it can to facilitate hyper-fast development.
+Portability - MyBatis can be implemented for nearly any language or platform such as Java, Ruby, and C# for Microsoft .NET.
+Independent Interfaces - MyBatis provides database-independent interfaces and APIs that help the rest of the application remain independent of any persistence-related resources.
+Open source- MyBatis is free and an open source software.
+
+
+Supports stored procedures - MyBatis encapsulates SQL in the form of stored procedures so that business logic can be kept out of the database, and the application is more portable and easier to deploy and test.
+Supports inline SQL - No pre-compiler is needed, and you can have the full access to all of the features of SQL.
+Supports dynamic SQL - MyBatis provides features for dynamic building SQL queries based on parameters.
+Supports O/RM - MyBatis supports many of the same features as an O/RM tool, such as lazy loading, join fetching, caching, runtime code generation, and inheritance.
+
+
+configuration file:
+
+in order to communicate with the db, we will be using configuration file (xml based configuration)
+sample:
+<configuration>
+
+   <typeAliases>
+      <typeAlias alias = "class_alias_Name" type = "absolute_clas_Name"/>
+   </typeAliases>
+   <environments default = "default_environment _name">
+      <environment id = "environment_id">
+         <transactionManager type = "JDBC/MANAGED"/>  
+            <dataSource type = "UNPOOLED/POOLED/JNDI">
+               <property name = "driver" value = "database_driver_class_name"/>
+               <property name = "url" value = "database_url"/>
+               <property name = "username" value = "database_user_name"/>
+               <property name = "password" value = "database_password"/>
+            </dataSource>        		
+      </environment>
+   </environments>
+   <mappers>
+      <mapper resource = "path of the configuration XML file"/>
+   </mappers>
+</configuration>
+
+
+Typealiases: instead of providing the complete path when required, we just have the alias name for this and we can use the alias name when ever required
+environments: environments element, we configure the environment of the database that we use in our application. In MyBatis, you can connect to multiple databases by configuring multiple environment elements. To configure the environment, we are provided with two sub tags namely transactionManager and dataSource.
+
+<typeAliases>
+   <typeAlias alias = "Student" type = "mybatis.Student"/>
+</typeAliases>
+
+transactionManager: MyBatis supports two transaction managers namely JDBC and MANAGED
+If we use the transaction manager of type JDBC, the application is responsible for the transaction management operations, such as, commit, roll-back, etc...
+If we use the transaction manager of type MANAGED, the application server is responsible to manage the connection life cycle. It is generally used with the Web Applications.
+
+dataSource: It is used to configure the connection properties of the database, such as driver-name, url, user-name, and password of the database that we want to connect. It is of three types namely -
+UNPOOLED - For the dataSource type UNPOOLED, MyBatis simply opens and closes a connection for every database operation. It is a bit slower and generally used for the simple applications.
+POOLED - For the dataSource type POOLED, MyBatis will maintain a database connection pool. And, for every database operation, MyBatis uses one of these connections, and returns them to the pool after the completion of the operation. It reduces the initial connection and authentication time that required to create a new connection.
+JNDI - For the dataSource type JNDI, MyBatis will get the connection from the JNDI dataSource (properties files).
+
+<environments default = "development">
+   <environment id = "development">
+      <transactionManager type = "JDBC"/>         
+      <dataSource type = "POOLED">
+         <property name = "driver" value = "com.mysql.jdbc.Driver"/>
+         <property name = "url" value = "jdbc:mysql://localhost:3306/details"/>
+         <property name = "username" value = "root"/>
+         <property name = "password" value = "password"/>
+      </dataSource>            
+   </environment>
+</environments>
+
+
+Mappers: Mapper XML file is the important file, which contains the mapped SQL statements. Mapper’s element is used to configure the location of these mappers xml files in the configuration file of MyBatis (this element contains four attributes namely resources, url, class, and name).
+
+For example, the name of the mapper xml file is Student.xml and it resides in the package named as mybatis,, then you can configure the mapper tag as shown below.
+<mappers>
+   <mapper resource = "mybatis/Student.xml"/>
+</mappers>
+
+
+the attribute resource points to the classpath of the XML file where we will have all the statements (mapped statements).
+The attribute url points to the fully qualified path of the xml file.
+We can use mapper interfaces instead of xml file, the attribute class points to the class-path of the mapper interface.
+The attribute name points to the package name of the mapper interface. In the example provided in this chapter, we have specified the class path of the mapper XML using the resource attribute.
+
+Mapper.xml:
+
+mapper xml is the configuration file which contains the sql statements and these statements are called as mapped statements or mapped sql statements (select, insert,updtae,delete)
+
+All the statements have unique id. To execute any of these statements you just need to pass the appropriate id to the methods in Java Application.
+
+<insert id = "insert" parameterType = "Student">
+   INSERT INTO STUDENT1 (NAME, BRANCH, PERCENTAGE, PHONE, EMAIL ) 
+   VALUES (#{name}, #{branch}, #{percentage}, #{phone}, #{email});    
+</insert
+
+id is unique identifier used to identify the insert statement. On the other hand, parametertype is the class name or the alias of the parameter that will be passed into the statement
+
+
+<delete id = "deleteById" parameterType = "int">
+   DELETE from STUDENT WHERE ID = #{id};
+</delete>
+
+<select id = "getAll" resultMap = "result">
+   SELECT * FROM STUDENT; 
+</select>
+
+You can retrieve the data returned by the select query using the method selectList(). This method returns the data of the selected record in the form of List as shown below -
+List<Student> list = session.selectList("Student.getAll");
+
+to get only one, selectOne("",value);
+resultMaps
+It is the most important and powerful elements in MyBatis. The results of SQL SELECT statements are mapped to Java objects (beans/POJO). Once the result map is defined, we can refer these from several SELECT statements.
+
+<resultMap id = "result" type = "Student">
+   <result property = "id" column = "ID"/>
+   <result property = "name" column = "NAME"/>
+   <result property = "branch" column = "BRANCH"/>
+   <result property = "percentage" column = "PERCENTAGE"/>
+   <result property = "phone" column = "PHONE"/>
+   <result property = "email" column = "EMAIL"/>
+</resultMap>
+
+<select id = "getAll" resultMap = "result">
+   SELECT * FROM STUDENT; 
+</select>
+
+<select id = "getById" parameterType = "int" resultMap = "result">
+   SELECT * FROM STUDENT WHERE ID = #{id};
+</select>
+
+It is not mandatory to write the column attribute of the resultMap if both the property and the column name of the table are same.
+
+
+
+MYBATIS Annotations:
+-----------------------------------
+here we will use annotations instead of the configuration file
+
+While working with annotations, instead of mapper XML file, we can use a java mapper interface to map and execute SQL queries
+
+public interface Student_mapper {
+	
+   final String getAll = "SELECT * FROM STUDENT"; 
+   final String getById = "SELECT * FROM STUDENT WHERE ID = #{id}";
+   final String deleteById = "DELETE from STUDENT WHERE ID = #{id}";
+   final String insert = "INSERT INTO STUDENT (NAME, BRANCH, PERCENTAGE, PHONE, EMAIL ) VALUES (#{name}, #{branch}, #{percentage}, #{phone}, #{email})";
+   final String update = "UPDATE STUDENT SET EMAIL = #{email}, NAME = #{name}, BRANCH = #{branch}, PERCENTAGE = #{percentage}, PHONE = #{phone} WHERE ID = #{id}";
+   
+   @Select(getAll)
+   @Results(value = {
+      @Result(property = "id", column = "ID"),
+      @Result(property = "name", column = "NAME"),
+      @Result(property = "branch", column = "BRANCH"),
+      @Result(property = "percentage", column = "PERCENTAGE"),       
+      @Result(property = "phone", column = "PHONE"),
+      @Result(property = "email", column = "EMAIL")
+   })
+   
+   List getAll();
+  
+   @Select(getById)
+   @Results(value = {
+      @Result(property = "id", column = "ID"),
+      @Result(property = "name", column = "NAME"),
+      @Result(property = "branch", column = "BRANCH"),
+      @Result(property = "percentage", column = "PERCENTAGE"),       
+      @Result(property = "phone", column = "PHONE"),
+      @Result(property = "email", column = "EMAIL")
+   })
+   
+   Student getById(int id);
+
+   @Update(update)
+   void update(Student student);
+
+   @Delete(deleteById)
+   void delete(int id);
+  
+   @Insert(insert)
+   @Options(useGeneratedKeys = true, keyProperty = "id")
+   void insert(Student student);
+}
+
+and in mapper tag in configuration file, we will have the interface path which will take care of all mapper configurations
+
+
+
+Stored procedures
+
+Unlike IBATIS, there is no <procedure> tag in MyBatis. To map the results of the procedures, we have created a resultmap named Student and to call the stored procedure named read_recordById. We have defined a select tag with id callById, and we use the same id in the application to call the procedure.
+<mapper namespace = "Student">	
+		
+   <resultMap id = "result" type = "Student">
+      <result property = "id" column = "ID"/>
+      <result property = "name" column = "NAME"/>
+      <result property = "branch" column = "BRANCH"/>
+      <result property = "percentage" column = "PERCENTAGE"/>
+      <result property = "phone" column = "PHONE"/>
+      <result property = "email" column = "EMAIL"/>
+   </resultMap>   
+   
+   <select id = "callById" resultMap = "result" parameterType = "Student" statementType = "CALLABLE">
+      {call read_record_byid(#{id, jdbcType = INTEGER, mode = IN})}
+   </select>   
+    	
+</mapper>
+
+
+
+Dynamic SQL:
+
+Dynamic SQL is a very powerful feature of MyBatis. It enables programmers to build queries based on the scenario dynamically. For example, if you want to search the Student data base, based on the name of the student in MyBatis, you have to write the query using the dynamic SQL.
+
+MyBatis uses a powerful Dynamic SQL language that can be used within any mapped SQL statement. Following are the OGNL based Dynamic SQL expressions provided by MyBatis.
+
+if
+choose (when, otherwise)
+trim (where, set)
+foreach
+
+
+<select id = "getRecByName" parameterType = "Student" resultType = "Student">
+
+   SELECT * FROM STUDENT		 
+   <if test = "name != null">
+      WHERE name LIKE #{name}
+   </if> 
+</select>
+
+<select id = "getRecByName_Id" parameterType = "Student" resultType = "Student">
+
+   SELECT * FROM STUDENT		 
+   <if test = "name != null">
+      WHERE name LIKE #{name}
+   </if>
+
+   <if test = "id != null">
+      AND id LIKE #{id}
+   </if> 
+</select>
+
+CHOOSE: is same like switch in java
+
+
+
+<select id = "getRecByName_Id_phone" parameterType = "Student" resultType = "Student">
+   SELECT * FROM Student WHERE id != 0
+	
+   <choose>
+      <when test = "name != null">
+         AND name LIKE #{name}
+      </when> 
+
+      <when test = "phone != null">
+         AND phone LIKE #{phone}
+      </when>
+   </choose>
+	
+</select>
+
+
+
+
+where:
+
+<select id = "getName_Id_phone" parameterType = "Student" resultType = "Student">
+   SELECT * FROM STUDENT
+	
+   <where>
+      <if test = "id != null">
+         id = #{id}
+      </if>
+
+      <if test = "name != null">
+         AND name LIKE #{name}
+      </if>
+   </where>
+		
+</select>
+
+
+The foreach Statement
+The foreach element allows you to specify a collection and declare item and index variables that can be used inside the body of the element.
+
+It also allows you to specify opening and closing strings, and add a separator to place in between iterations. You can build an IN condition as follows -
+
+<select id = "selectPostIn" resultType = "domain.blog.Post">
+   SELECT *
+   FROM POST P
+   WHERE ID in
+	
+   <foreach item = "item" index = "index" collection = "list"
+      open = "(" separator = "," close = ")">
+      #{item}
+   </foreach>
+	
+</select>
+
+
+
+
+********
+to return the auto generated value to code:
+-------------------------------------------------------------
+
+
+<insert id="insertIntoDisburdement" parameterType="com.demo.model.LoanDetails"
+		useGeneratedKeys="true" keyProperty="disbursementId">
+
+		INSERT INTO LoanDisbursement
+		(loanNumber,applicationNumber,clNumber,currAmtRequested,currAmtContract,applicationDate,dateApplRecdByADB,dateApprovedByRM,processorId,retroactiveFinancing,clientPortalNumber,typeOfDisbursement,advanceType,paymentCode,periodCovered,statusCode,remark,accessToken)
+		VALUES (#{loanNumber},
+		#{applicationNumber}, #{clNumber},
+		#{currAmtRequested},#{currAmtContract},
+		#{applicationDate},#{dateApplRecdByADB},#{dateApprovedByRM},#{processorId},
+		#{retroactiveFinancing}, #{clientPortalNumber},
+		#{typeOfDisbursement},#{advanceType}, #{paymentCode},
+		#{periodCovered},#{statusCode}, #{remark}, #{accessToken})
+		<selectKey keyProperty="disbursementId" resultType="java.lang.Integer"
+			order="AFTER">
+			select LOANDISBURSEMENT_SEQ2.CURRVAL as disbursementId from	dual
+		</selectKey>
+
+
+
+this will return the auto generated value, we need to declare the value as integer in java code (disbursementId)
+
+
+
+
+
+****
+If a property exists in more than one of these places, MyBatis loads them in the following order:
+
+Properties specified in the body of the properties element are read first,
+Properties loaded from the classpath resource or url attributes of the properties element are read second, and override any duplicate properties already specified,
+Properties passed as a method parameter are read last, and override any duplicate properties that may have been loaded from the properties body and the resource/url attributes.
+Thus, the highest priority properties are those passed in as a method parameter, followed by resource/url attributes and finally the properties specified in the body of the properties elemen
+
+
+Every MyBatis application centers around an instance of SqlSessionFactory. A SqlSessionFactory instance can be acquired by using the SqlSessionFactoryBuilder. SqlSessionFactoryBuilder can build a SqlSessionFactory instance from an XML configuration file, or from a custom prepared instance of the Configuration class.
+
+Building a SqlSessionFactory instance from an XML file is very simple. It is recommended that you use a classpath resource for this configuration, but you could use any InputStream instance, including one created from a literal file path or a file:// URL. MyBatis includes a utility class, called Resources, that contains a number of methods that make it simpler to load resources from the classpath and other locations.
+
+String resource = "org/mybatis/example/mybatis-config.xml";
+InputStream inputStream = Resources.getResourceAsStream(resource);
+SqlSessionFactory sqlSessionFactory =
+  new SqlSessionFactoryBuilder().build(inputStream);
+
+
+
+Building SqlSessionFactory without XML
+If you prefer to directly build the configuration from Java, rather than XML, or create your own configuration builder, MyBatis provides a complete Configuration class that provides all of the same configuration options as the XML file.
+
+DataSource dataSource = BlogDataSourceFactory.getBlogDataSource();
+TransactionFactory transactionFactory =  new JdbcTransactionFactory();
+Environment environment =  new Environment("development", transactionFactory, dataSource);
+Configuration configuration = new Configuration(environment);
+configuration.addMapper(BlogMapper.class);
+SqlSessionFactory sqlSessionFactory =  new SqlSessionFactoryBuilder().build(configuration);
+
+
+
+
+Session factory for mybatis:
+
+SQLSessionFactory is the core class for every MyBatis application. This class is instantiated by using SQLSessionFactoryBuilder’s builder() method which loads a configuration XML file:
+
+String resource = "mybatis-config.xml";
+InputStream inputStream Resources.getResourceAsStream(resource);
+SQLSessionFactory sqlSessionFactory
+  = new SqlSessionFactoryBuilder().build(inputStream);
+  
+  
+
+  
+we can configure the configuration file using java code too as below
+The Java configuration file includes settings like data source definition, transaction manager details, and a list of mappers which define relations between entities, these together are used to build the SQLSessionFactory instance:
+
+DataSource dataSource = BlogDataSourceFactory.getBlogDataSource();
+TransactionFactory transactionFactory =
+  new JdbcTransactionFactory();
+Environment environment =
+  new Environment("development", transactionFactory, dataSource);
+Configuration configuration = new Configuration(environment);
+configuration.addMapper(BlogMapper.class);
+SqlSessionFactory sqlSessionFactory =
+  new SqlSessionFactoryBuilder().build(configuration);
+  
+
+SQLSession contains methods for performing database operations, obtaining mappers and managing transactions. It can be instantiated from SQLSessionFactory class. Instances of this class are not thread-safe.
+
+After performing the database operation the session should be closed. Since SqlSession implements the AutoCloseable interface, we can use the try-with-resources block:
+
+try(SqlSession session = sqlSessionFactory.openSession()) {
+    // do work
+}
+
+
+procedures in mybatis
+----------------------------------
+
+
+For Auto generated value:
+
+<insert id="logincredentialsprocedureinisert7" statementType="CALLABLE">
+		{call dbo.logincredentialsprocedureinisert1( #{username, mode=IN,
+		jdbcType=VARCHAR},
+		#{password, mode=IN, jdbcType=VARCHAR},
+		#{role, mode=IN, jdbcType=VARCHAR},
+		#{loginId, mode=OUT, jdbcType=INTEGER })}
+</insert>
+
+
+CREATE PROCEDURE dbo.logincredentialsprocedureinisert7
+  @Name VARCHAR(500),
+  @URL  VARCHAR(2000),
+  @ROLE  VARCHAR(2000),
+  @loginId INT OUTPUT
+AS
+BEGIN
+    SET NOCOUNT ON;
+    INSERT dbo.logincredentials(USERNAME, PASSWORD, ROLE) SELECT @Name, @URL,@ROLE
+    SET @loginId = @@IDENTITY
+	RETURN @loginId
+END
+
+System.out.println(svo.get("loginId"));// after suddessful insert, get the returned value as this, loginId is declared as out
+
+
+For Role:
+
+
+
+<select id="selectRole" resultType="String" statementType="CALLABLE">
+		<!-- //PROCEDURE -->
+		{call dbo.logincredentialsprocedure( #{username, mode=IN,
+		jdbcType=VARCHAR},
+		#{password, mode=IN, jdbcType=VARCHAR},
+		#{role,
+		mode=OUT, jdbcType=VARCHAR})}
+		<!-- NORMAL QUERY SELECT ROLE FROM dbo.logincredentials where username=#{username} 
+			and password=#{password} -->
+	</select>
+
+Create  PROCEDURE dbo.logincredentialsprocedure
+(
+
+@USERNAME VARCHAR(200),
+@PASSWORD VARCHAR(200),                      
+@ROLE VARCHAR(200)  OUT        
+)
+AS
+BEGIN
+SELECT ROLE FROM dbo.logincredentials WHERE USERNAME= @USERNAME and PASSWORD= @PASSWORD
+END
+
+
+
+For complete list:
+
+
+
+<select id="logincredentialsprocedureall" resultMap="studentVo"
+		statementType="CALLABLE">
+		<!-- //PROCEDURE -->
+		{call dbo.logincredentialsprocedureall}
+		<!-- NORMAL QUERY SELECT ROLE FROM dbo.logincredentials where username=#{username} 
+			and password=#{password} -->
+	</select>
+
+
+Create  PROCEDURE dbo.logincredentialsprocedure
+AS
+BEGIN
+SELECT * FROM dbo.logincredentials
+END

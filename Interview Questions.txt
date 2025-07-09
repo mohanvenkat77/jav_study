@@ -1,0 +1,738 @@
+Date : 6-November 2014
+Company : Prodapt
+Mode	: Direct
+
+1) Tell about yourself?
+2) How to mark the fields not to overridden ?
+3) static method can be overridden?
+	Answer : No
+	http://javarevisited.blogspot.in/2013/03/can-we-overload-and-override-static-method-java.html
+	
+	
+Date 	: 9-November 2014
+Company : HCL
+Mode	: Direct
+
+
+Date	: 12-November-2014
+Company : Bank Of America
+Mode	: Telephonic
+
+1) Tell about yourself?
+2) What are the OOPS concept and explain?
+3) Abstract Class can have Constructor? What is the use?
+4) Difference Between private variable with getter / setter and public variable?
+
+there are much more advantages:
+
+getters and setter can have validation in them, fields can't
+using getter you can get subclass of wanted class.
+getters and setters are polymorphic, fields aren't
+debugging can be much simpler, because breakpoint can be placed inside one method not near many references of that given field.
+they can hide implementation changes:
+Some libraries require this to fulfill the "Java Bean standard".
+A setter/getter can be in an interface, a property cannot be in an interface
+
+
+5) static method can be overridden?
+6) What is serialization?
+
+7) How to protect the variable not to serialize?
+	if you don't want any field to be part of object's state then declare it either 
+	static or transient based on your need and it will not be included during Java serialization process
+
+Read more: http://javarevisited.blogspot.com/2011/04/top-10-java-serialization-interview.html#ixzz3J1vrS6Tu
+8) What is Externalization?
+9) What are the modules  you worked in Spring?
+10)How to integrate Hibernate in Spring?
+	http://www.studytrails.com/frameworks/spring/spring-hibernate-dao-support.jsp
+	
+11) What is Singleton design Pattern?
+12) How to achieve Singleton in Multithreaded Environment?
+13) what is difference Between throws and throw keyword in Exception?
+14) Can we add throws at class level? No only method signature
+15) What is hashCode and equals method do?
+16) difference between the below
+
+     String aStr = null;
+	 
+	 1) if(aStr != null) --> false
+	 2) if(aStr.equlas(null)) --> NPE
+	 3) if(null.equals(aStr)) --> Can not invoke equals on the primitive type null
+	 
+17) How to access the JNDI datasource using Spring ?
+
+http://stackoverflow.com/questions/9183321/how-to-use-jndi-datasource-provided-by-tomcat-in-spring
+http://www.journaldev.com/2597/spring-datasource-jndi-with-tomcat-example
+http://www.codejava.net/frameworks/spring/configuring-spring-mvc-jdbctemplate-with-jndi-data-source-in-tomcat
+
+<xmlns:jee="http://www.springframework.org/schema/jee"
+xsi:schemaLocation="http://www.springframework.org/schema/jee 
+                    http://www.springframework.org/schema/jee/spring-jee-3.2.xsd">
+...
+<jee:jndi-lookup id="dbDataSource"
+   jndi-name="jdbc/DatabaseName"
+   expected-type="javax.sql.DataSource" />
+ 
+
+		(OR)
+		<bean id="dbDataSource" class="org.springframework.jndi.JndiObjectFactoryBean">
+    <property name="jndiName" value="java:comp/env/jdbc/DatabaseName"/>
+</bean>
+
+18) What is the behaviour of the Spring Container on the following case
+
+     Class A {
+	 }
+	 Class B {
+	 }
+		
+	In spring configuration Class A having Class B as reference , Class B is having Class A reference what will happen?
+
+      A --> B 
+	  B --> A
+	  
+	  Yes it will work.
+
+
+Date	: 17-November-2014
+Company : D&B
+Mode	: Direct
+
+1) Tell about yourself?
+2) What are the modules you worked in Spring?
+3) What are the ways to create an object - scopes?
+3) Default scope of the bean?
+4) Want to create a Singleton bean but not at the startup, upon first request will be created for only one and its maintained? what to do
+	Answer : Lazy init parameter in bean configuration
+5) Any of the Data Structure worked?
+6) How to create a Tree Data Structure?
+7) Difference b/w REST and SOAP Web Service?
+8) How the request URL is mapped in REST?
+9) What is the need of Serialization?
+10) How to config Spring in Web.xml?
+11) What are the design pattern worked?
+
+Date	: 17-November-2014
+Company : Verizon
+Mode	: Direct
+
+1) Tell about yourself?
+2) What is your hobbies and talk about it (Checking Comminication)
+3) How to integrate Spring in Web.xml?
+4) How to integrate Struts and Spring?
+5) How to deploy the application in WAS?
+6) What is JNDI ? How to map the JNDI?
+7) What are the Spring lifecycle methods? And the order in which executes?
+8) What is Destroy method how it is configured in Spring?
+9) What are the design pattern worked?
+ 	  
+Date	: 17-November-2014
+Company : Capgemini
+Mode	: Telephonic
+
+1) What is project your architecture?
+2) What is latest version of Java? and its features?
+	Version 8 Update 25
+	Features 
+	*********
+3) What is Java 7  features?
+ 1) String in Switch case
+ 2) Underscore in binary literal
+ 3) automatic close of stream
+ 
+
+4) What is Latest Spring and Hibernate version? 
+Answer : Spring - 4.1.2
+		 Hibernate - 4.3.7.Final
+5) What is Component Mapping in hibernate?
+	  http://www.tutorialspoint.com/hibernate/hibernate_component_mappings.htm
+	
+6) How to create abstract instance in Spring?
+	<bean id="abstractTest" class="AbstractTest" abstract="true">
+   		<property name="strName" value="Hariharan"/>
+   	</bean>
+	
+	
+7) How to create Parent child relation in Spring configuration?
+	<bean id="abstratImpl" class="AbstractImpl" parent="abstractTest"/>
+	
+8) How to integrate Spring with Hibernate?
+
+	<bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource">
+        <property name="driverClassName" value="com.mysql.jdbc.Driver" />
+        <property name="url"
+                  value="jdbc:mysql://localhost:3306/contact_db?zeroDateTimeBehavior=convertToNull" />
+        <property name="username" value="user" />
+        <property name="password" value="secret" />
+    </bean>
+    
+    <bean id="sessionFactory"
+          class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+        <property name="dataSource" ref="dataSource" />
+        <property name="packagesToScan" value="org.mano.app.model" />   
+        <property name="hibernateProperties">
+            <props>
+                <prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
+                <prop key="hibernate.show_sql">true</prop>  
+                <prop key="hibernate.hbm2ddl.auto">create-drop</prop>              
+            </props>
+        </property>
+        <property name="annotatedClasses">
+            <list>
+                <value>org.mano.app.model.Contact</value>
+                <value>org.mano.app.model.Address</value>                
+            </list>
+        </property>
+    </bean>
+ 
+    <bean id="transactionManager"
+      class="org.springframework.orm.hibernate4.HibernateTransactionManager" 
+		p:sessionFactory-ref="sessionFactory">
+    </bean>
+
+9) How to create a Table in Hibernate?
+
+	
+
+	Answer 2 ways.
+	
+  1) <property name="hibernate.hbm2ddl.auto" value="create"/>
+  
+	if you comment frst one. 
+	
+   2) http://www.java-tutorial.ch/hibernate/generate-ddl-with-hibernate
+   
+   Configuration configuration = new Configuration().configure();
+        SessionFactory sessionFactory = configuration.buildSessionFactory();
+       
+        SchemaExport schema = new SchemaExport(configuration);
+        schema.setOutputFile("F:/schema.sql");
+        schema.create(true, false);
+		
+10) What are all the ways to connect to DB using Hibernate?
+11) With out using HibernateTemplate How to connect to Hibernate in Spring?
+12) What is 2nd level Cache in Hibernate?
+http://www.tutorialspoint.com/hibernate/hibernate_caching.htm
+http://www.java4s.com/hibernate/hibernate-second-level-cache-example/
+	Query Cache
+	*********
+		hibernate.cache.use_query_cache="true"
+		Session session = SessionFactory.openSession();
+		Query query = session.createQuery("FROM EMPLOYEE");
+		query.setCacheable(true);
+		List users = query.list();
+		SessionFactory.closeSession();
+
+13) What is Lazy initialization? How to config class to support Lazy initialization?
+
+
+
+Date	: 19-November-2014
+Company : TCS
+Mode	: Telephonic
+
+1) Tell About yourself? and project? Roles?
+2) How to connect Struts and Spring?
+3) What are the modules used in Spring?
+4) Lifecycle methods of Spring?
+5) Design pattern worked?
+6) What are all the design pattern used by Struts?
+7) What is factory design pattern?
+8) How to check the performace of the query?
+9) Any profiling tools used?
+
+Date	: 20-November-2014
+Company : Verizon
+Mode	: Telephonic (2nd)
+
+1) Tell About yourself? and project? Roles?
+2) How to connect Hibernate and Spring?
+3) What are the attributes of bean definition?
+4) What is lazy loading?
+5) What is difference b/w Lazy / Eagar loading in Hibernate? and how to configure?
+6) What is your career aspiration?
+7) Rate yourself in Java?
+8) What is the version of Java used in project?
+9) What are all the challenges you faced?
+10) Difference b/w Spring prototype / Singleton beans?
+11) Add 3 Consecutive Odd number to give value as 48?
+12) 10 balls are there , in that one ball having more weight how to find that? How many iterations?
+13) What are all the collections used in project?
+14) Will Map inside iterator allow to modify value and its size? If not what is the approach?
+15) what will happen if we try to increase the size of a collection inside iterator?
+16) What is Dialect in Hibernate?
+17) If we want to restrict the List to only for you how to do that? So that other developer will not modify?
+
+
+Date	: 24-November-2014
+Company : Yume
+Mode	: Telephonic
+
+1) Tell about yourself?
+2) How to JVM loads the class? How the memory allocated?
+3) Output System.out.println(null);
+	The method println(char[]) is ambiguous for the type 
+		PrintStream
+		
+		Answer - println(String), println(char[]) both matches this pattern so compiler error.
+4) in JavaScript how will get the current url address
+	windows.location.href
+5) how to user JQuery Ajax?
+6) Have you worked in any of the JavaScript Object Oriented Technology?
+
+Date	: 27-November-2014
+Company : TCS
+Mode	: Direct
+
+1) What is your experience and current company?
+2) What technology you know?
+3) Rate yourself on Java and Spring?
+4) What is Coupling and Cohession and Decoupling? Explain with an example?
+http://javaeasy.weebly.com/types-of-coupling.html
+
+5) Use of Spring?
+6) Difference b/w Annotation and XML Configuration? Which is best?
+	I use annotations for classes in my own project and resort to XML when 
+	I need to inject beans in 3rd party libraries cause XML is the only way I can do that.
+	XML definition will override the annotation
+
+7) Narrow Conversion? wide and narrow primitive type casting
+8) Difference b/w String and StringBuffer and StrinBuilder?
+	String immutable (once created can not be changed ),threadsafe(no tow threads can change the value), stores the values in Constant String Pool  
+	StringBuffer mutable( one can change the value of the object ), threadsafe, The object created through StringBuffer is stored in the heap 
+	StringBuilder  is same as the StringBuffer , that is it stores the object in heap and it can also be modified,
+	StringBuilder is also not thread safe. StringBuilder is fast as it is not thread safe.
+	StringBuffer methods -> append, delete, reverse, insert,replace.
+	
+9) Difference b/w String ="" and String s = new String("");
+ example
+ *******
+ String s = "Polish";
+ String t = "Polish";
+ 
+ Polish is a string is in String pool, then s and t actually refer to the 
+ same object, and s==t will return true, for "==" for objects read "is the same object" 
+ 
+ String s = new String("Polish");
+ String t = new String("Polish");
+ created in heap, both are different object. s!=t and   s.equals(t) will return true 
+ 
+10) Difference b/w HashMap and HashTable , ArrayList and Vector?
+
+http://beginnersbook.com/2013/12/difference-between-arraylist-and-vector-in-java/
+
+11) Difference B/W Collections.Synchorinize(arrayList) and Vector?
+12) Why Map is not in Collection and alos why it is called as Collection?
+13) What is your area of expertise in Java?
+
+
+Date	: 29-November-2014
+Company : TCS
+Mode	: Direct
+
+1) Tell about yourself?
+2) Why you are switching company?
+2) Project Architecture , Frameworks used?
+3) Rate yourself on Java, Spring and hiberante?
+4) How sessions are handled in your project?
+5) How LDAP is connected from application?
+6) How to validate the sessions?
+7) After session timeout how to redirect to loginpage and what are all the validations?
+8) How to integrate Struts and Spring?
+9) How to integrate Spring and Hibernate / JPA?
+10) How to connect to DB using JPA?
+11) What is NamedQuery and Native Query in JPA?
+12) Difference b/w join and subquery in Database?
+13) Diference b/w inner and outter join?
+14) What is Dialact in ORM Mapping?
+15) What are all the jar files required for JasperReport?
+16) How to integrate Jasper and Struts 2?
+17) What is JQuery? Why used?
+18) What are all the parameters used in JQuery Ajax call?
+19) Why Ajax is used? and an Example?
+20) What is the advantage of Spring?
+21) Why we need ORM Framework and difference b/w ORM and plain old JDBC call?
+22) What is 2nd level cache in Hibernate? how it is configured?
+23) 2nd level cache is for each request / session / throughout the application?
+24) How to write test case in JUnit?
+
+Date	: 4-Dec-2014
+Company : Virtusa
+Mode	: Direct
+
+1) Tell about yourself?
+2) What are the UI Technology you are familiar with?
+3) How to use JQuery to access the element using id, class, name ?
+4) How to use JQuery Ajax?
+5) Features in Java 5?
+6) Difference b/w JDK vs JRE?
+
+7) Difference b/w Heap vs Stack memory?
+	http://www.journaldev.com/4098/java-heap-memory-vs-stack-memory-difference
+	
+8) How to set the Heap memory at runtime ?
+9) What is Heap Dump how to analysis?
+10) What is the use of JUnit? How to use?
+11) Any Code Coverage tool used?
+12) iterator / for loop difference?
+13) REST / SOAP webservice difference?
+14) Spring IOC, AOP?
+
+15) What is young generation and old generation in JVM?
+	http://www.journaldev.com/2856/java-jvm-memory-model-and-garbage-collection-monitoring-tuning
+	
+16) Any Continuous Integration tool?
+17) Use of Hibernate?
+18) What is projection in Hibernate?
+19) What is 2nd level cache? is it for per session/ per application scope?
+20) Reflection access method, attributes of a class?
+21) Thread Local , Thread Pool?
+22) Struts , Spring integration?
+23) Spring MVC?
+24) Query for getting 2nd highest salary of an employee using Oracle?
+
+	SELECT *  FROM emp1 t1  WHERE ( 2 ) = (SELECT COUNT( t2.sal ) FROM emp1 t2   WHERE  t2.sal >=  t1.sal  )
+	
+	MYSQL
+	*****	
+		http://www.mysqltutorial.org/mysql-limit.aspx
+		
+		SELECT *  FROM emp1 ORDER BY Sal DESC LIMIT 1,1   (LIMIT Offset, no of rows to return after offset, offset starts at 0)
+
+25) Difference Aggregaton / composition?
+26) What is Is-A releationship / Has A relationship?
+27) Difference Java.util.Comparator vs Java.lang.Comparable?
+http://www.javacodegeeks.com/2013/03/difference-between-comparator-and-comparable-in-java.html
+
+28) What is DB Normalization? and its Types?
+29) Design Patterns used?
+30) What is JNDI?
+31) What is JMX?
+32) What is JMS?  Difference b/w Queue vs Topic?
+33) Have you done any Design for project?
+34) What is Indexing in Database?
+35) What is the DB driver you are using in application? What are the types of Drivers?
+http://www.tutorialspoint.com/jdbc/jdbc-driver-types.htm
+36) What is Garbage Collection?
+37) What is deadlock in thread? example code?
+38) JavaScript Prototype?
+
+
+Date	: 6-Dec-2014
+Company : Mindtree
+Mode	: Direct
+
+1) Tell about yourself?
+2) Rate yourself on Java, Struts, spring , hibernate?
+3) Current Project architecture?
+4) What are the collections used in project?
+5) Design patterns know? Adapter Design pattern
+
+Adapter pattern works as a bridge between two incompatible interfaces. This type of design pattern comes under 
+structural pattern as this pattern combines the capability of two independent interfaces.
+
+This pattern involves a single class which is responsible to join functionalities of independent or incompatible interfaces. 
+A real life example could be a case of card reader which acts as an adapter between memory card and a laptop.
+ You plugins the memory card into card reader and card reader into the laptop so that memory card can be read via laptop
+
+ http://www.tutorialspoint.com/design_pattern/adapter_pattern.htm
+ 
+ 
+6) Methods in HashMap ?
+7) Experience in Multi Threading?
+8) Features of JDK 5?
+9) experieince in EJB?
+10) How Struts and Spring Hibernate work?
+11) Spring AOP?
+12) Spring Transactions?
+13) Query for getting greatest 3 employee records based on salary?
+14) difference b/w procedures and functions in DB?
+	http://stackoverflow.com/questions/771949/what-is-the-difference-between-function-and-procedure-in-pl-sql
+
+15) JSP implicit objects?
+16) write a program to iterate the HashMap inside HashMap and print the values?
+
+			HashMap<String,HashMap<String,String>> strMap = new HashMap<String, HashMap<String,String>>();
+			
+			HashMap<String, String> innerMap = new HashMap<String, String>();
+			innerMap.put("one", "ONE");
+			innerMap.put("two", "TWO");
+			innerMap.put("three", "THREE");
+			innerMap.put("four", "FOUR");
+			innerMap.put("five", "FIVE");
+			
+			
+			strMap.put("Numbers", innerMap);
+			
+			Set<Map.Entry<String,HashMap<String,String>>> entrySets = strMap.entrySet();
+			
+				for(Entry<String,HashMap<String,String>> ee  : entrySets){
+					
+					System.out.println("****************************************");
+					System.out.println("Outter Key -->" + ee.getKey());
+					System.out.println("****************************************");
+					Set<Map.Entry<String,String>> innerValEntrySet = ee.getValue().entrySet();
+					
+					for(Entry<String,String> ine : innerValEntrySet){
+						System.out.println("Inner Key -->" + ine.getKey());
+						System.out.println("Inner Value -->" + ine.getValue());
+					}
+				}
+17) Experience in UML?
+18) What is Trigger in DB?
+19) If text file having 10000 records need to parse it, compare against DB records, 
+ for matching rows need to create a separate HTML file and show the page to the user, on click of each link the respective HTML page should open.
+20) Difference b/w Hibernate load and get method?
+http://www.journaldev.com/3472/hibernate-session-get-vs-load-difference-with-examples
+
+
+Date	: 13-Dec-2014
+Company : CTS
+Mode	: Direct
+
+1) Tell About yourself?
+2) Current Project and Role?
+3) Rate yourself on Java , Struts , Spring and Hibernate?
+4) What is AOP in Spring?
+5) What are the attributes of Bean definition in Spring?
+6) Serialization?
+7) Thread and its methods?
+8) Write a program to for JDBC Connectivity?
+9) HashMap internal working?
+10) hashCode and equals method use?
+11) Comparator and Comparable interfaces difference?
+12) Thread notify and notifyAll and wait method difference?
+13) Write a Oracle SQL Query to get the 2nd largest salary of an employee?
+14) Database Join and Sub Query difference?
+15) TreeSet and HashSet difference?
+16) hibernate inheritance 
+
+http://viralpatel.net/blogs/hibernate-inheritance-table-per-concrete-class-annotation-xml-mapping/
+http://www.javatpoint.com/hibernate-inheritance-mapping-tutorial
+http://www.dineshonjava.com/p/implementing-inheritance-in-hibernate.html
+http://www.java2blog.com/2013/02/hibernate-inheritancetable-per-concrete.html
+
+17) spring life cycle methods
+18 What is wild card characters in Java Generics?
+
+
+Date	: 13-Dec-2014
+Company : BOA
+Mode	: Direct
+
+1) Tell About yourself?
+2) Current Project and Role?
+3) Rate yourself on Java , Struts , Spring and Hibernate?
+4) What is HashMap how to iterate ?
+5) What are all the design pattern worked?
+6) What is intercpetor in Struts 2?
+7) what is modeldriven interceptor? preparable interceptor?
+8) when the spring container will create an object?
+9) Java is passing value by reference / value?
+10) Why hashCode and equals method required for adding value into HashMap?
+11) what is transaction? how to implement in spring / hibernate?
+12) @Transaction?
+13) How to implement the transaction for the multiple database connectivity in a single method?
+14) Difference b/w Thread run and start method?
+15) What is the first class loads on spring container starts up?
+
+
+
+Date	: 19-Dec-2014
+Company : BNPP
+Mode	: Direct
+
+1) Tell About yourself?
+2) Technology in current Project?
+3) Rate yourself on Java, Servlets, JSP, Spring, Hibernate, Design Pattern, SQL.
+4) What are all the design patterns used in your project?
+http://www.tutorialspoint.com/design_pattern/index.htm
+
+5) Difference B/W Factory and Abstract Factory Pattern?
+6) ServiceLocator Pattern? Singleton Pattern?
+7) In Interface final methods allowed? static method allowed? private and protected methods allowed?
+	No Only public and abstract  are allowed
+	
+8) In Interface private variables allowed, static variables, final variables allowed?
+	only public static final variables allowed
+	
+9) static method can be overridden?
+	No
+10) What is aggregation and Composition in java and how to implement?
+
+	Aggregation, Composition falls on Has-A relationship.
+	Aggregation
+		 WIll exist if the Whole is destroyed. for example an Engine could exist with or without a Car.
+		 
+		 public Class Car {
+
+				private Engine engine;
+
+				public void setEngine(Engine engine){
+				 this.engine=engine;
+				}  
+
+				public Engine getEngine(){
+				 return engine;
+				}
+		}
+	Composition
+		Will not exist if the object is destroyed. for example a Room can't exist without a House.
+		public class House {
+		   private Room room;
+		   public House (int noRooms, String nameOfHouse){
+			  room = new Room (noRooms,  nameOfHouse);
+
+		   }
+		}
+
+11) How to get keys from HashMap?
+	mapObj.keySet();
+12) Difference b/w ArrayList and LinkedList?
+	Both maintain the insertion order
+	ArrayList
+		Faster search  --> ArrayList maintains index based system for its elements 
+				as it uses re sizable array data structure implicitly which makes it faster for searching an element in the list.
+	
+	LinkedList
+		slow for search -->LinkedList implements doubly linked list which requires the 
+					traversal through all the elements for searching an element.
+	
+	LinkedList has more memory overhead than ArrayList because in ArrayList each index 
+	only holds actual object (data) but in case of LinkedList each node holds both data and address of next  and previous node.
+
+				
+	Difference b/w HashSet and TreeSet and LinkedHashSet?
+		Set --> Unique elements
+		HashSet --> Fast set, allow null, uses equals for comparision, doesn't maintain order
+		LinkedHashSet --> 2nd Fast,allow null, uses equals for comparision,Insertion Order
+		TreeSet -->  slow, doesnot allow null (NPE throws), compareTo() for comparision, Sorted
+		
+	
+13) What are all the methods in Object class?
+equals, hashCode, clone,toString,notify, notifyAll,wait,finalize
+
+14) What is serialization? Where we need to use it?  
+		If we dont implement the Serializable interface what is the exception we will get? In which layer we need to use Serializable?
+15) volatile keyword?
+	--> volatile keyword guarantees visibility of changes to variables across threads
+	--> JVM guarantees that every read of the variable will always be read from main memory.
+	--> Very expensive , since stores into main memory
+	
+16) GenericServlet and HttpServlet difference?
+
+	Generic Servlet:
+			GenericServlet class is direct subclass of Servlet interface.
+			Generic Servlet is protocol independent.It handles all types  of protocol  like http, smtp, ftp etc.
+			Generic Servlet only supports  service() method.It handles only simple request 
+			public void service(ServletRequest req,ServletResponse res ).
+			Generic Servlet only supports  service() method.
+	HttpServlet:
+			HttpServlet class is the direct subclass of Generic Servlet.
+			HttpServlet is protocol dependent. It handles only http protocol.
+			HttpServlet  supports public void service(ServletRequest req,ServletResponse res )
+					and protected void service(HttpServletRequest req,HttpServletResponse res).
+					
+			HttpServlet supports also   doGet(),doPost(),doPut(),doDelete(),doHead(),doTrace(),doOptions()etc.
+
+17) What is the method we need to implement when extends GenericServlet?
+	service
+18) GenericServlet class / Interface?
+class
+19) Difference b/w save, persist, merge, saveOrUpdate methods in hibernate?
+http://www.journaldev.com/3481/hibernate-save-vs-saveorupdate-vs-persist-vs-merge-vs-update-explanation-with-examples
+
+20) what are all the locks in hibernate?
+21) In spring what is Dependency Injection?
+22) Different scopes in bean definition? and its difference? when the object is created for each scope?	
+singleton  - This scopes the bean definition to a single instance per Spring IoC container (default).
+prototype  - This scopes a single bean definition to have any number of object instances.
+request    - This scopes a bean definition to an HTTP request. Only valid in the context of a web-aware Spring ApplicationContext.
+session    - This scopes a bean definition to an HTTP session. Only valid in the context of a web-aware Spring ApplicationContext.
+global-session - This scopes a bean definition to a global HTTP session. Only valid in the context of a web-aware Spring ApplicationContext.
+23) for Standalone application what are the scopes can be used?
+24) what is AOP? How to integrate for Transaction?
+25) What is the use of View?
+26) Inner Join and Equi Join difference?
+27) Duplicate rows deletion in oracle?
+	DELETE FROM names a WHERE ROWID > (SELECT MIN(ROWID) FROM names b WHERE b.name=a.name);
+	
+	Delete from emp where rowid not in (select max(rowid) from emp group by empno);
+28) Rownum/ Rowid difference?
+	1) ROWNUM is temporary while ROWID is permanent
+	2) ROWID can be used to fetch a row, 
+		while ROWNUM only has meaning within the context of a single SQL statement, 
+		a way of referencing rows within a fetched result set
+
+
+Date	: 14-Jan-2014
+Company : Datacert
+Mode	: Telephonic
+
+1) Tell About yourself?
+2) Hibernate Session and SessionFactory difference?
+3) @Depreciated annotation use?
+4) Employee entity has empId, empNum, empName, both empId, empNum are having same value, future we want to remove that what to do?
+5) keytools in java?
+6) @Transaction use?
+7) Multiple Database in a transaction?
+8) How to configure LDAP?
+9) How to insert data into LDAP?
+10) JQuery?
+11) Struts Request and Session Scope?
+12) With in java transaction executing 3 Stored Procedures which has own DB transaction code in it, 
+while executing 3rd procedure getting an exception what will happen?
+
+Date	: 19-Jan-2014
+Company : Datacert
+Mode	: Telephonic
+
+1) Tell About yourself?
+2) Hibernate Session and SessionFactory difference? Are they threadsafe?
+3) JVM, JDK, JRE Difference?
+4) Interface / Abstract Class Difference?
+5) Multiple Inheritance possible in java? why is not possible?
+6) String is mutable or immutable ? why ?
+7) How to create custom immutable class? what are all the rules?
+8) What are all the design pattern used in java implementation API?
+9) Abstract class can have non abstract menthods?
+10) static methods can be overridden?
+11) Hibernate Caching?
+12) What is OutOfMemory error? How to resolve it?
+13) JDBC preparedStatement and CallableStatement difference?
+14) what is Deployment Descriptor?
+15) What is declarative Security in web application?
+
+Date	: 20-Jan-2014
+Company : Datacert
+Mode	: Direct
+1) Tell about yourself?
+2) Architecture of your current project?
+3) Java version in your project?
+4) How you are updating yourself with latent trends in java?
+5) any UI framework experience?
+6) Subquery example? Correlated subquery?
+7) Hibernate Session and SessionFactory difference?
+8) Hibernate Cache?
+9) Multiple database (Distributed) Transaction how to handle?
+10) Write a program for any of the Design pattern?
+11) Write a program to print following output?
+	1 3 5 7 9 11
+12) Write a program to print following output?
+	1  3  6  10  15  21  
+
+Date	: 22-Jan-2014
+Company : Accenture
+Mode	: Telephonic
+	
+1) Coding for Interface?
+2) Ways to create a Object in Java?
+3) Class should be open for Extension and close for modification?
+4) What is use of Clonable?
+5) How HashMap works?
+6) Struts2 Components?
+7) Differnce b/w Spring IOC and DI?
+8) Difference types of beans in Spring (Scopes)
+9) Difference b/w singleton and prottype? are they threadsafe?
+10) How to configure Manytomany relation ship in hiberate and what will happen in DB side?

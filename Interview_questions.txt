@@ -1,0 +1,28 @@
+collection framework
+sort employee by id in java8. 
+	Same with collections
+Service registery, api gateway
+Stack, Queue
+E1,E2 Sort in lambda expression
+Microservices 
+spring security
+what is rest api
+OOPS concepts
+Arraylist vs Linkedlist
+Java Streams, sort, filter
+SOLID principles
+Load balancer
+Hibernate methods
+how to connect to DB
+can the configuration file be final?
+how to communicate bw microservices (restTemplate, web), sync and Async
+Kafka rebalancing issues
+kafka duplicate messages
+kafka producer publish json, consumer needs string how?
+marker interface and why needed
+hibernate get methods
+Session vs session factory
+can we have multiple session factories?
+load vs get vs find
+profiling
+lazy loading in hibernate

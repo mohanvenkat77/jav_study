@@ -1,0 +1,2355 @@
+https://learning.oreilly.com/library/view/practical-oracle-cloud/9781484255063/html/478313_1_En_1_Chapter.xhtml
+
+Oracle Cloud Infrastructure(OCI)
+
+Cloud computing is a model for enabling ubiquitous, convenient, on-demand network access to a shared pool of configurable computing resources (e.g., networks, servers, storage, applications, and services) that can be rapidly provisioned and released with minimal management effort or service provider interaction. This cloud model is composed of five essential characteristics, three service models, and four deployment models.1
+
+Gartner, a well-known research and advisory company, has proposed another definition that points out two further characteristics (emphasis added).
+Gartner defines cloud computing as a style of computing in which scalable and elastic IT-enabled capabilities are delivered as a service using Internet technologies.2
+
+The rapid provisioning of IT resources that are available in a shared pool is one of the fundamental attributes of cloud computing. This rapid provisioning boosts the productivity by shortening any unwanted waiting time, eliminates possible errors through the repeatability of underlying automation, and eventually entails cost savings. Resources that are no longer in use may return to a shared pool, which allows other projects to reuse them, thereby optimizing the overall resource allocation. Elasticity, provided by resource scalability, is a key factor to optimize the resource use. Moreover, it can help to increase robustness by allowing computer systems to react to unexpected failures and varying the performance footprint. Resources of closely related types, such as compute, networking, different types of storage, and many more, are grouped together and made available as web services.
+
+
+
+CHARACTERISTICS OF OCI
+
+PROVISIONING : the action of providing or supplying something for use.
+
+Traditional provisioning: raise a request and once the request is approved, then the order will get placed, and if any of the resource required is not available then again it will go thru the process of ordering the missing resource and its gets delayed to get the final order.
+
+Rapid Self-Provisioning Process
+In the world of cloud computing, the word provisioning is often encountered as the state of your virtual resource observed while your new resource instance is being launched. The definition from NIST emphasizes rapid provisioning with minimal service provider interaction. This is the key. Minimal service provider interaction means that there is no need to submit a ticket and wait until the resources are semimanually set up for you by a team of administrators. Instead, the process is fully automated, and as soon as you trigger an instance launch, the order will be validated against your permissions and quota, also known as service limits, and passed to the rapid provisioning engine. The engine will use various profiles and templates to launch and configure the resources.
+
+
+ELASTICITY AND SCALABILITY
+An elastic object is able to return to its regular shape voluntarily, after it has been stretched (or squeezed). Such an object is thus highly adaptable to the impact of external circumstances. A web application can be considered highly adaptable or elastic if it is able to handle unexpected peaks of inbound traffic requests. A backend data warehousing extract-transform-load (ETL) engine is reckoned to be very elastic or adaptable if it is capable of staging sudden, extraordinarily large volumes of incoming data loads.
+
+Computer system elasticity can be achieved through scalability of the underlying resources. For a modern, stateless web application, the number of containers that expose the API and encapsulate its request processing implementation logic could be increased, even by launching them on additional virtual machines. This action would enlarge the overall compute capacity of a cluster. In other words, we would have more application containers running on a larger set of host instances of the same size added to the cluster to increase the overall system throughput. This is called horizontal scaling. In the case of a backend ETL engine, the overall capacity of the attached block storage units for the staging area could be upsized. Put differently, we would add more hardware resources such as block volumes to each machine, keeping the number of machines unaltered. This is called vertical scaling .
+
+
+
+DELIVERY AS A SERVICE
+
+APIS
+
+
+CLOUD MANAGEMENT PLANE
+If we want to apply cloud computing to our own hardware, we need a system that manages pools of resources, enables rapid self-provisioning, and permits virtual machines to scale horizontally. Such a system, let’s call it a cloud management plane, must offer an API that can be used by the project teams on a self-service basis. The REST style is a perfect fit for cloud computing because the cloud capabilities, which we will discuss in the next section, can be easily seen as first-class REST resources. When you manage cloud resources, direct API calls are rarely done. Usually, the API is used through a web console, software development kits (SDKs) for various languages, a command-line interface, or an infrastructure-as-code software such as Terraform. In all these cases, API calls are constructed and sent in the background. You only provide the required input.
+
+-----------------------------------------------------
+
+
+CORE CLOUD CAPABILITIES OF OCI
+
+In the cloud, you build solutions using virtual cloud resources that resemble the hardware equipment that provides a physical platform for the software to run. There are different types of cloud resources. Some cloud resource types are intended to be used strictly together with other types of cloud resources. For example, a routing rules table is a cloud resource type that always exists within a virtual cloud network cloud resource. Together with a few other cloud resource types, they are collectively seen as part of the same cloud capability, which is a term you would more often see referenced as an individual cloud service. The way individual cloud resource types are grouped together depends on choices made by a particular cloud provider. Usually, you will see four core cloud capabilities typically referenced as cloud services, no matter how global or niche a cloud provider is.
+
+1. Compute
+
+2. Networking
+
+3. Storage
+
+4. Identity and access management
+
+These four core cloud computing capabilities provide resources that are often used, in the background, as building blocks to deliver further infrastructure and platform capabilities such as the following:
+
+1. Container orchestration
+
+2. Managed databases
+
+3. Serverless computing
+
+
+COMPUTE
+Executing programs and processing information are often seen as computational activities and considered two of the most important tasks for the solutions running on contemporary cloud computing platforms. One way to perform these activities is to run software on virtual hosts, also known as compute instances. You can think of these instances as if they were computer machines running in data centers that are managed by a particular cloud provider. You provision the instances either individually or grouped together using instance pools. You are able to establish a Secure Shell (SSH) or a Remote Desktop (RDP) connection to manage them or the software that they host remotely.
+
+The vast majority of compute instances in the cloud are virtual machines (VMs) . Multiple VMs that belong to different cloud tenancies (accounts) may be running on the same physical server. This is called multitenancy . Multiple tenants eventually share the same physical equipment, even not being aware of that, to leverage sharing economy principles. Using virtual machines makes it much easier for cloud providers to offer more granular compute resources managed in shared pools to their customers. More demanding customers who need to perform high-performance computing (HPC) or use systems that work better with no virtualization usually prefer to deploy their solutions on dedicated hosts with no multitenancy and no hypervisor involved. They then opt for bare-metal (BM) compute instances that do not use any hypervisor and are dedicated to a single cloud account at the time. What needs to be said at this stage is that not every cloud provider supports bare-metal machines.
+
+
+
+STORAGE
+Without the possibility to persist both the inputs and the results, any computational processing would make little sense. Various types of data follow different lifecycles that eventually result in nonidentical requirements. What follows is the variety of different cloud resource types that are used to fulfill diverse storage goals. If we skip the higher-level database storage for the moment, we can talk about storage capability. We usually break apart this capability into three groups of storage resource types.
+
+1. Object storage
+
+2. Block storage
+
+3. File storage
+
+
+			Object storage:  is meant to store any amount of data of any type providing redundancy, integrity, data encryption, and various types of 				access. Data entities such as files are seen as individual objects grouped together in a folder-like hierarchy that are called buckets . 				Access policies guard the stored objects and decide who can access them and what actions are allowed. Data is encrypted at rest, and 				redundant copies are distributed across data centers within a selected region. We often differentiate two types of object storage based on 				the access frequency.
+	
+					i. Standard object storage that offers an immediate, fast access to the data
+
+					ii. Archive storage that offers much cheaper way to preserve data at the cost of having to wait a few hours or more to be able 						to retrieve the data
+
+				Data entities of any type are stored as objects inside virtual containers called buckets that are usually used to group related objects. 				The objects can be accessed by authenticated and authorized OCI users or with the use of short-living pre-authenticated requests. A bucket 				can be created as an archive only, which would decrease the cost of storage but add some time before an object is available for a download.
+				Moreover, it is possible to employ lifecycle policy rules to either delete or archive an object after a given period of time has elapsed.
+	
+				Some lifecycle aspects such as moving these objects that are rarely accessed to the archive storage can be automated through the use of 				lifecycle policies. What kind of data do you typically persist in object storage buckets? This type of data can range from application 				logs, through database backups or data that is stored as part of your content delivery network, to large archives of business data that must 				be safely stored for a longer period of time to comply with the regulations.
+	
+	
+	
+			Block storage: contrary to the object storage, plays a supplementary role in the context of the compute capability, even though we 				classify the resources such as block volumes, volume groups, or backup polices as belonging to the storage capability. The 				primary type of a cloud resource here is a block volume. You can think of it as a nonvolatile memory disk that is a subject of 				its own lifecycle, but it makes sense to use it only with compute instances such as virtual or bare-metal machines. Actually, nothing 				spectacular takes place while provisioning a new block volume. The life of a new block volume begins as soon as you attach it to a compute 				instance, create a filesystem, and mount it. From this moment, you can use the volume as an additional disk for your compute instance. As a 				matter of fact, depending on the applications you host on the instance, you may store all your application data on this volume instead 				of using the boot volume that every compute instance has from the beginning. Of course, if you architect a new cloud solution, you will 				probably choose another type of cloud resources such as object storage or managed database for storing the application data. Yet, you 				will still discover a lot of different types of applications, especially traditional ones, that will benefit more from using an attachable 				block volume.
+
+				Going further, we can distinguish two ways a block storage volume can be attached to a compute instance.
+				Remote attachment over an IP network
+
+				Direct attachment to the physical machine
+
+				The interconnectivity between servers and remotely attached volumes is often handled with the use of the Internet Small Computer 				Systems Interface (iSCSI) protocol standardized in RFC7143.
+				The Small Computer System Interface (SCSI) is a popular family of protocols for communicating with I/O devices, especially storage
+				devices. (…) The iSCSI protocol (…) describes a means of transporting SCSI packets over TCP/IP.7
+	
+
+				A boot volume holds a compute image, provides a root filesystem, and is used to fire up a compute instance. An instance can get 				additional block volumes attached to increase the available total block storage. It is possible to create point-in-time volume backups 				of both types of volumes. The backups can be either incremental or full and optionally driven by automated volume backup policies.
+
+
+
+
+			File storage :While a block storage device is typically meant to be attached to a single compute instance at a time, file storage is 				designed to enable file-oriented data exchange between multiple compute instances. It may be especially useful when these 				traditional systems leverage active-passive high availability that is built upon a file-based shared state. The shared file 				storage capability can be implemented using the Network File System (NFS) protocol
+	
+	
+	
+	
+	
+	
+	
+NETWORKING
+	In a multitier or distributed architecture, the software solutions are often composed of multiple application nodes of different kinds that 	collaborate with the other nodes in a variety of ways such as the following:
+	
+	Exposing their services through web interfaces also known as APIs
+
+	Remotely consuming the functionalities provided by other services
+
+	Maintaining connections to other nodes that compose the cluster
+
+	Accessing external dependencies such as the database or message broker
+
+	Cloud resources used to deliver virtual networking such as networks, subnets, route tables, security rules, or different types of gateways may seem 	conceptually similar to the building blocks of traditional, hardware-based networks. Yet, they are radically simplified in the way you configure 	them. Software-defined networking (SDN) plays a significant role in cloud computing. Cloud infrastructure can be seen as an SDN-enabled 	infrastructure that lets you create and terminate your isolated virtual overlay networks called virtual cloud networks (VCNs), subdivide them into 	subnets, and use them to roll out various networking patterns applied for your compute instances and other cloud resources. These are the cloud 	resources seen as part of the networking capability:
+	
+	Virtual cloud networks and their subnets
+
+	Reserved public IP addresses
+
+	Security lists and security rules
+
+	Various types of gateways
+
+	Route tables and route rules
+
+	Load balancers
+
+	Virtual devices used to deliver VPN capabilities
+
+	DNS zones
+
+	Web Application Firewall (WAF) policies 
+
+
+IDENTITY AND ACCESS MANAGEMENT
+
+Identity and access management refers to a set of tools and principles that let you define and govern who can access and manage your cloud tenancy mainly by provisioning, changing, and terminating the cloud resources. Issuing a cloud management plane API call or using a management console can be done only by a successfully authenticated user. Usually, cloud providers implement two types of cloud users.
+Locally defined
+
+Retrieved from an external identity provider
+
+Smaller organizations and startups will probably use locally defined users, while large organizations that already maintain their user hierarchy in an identity provider of some kind would rather federate their tenancy with this provider. What is an identity provider (IdP)? It is a system that stores and manages the lifecycle of human users, system users, and groups of users. Furthermore, an IdP usually offers authentication services that can be consumed by other systems and their IAM services. Federating your cloud tenancy with an external identity provider means that you are going to reuse the identity data that is already present in the IdP. To keep it simple, the users defined in the IdP will be recognized by your cloud tenancy IAM. Users alone can actually do very little, unless they are assigned to the proper groups. Authorization, which is the function that verifies what kind of actions a particular user is allowed to conduct over certain cloud resources, is enforced through policies. A policy decides which group is allowed to perform which kind of actions over a set of cloud resources either in the entire tenancy or in an individual compartment. Compartments are unique to Oracle Cloud Infrastructure and let you isolate different cloud resources that exist in your cloud tenancy. In this way, a single cloud account can be used to host a number of completely independent and unrelated projects. OCI lets you create hierarchies of compartments.
+
+
+---------------------------------------------------------------------------------------------------------------------------
+
+Deployment Models
+I’ve already said that some people mistakenly assume that cloud computing and public cloud are the same. Yet, it is the public cloud that the general public, press, and IT professionals most often refer to in their discussions about cloud computing. What does the term actually mean? Well, let’s take a look at the three leading deployment models.
+
+Private cloud
+
+Public cloud
+
+Hybrid cloud
+
+
+
+
+Service Models
+The responsibility is split between a cloud provider and a cloud service consumer. In other words, a cloud account owner’s responsibilities depend on the type of service. In this context, we classify the cloud services using three commonly known cloud computing service models.
+
+Infrastructure as a service (IaaS)
+
+Platform as a service (PaaS)
+
+Software as a service (SaaS)
+
+The four core cloud computing capabilities (compute, storage, networking, and IAM) are considered part of the most fundamental service model called infrastructure as a service . This service model gives you the greatest control over the individual, often low-level, elements such as virtual machines that host your cloud solution. Using cloud resources that, from an architecture point of view, can be easily conceptually mapped to the hardware infrastructure we are used to working with allows you to plan the cloud infrastructure in a similar way to what you would do if you were working with physical hardware. You just do not need to worry about things like power supply, cooling, or physical security enforced in on-premise data centers. Yet, you continue to be responsible for the networking configuration (virtual firewall security rules, routing, VPN setup, etc.), operating systems management (especially updates), and some aspects of the storage capability (logically attaching new block volumes, creating file systems, mounting shared filesystems, etc.). Greater flexibility comes at the cost of more responsibility.
+
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+Oracle Cloud Infrastructure
+
+Oracle Cloud Infrastructure (OCI) is a suite of infrastructure-as-a-service public cloud services Oracle has made available for the general public, small businesses, nonprofit organizations, government agencies, and large enterprises. OCI delivers a broad range of cloud resources that fulfill core cloud capabilities such as compute, networking, different kinds of storage, and identity and access management. Furthermore, OCI features a number of integrated platform-as-a-service cloud services built on top of the OCI IaaS layer. These include, but are not limited to, two types of fully managed Oracle Database known as Autonomous Transaction Processing (ATP) and Autonomous Data Warehouse (ADW), managed container orchestration using the open source Kubernetes engine, and an integrated Docker container registry. Furthermore, the OCI ecosystem includes a rich choice of diverse templates that use the open source provisioning tool called Terraform to deploy systems such as different NoSQL databases, data integration platforms, and data science workbenches.
+
+Less critical systems can be distributed across two or three fault domains within a single availability domain. What does this mean? Hardware inside a single availability domain can be split into physically isolated units of equipment called fault domains. In this way, a power unit failure or a cascade of equipment failures within a single hardware unit may be separated from impacting other units. 
+
+
+WORKLOADS
+When you consider moving an existing solution or building a completely new service in the cloud, you should always begin by looking at the data you are going to process and store in the cloud. Depending on the geographical region and the legal jurisdiction you fall within, you will be often legally obliged to comply with various data protection acts. This is the aspect to which you should actually pay more attention in the beginning than the application architecture planned for your cloud-based solution.
+
+From a purely technical point of view, as long as it is possible to successfully compose a sufficient set of cloud infrastructure resources that collectively serves as a backbone to the cloud solution you are working on, we can say that this kind of application or workload is indeed supported by Oracle Cloud Infrastructure. If we were asked to list a few typical types of systems you could run on OCI, we could come up with applications such as the following:
+Multitier web applications provisioned using virtual machines or powerful, dedicated bare-metal hosts launched in public and private virtual cloud network subnets. Using a proper mix of public and private subnets allows you to keep an accurate isolation for each application tier.
+
+Distributed, microservices-oriented, container-based systems running on a managed Kubernetes container engine, called Oracle Kubernetes Engine.
+
+Database-contained workflows, transactional or analytical, backed up by a feature-complete, market-leading, fully managed relational database management system, called Oracle Autonomous Database.
+
+High-performance computing (HPC) that supports things like rendering, engineering simulations, or big data workloads.
+
+Various traditional applications lift-and-shifted from their earlier on-premise environment and deployed in the cloud infrastructure that design mirrors the on-premise hardware setup.
+
+Serverless workloads using Oracle Functions that relies on the open source Fn Project.
+
+Or anything else that requires additional, peak-time processing capacity beyond what you are able to deliver with your current infrastructure.
+
+Last but not least, independent professionals could also benefit from subscribing to their own cloud tenancies. Instead of using a dozen VMs, individual developers could consider performing some of their work using cloud-based compute instances in place of heavy-footprint, locally hosted virtual machines. As another example, it is faster to provision a managed Kubernetes engine that consists of multiple worker nodes in the cloud than doing it on a set of virtual machines hosted locally on your laptop.
+
+
+
+
+
+
+Compute
+
+Compute instances provide computational power to run software in the cloud. They are based on images, which specify a preinstalled software stack for an instance. They use shapes to determine the allocated virtual hardware profile. The instances can be provisioned stand-alone or pooled using node pools. A node pool is created based on an instance configuration that can be seen as an extended instance definition. A vNIC attachment cloud resource attaches a particular compute instance to a virtual network interface card. A vNIC gets created in a selected virtual cloud network subnet and connects the instance to a virtual cloud network.
+
+Networking
+
+A virtual cloud network is a software-defined private network created within an Oracle Cloud Infrastructure region. It can span multiple availability domains. You subdivide it into one or more subnets. Traffic is routed based on the route rules created in a route table that gets referenced by one or more subnets. Access to the Internet is enabled by an Internet gateway you point to as a route rule target. NAT gateways let instances in private subnets establish outbound connections to the Internet. A subnet can reference one or more security lists that consist of stateful and stateless security rules. The rules effectively furnish a particular subnet with an additional layer of a virtual firewall. An instance that attaches to a public IP cloud resource is directly reachable from the Internet as long as the particular traffic is allowed by the security rules that are being enforced.
+
+Block volume
+
+A boot volume holds a compute image, provides a root filesystem, and is used to fire up a compute instance. An instance can get additional block volumes attached to increase the available total block storage. It is possible to create point-in-time volume backups of both types of volumes. The backups can be either incremental or full and optionally driven by automated volume backup policies.
+
+Object storage
+
+Data entities of any type are stored as objects inside virtual containers called buckets that are usually used to group related objects. The objects can be accessed by authenticated and authorized OCI users or with the use of short-living pre-authenticated requests. A bucket can be created as an archive only, which would decrease the cost of storage but add some time before an object is available for a download. Moreover, it is possible to employ lifecycle policy rules to either delete or archive an object after a given period of time has elapsed.
+
+File storage
+
+A shared file storage file system can be created in a selected subnet. You attach your compute instance to a particular file system using details provided by a mount target cloud resource, which exists within the file system cloud resource. You can use point-in-time views called snapshots to implement a backup mechanism for your shared file system.
+
+IAM
+
+Compartments are used to isolate cloud resources that usually belong to different projects hosted under a single cloud tenancy. You define cloud users locally or federate the tenancy with an external identity provider. A policy consists of policy statements that grant various types of access over cloud resources to groups of users. Dynamic groups allow matching compute instances to issue API calls permitted for that group.
+
+
+Load balancing
+
+A load balancer distributes the incoming traffic to the instances registered in backend sets based on the chosen distribution algorithm.
+
+
+Database
+
+OLTP applications, which have to support write-intensive, high-throughput, and transaction-intensive operations, can leverage autonomous transaction processing. OLAP workloads, which reinforce data warehousing and business intelligence systems, are meant to use autonomous data warehouse. The instances of both cloud resource types give you a fully managed Oracle database experience.
+
+Container registry
+
+Each cloud account comes with an associated container image registry where you can store Docker images using public and private repositories.
+
+Container engine
+
+The container engine for Kubernetes lets you launch fully managed Kubernetes clusters with associated node pools for worker nodes that are provisioned as compute instances.
+
+Serverless
+
+Open source Fn Project functions can be deployed to the managed Oracle Functions service for serverless computing.
+
+DNS
+
+The domains you own can be redirected to a DNS zone where custom DNS records can be created.
+
+Web Application Firewall (WAF)
+
+Internet-facing application endpoints can be protected against potentially malicious and unwanted inbound traffic using a set of predefined WAF policies ranging from simple captcha or geolocation filters to more sophisticated traffic patterns.
+
+
+
+
+
+
+
+
+****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************
+
+2. Creating 1st cloud application
+
+
+Well, technically speaking, the root compartment is not a compartment. Every Oracle Cloud Infrastructure resource has a type. All compartments are of compartment type, except the root compartment, which is of tenancy type. Do not worry if this is unclear at this stage. The only thing you should remember is this: do not create resources directly in your root compartment. It is technically possible, but it is not necessarily a good practice.
+
+
+The requests are evenly distributed to the endpoints on both API nodes because we place a load balancer in front of them and rely on a simple round-robin policy. Even though this is a trivial demonstration scenario, we are still going to deploy each node in a different availability domain to create a highly available solution. Such a design increases the chances that our cloud service survives a disaster of a single data center. To recap, an availability domain can be thought of as a single data center interconnected with the remaining availability domains in the same region using a high-bandwidth link that provides low latency. The likelihood that more than one availability domain fails or gets destroyed at the same time is very low.
+
+A VCN is subdivided into one or more subnets. The IP address ranges of the subnets that belong to the same VCN have to be within the IP address range of the parent VCN and mustn’t overlap with other subnets. Each compute instance you run in Oracle Cloud Infrastructure will be attached to a particular VCN subnet. This is done through a virtual network interface card called a vNIC.
+
+The shape is a profile of hardware resources (CPU cores, available memory) offered by a compute instance that is based on a given shape. Oracle Cloud Infrastructure features two families of compute instance shapes.
+
+Bare-metal hosts: Dedicated, single-tenant hardware, no hypervisor
+
+Virtual machines: General purpose, multitenant hardware, hypervisor
+
+Some software such as messaging platforms, enterprise application servers, or database engines are reported to be more stable and efficient on dedicated, physical hardware with no hypervisor-managed virtualization involved. You can host them on fewer, more powerful bare-metal hosts. In all other general-purpose use cases, you will probably use more virtual machines to leverage horizontal scaling.
+
+
+The bare-metal compute shapes family is deeply rooted in the origins of Oracle Cloud Infrastructure. OCI actually evolved from a bare-metal-oriented cloud offering called Oracle Bare Metal Cloud Service.
+
+Let me list just a few arbitrarily selected shapes that are offered at the time of writing.
+VM.Standard2.1 is the smallest standard virtual machine shape that comes with 1 OCPU and 15GB of memory. It is powered by the X7 platform, which basically means that it is using Intel Xeon Skylake processors.
+
+VM.Standard2.8 is another example of a standard virtual machine shape that offers 8 OCPUs and 120GB of memory.
+
+BM.Standard2.52 is a standard bare-metal shape that leverages 52 OCPUs and 768GB of memory.
+
+BM.Standard.E2.64 is a bare-metal shape that uses AMD EPYC processors with 64 OCPUs and 512GB of memory.
+
+BM.DenseIO2.52 is a bare-metal shape dedicated to I/O-intensive workloads that are present in big data projects. It is backed with locally attached SSD NVMe drives that offer 51.2TB of storage capacity.
+
+BM.GPU3.8 is a bare-metal shape intended to power machine learning processes and high-performance computing (HPC) software. In addition to 52 OCPUs and 768GB of memory, its real capacity comes from eight Nvidia Tesla V100 GPUs.
+
+In the preceding list, I used a new abbreviation. An Oracle compute unit (OCPU) is a logical term and the most important metric for compute-related billings. You usually pay for 1 OCPU/hour. In other words, one hour of a running instance with 8 OCPUs will generate the same compute-related cost as an instance with just 1 OCPU running for eight hours.
+
+In the case of Intel-based shapes, a single OCPU corresponds to a single, physical Intel Xeon core. The operating system actually sees two virtual cores for each physical CPU core because of hyperthreading technology. To sum up, one Intel-based OCPU means one physical CPU core and the capability of two nearly parallel execution threads, sometimes called vCPUs.
+
+You can easily guess that our first choice related to compute instances is the selection of a shape for the nodes that will host the UUID service application. We are going to use the smallest virtual machine available: VM.Standard2.1.
+
+An image is a template that specifies the operating system and any additional software that has to be preinstalled during the instance launch. An image is used to initiate a new boot volume that a compute instance uses. A boot volume remains associated with its compute instance until termination. A boot volume can be seen as the primary storage that an instance uses, mainly for its operating system and software.
+
+Oracle-provided images are periodically updated and receive new versions. Yet, as soon as you launch an instance, it becomes your responsibility to schedule regular system updates.
+
+You might wonder what would happen if too many tenants (cloud customers) launched a large number of the most powerful bare-metal shapes in the same region at once. The number of these machines is surely limited even in the largest data center, isn’t it? Well, sure, it is. This is where the smart idea of service limits (also known as quotas) comes into play.
+
+Every cloud account has a set of service limits that define how many resources of which type are allowed to be running at the same time. If you see that your current limits are insufficient for your needs, you can request them to be increased simply by raising a service request. This helps Oracle to plan and optimize data center capacity. Simple and wise, isn’t it?
+
+
+
+Verifying and optionally increasing the service limits before launching a new cloud project should be included in your checklist for the planning phase.
+
+The sample cloud solution we are working on in this chapter will include the following OCI resources:
+
+One VCN
+
+Two VM.Standard2.1 compute instances
+
+One load balancer (100Mbps)
+
+One custom image
+
+Negligibly small size of block storage
+
+
+
+COMPARTMENT
+We need to choose a compartment in which our first cloud application will run. Compartments serve as the primary mean to isolate unrelated OCI resources. In this way, they can be used to separate different projects. From a formal point of view, they belong to the IAM service. Unless you already have an existing compartment for learning, it is advised that you create a new compartment to keep the artifacts you provision as part of our Chapter 2 exercise isolated. Follow these steps:
+
+1.	Go to Menu ➤ Identity ➤ Compartments.
+
+ 
+2.	Click Create Compartment.
+
+ 
+3.	Enter Sandbox for the name.
+
+ 
+4.	Provide some description.
+
+ 
+5.	Click Create Compartment.
+
+
+
+
+Every OCI resource, including your tenancy, is uniquely identified by an immutable, multipart, Oracle-assigned, strict-syntax key called an Oracle cloud identifier, abbreviated as OCID. The resource identifier structure is strict. For the time being, it always starts with ocid1, which indicates the current and only OCID version. The second element is more important because it shows a resource type. At the time of writing, the third element is always set to oc1. The fourth element denotes the region. Finally, the last element is unique for every OCI resource.
+
+ocid1.compartment.oc1..aaaaaaaal5rpi6vswp3r5bgmkpu2ozzv3ny5l7kkij6bhdk3jj6m63jvhkvq
+
+
+
+
+
+VIRTUAL CLOUD NETWORK
+As the name says, a virtual cloud network (VCN) is a virtual network that is private to your cloud tenancy. Yet, in the way you design and manage a VCN, it feels somehow similar to well-known, traditional, physical IP networks you may have worked with or learned about.
+
+This is how you create a new VCN using the OCI Console:
+
+1.	Go to Menu ➤ Networking ➤ Virtual Cloud Networks.
+
+ 
+2.	Make sure that the Sandbox compartment is selected. On the left side, slightly to the bottom, you will find the Scope section with a combo box that you use to choose the name of the active compartment.
+
+ 
+3.	Click Create Virtual Cloud Network.
+
+ 
+4.	Provide an optional display name for the new VCN (uuid-vcn).
+
+ 
+5.	Select Create Virtual Cloud Network Only.
+
+ 
+6.	Provide the CIDR block (192.168.1.0/24).
+
+ 
+7.	Select the DNS Resolution box and leave the default of DNS label.
+
+ 
+8.	Click Create Virtual Cloud Network to provision the VCN.
+
+
+
+
+
+INTERNET GATEWAY
+An Internet gateway is a virtual router that provides connectivity between compute instances in public subnets and the Internet. It must be defined as a target in the route rule; otherwise, compute instances won’t know where to send their outbound packets to. Let’s start by provisioning a new Internet gateway. This is how you do it using the OCI Console:
+
+1.	Go to Menu ➤ Networking ➤ Virtual Cloud Networks.
+
+ 
+2.	Make sure that the Sandbox compartment is selected.
+
+ 
+3.	Click the name of your VCN.
+
+ 
+4.	Click Internet Gateways in the Resources menu.
+
+ 
+5.	Select Create Internet Gateway.
+
+ 
+6.	Provide an optional display name (uuid-igw).
+
+ 
+7.	Click Create Internet Gateway.
+
+
+
+
+
+ROUTE TABLE
+It won’t be a big surprise if I say that a route table stores route rules for a VCN. A route rule defines how to direct the outbound traffic that is destined to travel outside the VCN. In our case, we must define a rule that properly directs all packets sent to the IP addresses that do not belong to the VCN address range. In IPv4 language, 0.0.0.0/0 means all addresses, and this is the value we are going to use in the destination CIDR block of a route rule. We will also set the Internet gateway we’ve just provisioned as the target for this rule.
+
+A VCN comes with a default but empty route table resource. This is how you add a new route rule to the existing default route table using the OCI Console:
+
+1.	Go to Menu ➤ Networking ➤ Virtual Cloud Networks.
+
+ 
+2.	Make sure that the Sandbox compartment is selected.
+
+ 
+3.	Click the name of your VCN.
+
+ 
+4.	Click Route Tables in the Resources menu.
+
+ 
+5.	Click the name of the default route table.
+
+ 
+6.	Click Add Route Rules.
+
+ 
+7.	Choose Internet Gateway in the Target Type selection box.
+
+ 
+8.	Place 0.0.0.0/0 in Destination CIDR Block.
+
+ 
+9.	Choose uuid-igw in Target Internet Gateway.
+
+ 
+10.	Click Add Route Rules.
+
+
+
+
+
+
+SECURITY LIST
+We’ve already dealt with a virtual network, virtual router, and virtual route table. Now, it is time to add some security. Every VCN subnet is required to have at least one security list, which is a collection of security rules. You can think of these rules as an additional layer of a virtual firewall, independent from the operating system firewall you control on each individual compute instance. Before a request reaches a compute instance’s virtual network interface, security rules are enforced.
+
+There are two types of security rules based on traffic direction.
+Ingress, which means they validate the inbound traffic to VCN
+
+Egress, which means they validate the outbound traffic from VCN
+
+A VCN comes with a default security list resource with some basic rules that allow ingress SSH and basic ICMP traffic as well as all egress traffic. We still need to add a rule that allows ingress traffic on the UUID service port (5000). This is how you add a new security rule to an existing security list using the OCI Console:
+
+1.	Go to Menu ➤ Networking ➤ Virtual Cloud Networks.
+
+ 
+2.	Make sure that the Sandbox compartment is selected.
+
+ 
+3.	Click the name of your VCN.
+
+ 
+4.	Click Security Lists in the Resources menu.
+
+ 
+5.	Click the name of the default security list.
+
+ 
+6.	Select Ingress Rules in the Resources menu.
+
+ 
+7.	Click Add Ingress Rule.
+
+ 
+8.	Provide the required values:
+	a.	Place 0.0.0.0/0 in Source CIDR.
+
+	b.	Place 5000 in Destination Port Range.
+ 
+9.	Click Add Ingress Rules.
+
+
+
+
+
+
+You may wonder what a small checkbox next to the Stateless label actually means. We’ve left this checkbox empty. As a result, the new ingress rule we’ve added is a stateful rule. Every time an inbound traffic (a request) on port 5000 is accepted by this stateful ingress rule, the corresponding outbound traffic (a reply) will be automatically let through with no other egress rule enforced. If you decide to use a stateless rule, you will also need to create another stateless rule in the opposite direction that validates the related traffic.
+
+Stateful rules may sound like a perfect solution. Then why would we still use stateless rules? Well, stateful rules require connection tracking that consumes resources and introduces some latency. Furthermore, each compute instance has a limit of how many connections can be tracked at a single moment. This is why the golden rule says that if you are able to design your security rules as stateless rules, do it.
+
+
+
+
+
+
+
+So far, we’ve provisioned a new VCN, launched an Internet gateway, added a new route rule to direct the outbound traffic via the Internet gateway, and created a stateful ingress security rule to allow all incoming TCP connections on port 5000. Next, we will create a new subnet and provision a new virtual machine.
+
+SUBNET
+A VCN is divided into one or more subnets . We attach compute instances, or more precisely their vNICs, to the subnets. You may recall that as we were defining a new VCN, we did not make any choices about availability domains. It is a subnet that you can explicitly create in exactly one availability domain of your choice. All compute instances that are created in a particular subnet will eventually have to run in the availability domain the subnet was created in. Alternatively, it is possible to create subnets that span all availability domains in a given region. That kind of subnets lets you launch instances in a more flexible way, deterring the choice of an availability domain for an instance
+
+For now, we are going to stick to subnets bound to single availability domains. This is how you create a new VCN subnet using the OCI Console:
+
+1.	Go to Menu ➤ Networking ➤ Virtual Cloud Networks.
+
+ 
+2.	Make sure that the Sandbox compartment is selected.
+
+ 
+3.	Click the name of your VCN.
+
+ 
+4.	Click Subnets in the Resources menu.
+
+ 
+5.	Click Create Subnet.
+
+ 
+6.	Provide the required values:
+	a.	Place a-net as a display name.
+
+	b.	Choose Availability Domain-specific Subnet Type.
+
+	c.	Select the first availability domain (suffixed AD-1) in your region.
+
+	d.	Place 192.168.1.0/28 as the CIDR block.
+
+	e.	Make sure that the default route table is chosen.
+ 
+	f.	Select the Public Subnet option.
+
+	g.	Mark Use DNS Hostnames in this subnet.
+
+	h.	Use the short, one-character label a as the subnet’s DNS label.
+
+ 	i.	Make sure that the default DHCP Options setting is chosen.
+
+	j.	Make sure that the default security list is chosen.
+
+ 
+7.	Click Create Subnet.
+
+
+
+
+
+
+
+
+There are two types of subnets.
+A public subnet lets you assign public IP addresses to compute instances that have been provisioned in this subnet. You can still create compute instances with no public IP address in a public subnet.
+
+A private subnet does not allow you to you assign public IP addresses to compute instances that have been provisioned in this subnet. These instances can use different means to communicate with the Internet and other networks. You’ll learn more about that in Chapter 6.
+
+COMPUTE INSTANCE
+The time has come to provision our first compute instance in Oracle Cloud Infrastructure. During the planning phase, which was described earlier in this chapter, we decided to use the smallest virtual machine shape, which is VM.Standard2.1. We also chose to use the newest available version of Oracle Linux 7. At the time of writing, this is Oracle Linux 7.6, but you may see newer minor versions as well. At the moment, there should be no compute instances in your learning compartment. Figure 2-18 shows an empty list in the Instances view in the OCI Console.
+
+
+
+Even if you automate the entire startup procedure of a particular cloud-based virtual machine, you may still want to have the option to connect to the command line on that host remotely. In the case of Linux-based machines, like Oracle Linux, we are going to use SSH public key authentication. If you have worked primarily with Windows-based hosts, it might be the first time you hear about SSH. The principle is pretty simple. You generate a pair of related files, so-called keys. One is called a private key, and the other is called a public key. You upload the public key to one or more Linux machines in the cloud. To authenticate your remote terminal connection, you need the private key. The compute instance creation wizard in the OCI Console gives us an opportunity to upload a public key.
+
+
+We would like our Oracle Linux compute instance to be able to serve UUID service clients as soon as the machine is up and running. We do not want to perform neither manual installations nor configurations. We are going to leverage the cloud-init package that is preinstalled on our compute instance already with the base operating system image. The role of cloud-init is to perform an early initialization of a cloud instance during its first boot. Your role is to upload a user data file in one of the supported formats during instance creation. Listing 2-3 shows cloud-init user data in cloud-config YAML format. You will find the cloud-config file in the git/chapter02/cloud-init directory.
+
+
+
+
+
+
+---------- config file--
+
+
+#cloud-config
+yum_repos:
+    ol7_developer_EPEL:
+        name: Oracle Linux $releasever Developement Packages ($basearch)
+        baseurl: http://yum.oracle.com/repo/OracleLinux/OL7/developer_EPEL/$basearch/
+        enabled: true
+        gpgcheck: true
+        gpgkey: file:///etc/pki/rpm-gpg/RPM-GPG-KEY-oracle
+package_upgrade: true
+packages:
+ - tree
+ - wget
+ - python36
+ - python36-pip
+write_files:
+-   content: |
+      [Unit]
+      Description = Launching UUID Service API
+      After = network.target
+      [Service]
+      Environment=FLASK_APP=/home/opc/uuidservice/app.py
+      Environment=LC_ALL=en_US.utf8
+      Environment=LANG=en_US.utf8
+      ExecStart = /home/opc/uuidservice/venv/bin/flask run --host=0.0.0.0
+      User = opc
+      [Install]
+      WantedBy = multi-user.target
+    path: /etc/systemd/system/uuidservice.service
+runcmd:
+  - [ "mkdir", "-p", "/home/opc/uuidservice/venv" ]
+  - [ "chown", "opc:opc", "/home/opc/uuidservice" ]
+  - [ "python3", "-m", "venv", "/home/opc/uuidservice/venv" ]
+  - [ "/home/opc/uuidservice/venv/bin/python3", "-m", "pip", "install", "--upgrade", "pip" ]
+  - [ "/home/opc/uuidservice/venv/bin/python3", "-m", "pip", "install", "flask" ]
+  - [ "wget", "-qO", "/home/opc/uuidservice/app.py", "https://raw.githubusercontent.com/mtjakobczyk/oci-book/master/chapter02/uuid-service/app.py " ]
+  - [ "firewall-offline-cmd", "--add-port=5000/tcp" ]
+  - [ "systemctl", "restart", "firewalld" ]
+  - [ "ln", "-s", "/etc/systemd/system/uuidservice.service", "/etc/systemd/system/multi-user.target.wants/uuidservice.service" ]
+  - [ "systemctl", "enable", "uuidservice.service" ]
+  - [ "systemctl", "start", "uuidservice.service" ]
+final_message: "UUID Service API node is running, after $UPTIME seconds"
+
+
+---------- config file end---------
+
+
+
+You will upload this file to the OCI Console instance creation wizard in a few moments. First, let’s understand what it does. If you look closer at config file , you will discover that it consists of six named sections.
+yum_repos defines a new repository that will be added to Yum.
+
+package_upgrade triggers a system-wide package update.
+
+packages lists new packages that will be installed on the machine.
+
+write_files creates a new file using provided content at the given path.
+
+runcmd executes commands in a provided sequence.
+
+final_message prints a message when the processing finishes.
+
+
+
+But what does our cloud configuration actually do in more detail? First, it adds the Oracle Linux EPEL repository to Yum. This repository contains Python 3, which we need to run our Python-based UUID service. Cloud-init will perform a system-wide package upgrade and install not only Python 3 but also the wget and tree utilities. Another interesting thing is the write_files section, which, in our case, creates a new systemd unit file. The file content is created in such way to run the UUID service as a systemd service. In this way, we are able to follow a standardized approach to running applications as operating system services in Linux. Last but not least, the runcmd section runs a series of commands. First directories for a new Python virtual environment are created, and the virtual environment alone is generated using the Python 3 venv module. Next, already inside the virtual environment, we upgrade Package Installer for Python (pip) and use it to install Flask. The subsequent steps use the wget utility to download the UUID service code from the GitHub repository related to this book and open port 5000 in the operating system firewall. The final three commands effectively link, enable, and start the systemd service. In this way, the UUID service operates as an operating system service and is started on each restart.
+
+You may wonder why are the commands are specified as arrays. There are two ways commands are run by cloud-init. The command will be executed as a new process, directly using an operating system call, if wrapped into an array like this:
+runcmd:
+  - [ "mkdir", "-p", "/home/opc/uuidservice/venv" ]
+The command will be written to a file first and then passed to the operating system shell for processing, if simply written as a string like this:
+runcmd:
+  - mkdir -p /home/opc/uuidservice/venv
+While the first way may be considered a bit faster from a performance point of view, only the latter will allow you to combine multiple commands by using piping like this:
+runcmd:
+  - 'echo $(date) | tee /home/opc/datemarker'
+It is fine to mix both styles in the same runcmd section.
+
+
+
+
+
+
+Now, please prepare the two files we’ve just discussed.
+Public SSH key
+
+User data file for the UUID service
+
+We are ready to launch the instance. This is how you create a new compute instance using the OCI Console:
+
+1.	Go to Menu ➤ Compute ➤ Instances.
+
+2.	Make sure that the Sandbox compartment is selected.
+
+3.	Click Create Instance.
+ 
+4.	Name your instance as uuid-1.
+
+5.	Click Show Shape, Network and Storage Options.
+
+6.	Set the image source to the newest Oracle Linux base image, such as Oracle Linux 7.6 or newer.
+
+7.	Provide the required details:
+	a.	Select the first availability domain in your region.
+	b.	Set the instance type to Virtual Machine.
+	c.	Select VM.Standard2.1 as your instance shape.
+
+8.	In the Configure Networking section, as shown in Figure 2-22:
+	a.	Make sure your new a-net subnet is selected.
+ 	b.	Check Assign a Public IP Address.
+
+ 
+9.	In the Add SSH Key section:
+	a.	Choose the newly generated public key (oci_id_rsa.pub), as shown in Figure 2-21.
+
+ 
+10.	Click Show Advanced Options.
+
+11.	On the Management tab under Advanced Options, as shown in Figure 2-23:
+	a.	Choose the user data file shown in Listing 2-3. You will always find the latest version of the user data file on my GitHub account at 		https://raw.githubusercontent.com/mtjakobczyk/oci-book/master/chapter02/cloud-init/vm.config.yaml.
+
+ 
+12.	On the Networking tab under Advanced Options, as shown in Figure 2-24:
+	a.	Set Private IP Address to 192.168.1.2.
+	b.	Set Hostname to uuid1.
+ 
+13.	Click Create.
+
+
+
+
+
+
+It usually takes about one minute to provision this shape and the base image of a compute instance. We’ve selected the Assign Public IP Address checkbox; therefore, the primary vNIC attached to your instance will get a public IP address assigned from the Oracle Cloud pool of public IPv4 addresses. You will be able to connect to the instance using this IP address as long as the subnet’s security list rules allow the particular traffic. Private IP addresses are used within the VCN to enable local communication between compute instances.
+
+
+
+Testing the Application
+Cloud solutions are often designed and automated in such a way that there is no need to run any additional initialization scripts manually in a terminal. You deploy your solution in a ready-to-go state from the beginning using a combination of custom image and user data that basically contains the initialization instructions. The same applies to our UUID service. As soon as the instance’s boot process has been completed and cloud-init has executed all the user data instructions, the API is up and running.
+
+SSH CONNECTION
+Yet, let me make an exception here. I would like to show you around the instance, and there is no better way than using the operating system shell. Let’s use SSH to connect to the uuid-1 compute instance remotely. You will find the instance’s public IP in Instance Details, as shown in Figure 2-26. In my case, it is 130.61.91.155. Even though you will be using key-based authentication, a username for which you are establishing the connection is still expected. For Oracle Linux and CentOS, please use the opc username. For Ubuntu, please use the ubuntu username.
+$ UUID1_INSTANCE=130.61.91.155
+$ ssh -i ~/oci_id_rsa opc@$UUID1_INSTANCE
+One more thing, do not be surprised if you are not able to connect to the terminal immediately after seeing the instance state moving from “provisioning” to “running.” It can still take a few more seconds to start the SSH daemon, although an instance is said to be “running.”
+
+
+
+WAITING FOR CLOUD-INIT
+Before you take any action, we are going to find out whether the user data instructions have been completed. At the bottom of Listing 2-3, you will find final message. As the name says, this is the last instruction that is processed by cloud-init. Figure 2-28 shows the easiest way to find the message (“UUID Service API node is running”) in the log (/var/log/cloud-init.log). Some cloud-init instructions can last a while, especially if they download or update software from remote repositories. In our case, it took four minutes to finish all the initialization steps. What does this mean? If you cannot see this message, you need to wait a bit. You can use the tail -f command and watch the progress by observing the /var/log/cloud-init.log file. Depending on the number of packages that are being updated, this operation can last a few minutes. Do not continue until you see this message in the log
+
+
+
+Is our service really running? Seeing is believing. You can run this command to double-check the systemd service status:
+sudo systemctl status uuidservice.service
+
+
+Is the service really listening on port 5000? Check it with this command:
+ss -nltp
+
+
+
+
+OPEN PORTS
+Typical problems you may need to troubleshoot on your future cloud projects are related to VCN security rules and operating system firewall rules. It is not enough to add a VCN security rule to the security list that is used by a subnet to which a particular compute instance is attached. You also need to open a required port in the operating system firewall. If you look at the user data we’ve uploaded to the uuid-1 instance, you will clearly see that we add a rule that opens port 5000. You can run this command in the instance’s shell to confirm the rule has been created:
+sudo firewall-cmd --list-ports
+
+You can now disconnect from the instance by issuing the exit command.
+
+
+API TEST
+Finally! It is time to perform a simple smoke test to see whether the UUID service is truly available in the cloud. We are dealing with a REST API that contains only one resource, identifiers, and supports only one method, GET. It cannot be easier. In our first attempt, we are going to use the curl command. It is available on the Mac/Linux console, Windows Subsystem for Linux, and GitBash on Windows. Please disconnect from the cloud instance and issue the following command, adapting it to include the public IP your instance has been attached to:
+curl -is $UUID1_INSTANCE:5000/identifiers
+
+Postman:
+publicip:port
+
+130.61.41.151:5000/identifiers
+
+
+Well done! You’ve reached the point in which the application is running and has been successfully tested. To sum up, we’ve managed to provision a new VCN with an Internet gateway, create a new public subnet, and add a new route rule to direct the outbound traffic via the Internet gateway and security rule to allow incoming TCP traffic to port 5000 on any compute instance to which this rule applies. On its first boot, the compute instance downloaded all the required packages, created the Python virtual environment, downloaded the UUID service code from GitHub, and installed a new systemd service for the application.
+
+
+
+Scaling Out
+Scaling out an application means adding more instances usually of the same type. This is another term that describes horizontal scaling. There are two reasons why you would want to scale an application out.
+Increasing processing throughput capacity
+
+Adding fault tolerance
+
+One instance is never enough to provide a reliable cloud API. However, something can still go wrong, annihilating your lonely application node. If you have more nodes that perform the same duty and are distributed across various data centers, you will probably never experience a full outage if a single data center fails. Moreover, if you have more instances of the same type, you can process a greater number of requests parallelly. It’s as simple as that.
+
+
+
+
+One of the fundamental cloud concepts is autoscaling. Autoscaling takes place when the cloud control plane dynamically scales an application horizontally by adding or removing instance nodes based on changing metrics such as request count or CPU utilization. We will discuss autoscaling in more detail later in the book. In this section, I will show you how to manually scale an application out by using custom images.
+
+CUSTOM IMAGE
+An image is a template that specifies the operating system and any additional software that has to be preinstalled during the instance launch. Oracle Cloud Infrastructure comes with a few base images with various operating systems. You can provision an instance based on a selected operating system image, install the software of your choice, perform some additional configuration, and create a new custom image based on this instance. In this way, you will be able to reuse your custom software stack configuration to launch other compute instances.
+
+If you have a running compute instance, you are able to create a new custom image based on that instance
+
+
+
+This is how you create a new custom image based on an existing compute instance:
+1.	Go to Menu ➤ Compute ➤ Instances.
+
+ 
+2.	Make sure that the Sandbox compartment is selected.
+
+ 
+3.	Click the name of our compute instance.
+
+ 
+4.	Click Actions ➤ Create Custom Image to open a custom image wizard.
+
+ 
+5.	Provide a name for your new custom image.
+
+ 
+6.	Click Create Custom Image.
+
+
+If you decide to create a custom image based on a particular compute instance, this instance will be taken offline for the time it takes to build the image. As soon as the image has been created, the compute instance will be started again.
+
+
+We are going to use the newly created custom image to launch a second instance that runs the UUID service API. To achieve fault tolerance, we will deploy the second node in a different availability domain. Let’s create a new subnet in the second availability domain exactly as we planned.
+
+
+
+
+We will follow the same sequence of steps we did a few sections earlier when we created the first subnet. To keep things simple, we will reuse the same route table and security list that are in use by the first subnet.
+
+This is how you create a new VCN subnet using the OCI Console:
+1.	Go to Menu ➤ Networking ➤ Virtual Cloud Networks.
+
+ 
+2.	Make sure that the Sandbox compartment is selected.
+
+ 
+3.	Click the name of your VCN.
+
+ 
+4.	Click Subnets in the Resources menu.
+
+ 
+5.	Click Create Subnet.
+
+ 
+6.	Provide the required values:
+	a.	Enter b-net as a display name.
+
+	b.	Choose Availability Domain-specific Subnet Type.
+
+	c.	Select the second availability domain (suffixed AD-2) in your region.
+
+	d.	Place 192.168.1.16/28 as the CIDR block.
+
+	e.	Make sure that the default route table is chosen.
+	
+	f.	Select the Public Subnet option.
+
+	g.	Select Use DNS Hostnames in this subnet.
+ 
+	h.	Use a short one-character label b as a DNS label.
+
+	i.	Make sure that the default DHCP Options setting is chosen.
+
+	j.	Make sure that the default security list is chosen.
+
+7.	Click Create.
+
+ 
+At this stage, you should be able to see two subnets in two different availability domains
+
+
+
+
+
+Now, we will create a second UUID service API instance in this newly created subnet.
+
+SECOND COMPUTE INSTANCE
+The second compute instance will run the same systemd service that runs on the first compute instance. This time, we won’t upload any user data because everything has already been set up in the image we created from the first compute instance
+
+
+This is how you create the second compute instance using the OCI Console:
+1.	Go to Menu ➤ Compute ➤ Instances.
+
+ 
+2.	Make sure that the Sandbox compartment is selected.
+
+ 
+3.	Click Create Instance.
+
+ 
+4.	Provide the required details:
+	a.	Name your instance uuid-2.
+	b.	Select the second availability domain in your region.
+	c.	Set the image source to the newly created custom image; in my case, its name starts with UUID-API-Oracle-Linux-.
+	d.	Set the instance type to Virtual Machine.
+	e.	Select VM.Standard2.1 as your instance shape.
+
+ 
+5.	In the Configure Networking section:
+	a.	Make sure your new b-net subnet is selected.	
+	b.	Select Assign a Public IP Address.
+
+ 
+6.	In the Add SSH Key section:
+	a.	Choose the public key (oci_id_rsa.pub), as shown in Figure 2-21.
+
+7.	Click Show Advanced Options.
+ 
+8.	On the Networking tab under Advanced Options, as shown in Figure 2-24:
+	a.	Set Private IP Address to 192.168.1.18.
+	b.	Set Hostname to uuid2.
+
+9.	Click Create.
+
+
+
+You can now test the API on both nodes. Please remember to replace the public IP addresses and use the ones that have been assigned to your instances in both cases.
+$ UUID2_INSTANCE=130.61.23.13
+$ curl $UUID1_INSTANCE:5000/identifiers
+
+{
+  "generator":"uuid1",
+  "uuid":"bc85b59f-cf0f-4035-a730-c25111db00ec"
+}
+$ curl $UUID2_INSTANCE:5000/identifiers
+{
+  "generator":"uuid2",
+  "uuid":"6eca06e0-65f2-444b-acb8-b9c46741dc72"
+}
+
+
+
+
+
+
+
+
+
+The current setup has one major pain point. The API consumers (in other words, applications that invoke the API) have to explicitly specify the public IP address of a particular virtual machine. With this approach, the more you scale the API out, the more unrelated endpoints with different public IP addresses you produce. This is not the best way to design a highly available solution. Luckily, we can change it by adding a load balancer.
+
+LOAD BALANCER
+A load balancer provides a single point of entry and traffic distribution to the active servers or worker nodes. We are going to use an Internet-facing, so-called public load balancer that uses a public floating IP to support the failover mechanism. This means that you launch a pair of load balancer (LB) nodes, each in a different availability domain. At any given time, only one LB node is active and forwards traffic to the UUID service API nodes. The second LB node remains in Standby mode. If the active LB node fails, the standby LB node will detect this situation and announce itself as the active node and the current IP address holder.
+
+A public load balancer requires two dedicated public subnets. We are going to create them in the same VCN in which we host UUID service API nodes. This time, we will use a new security list because the rules will differ from the default security list that we use for our application node subnets.
+
+Please create a new security list called lb-sl. This is how you create a new security using the OCI Console:
+
+1.	Go to Menu ➤ Networking ➤ Virtual Cloud Networks.
+
+ 
+2.	Make sure that the Sandbox compartment is selected.
+
+ 
+3.	Click the name of your VCN.
+
+ 
+4.	Click Security Lists in the Resources menu.
+
+ 
+5.	Click Create Security List.
+
+ 
+6.	Give it a name: lb-sl.
+
+ 
+7.	Create ingress rules as defined in Table 2-1. One rule has to be stateless.
+
+ 
+8.	Create egress rules as defined in Table 2-2. The rule has to be stateless.
+
+ 
+9.	Click Create Security List.
+
+
+
+
+Please create a new security list called lb-sl. This is how you create a new security using the OCI Console:
+1.	
+Go to Menu ➤ Networking ➤ Virtual Cloud Networks.
+
+ 
+2.	
+Make sure that the Sandbox compartment is selected.
+
+ 
+3.	
+Click the name of your VCN.
+
+ 
+4.	
+Click Security Lists in the Resources menu.
+
+ 
+5.	
+Click Create Security List.
+
+ 
+6.	
+Give it a name: lb-sl.
+
+ 
+7.	
+Create ingress rules as defined in Table 2-1. One rule has to be stateless.
+
+ 
+8.	
+Create egress rules as defined in Table 2-2. The rule has to be stateless.
+
+ 
+9.	
+Click Create Security List.
+
+ 
+Table 2-1Ingress/Engress Security Rules for Load Balancer Subnet
+ 	
+		Type			Protocol		Source					Destination
+
+1		Stateful		TCP			0.0.0.0/0, All ports			Port 80
+
+2		Stateless		TCP			192.168.1.0/24,Port 5000		All ports
+
+
+Table 2-2Egress Security Rules for Load Balancer Subnet
+ 	
+
+1		Stateless		TCP			All ports		192.168.1.0/24,Port 5000
+
+
+
+
+
+
+
+
+
+We are now going to create two subnets in two different availability domains for a fault-tolerant public load balancer pair of nodes.
+1.	Go to Menu ➤ Networking ➤ Virtual Cloud Networks.
+
+ 
+2.	Make sure that the Sandbox compartment is selected.
+
+ 
+3.	Click the name of your VCN.
+
+ 
+4.	Click Subnets in the Resources menu.
+
+ 
+5.	Add two new public subnets, as defined in Table 2-3.
+
+ 
+Table 2-3Load Balancer Subnets
+Name		AD		CIDR Block			DNS Label		Security List
+
+c-net		1		192.168.1.32/29			c				lb-sl
+
+d-net		2		192.168.1.40/29			d				lb-sl
+
+We’ve just prepared the networking setup for our highly available public load balancer. Altogether with UUID API subnets, you should see four subnets in your VCN,
+
+
+
+
+
+
+
+
+As a matter of fact, the load balancing capability is delivered by a set of cooperating OCI resources encapsulated by a load balancer resource. Compute nodes or private IP addresses to which the requests are forwarded by the load balancer are considered as backends and grouped together into a backend set resource. A backend set is more than just a simple grouping of backends because it also defines the health check policy. The health check policy decides how the backends are judge to be operational or failing. Finally, a listener is required to accept the ingress traffic; otherwise, requests wouldn’t be able to flow into the public load balancer from the Internet
+
+
+
+
+
+Having outlined the resources that a load balancer is composed of, let’s create them. When using the OCI Console, you can leverage a three-step all-in-one load balancer creation wizard. This is how you create a new load balancer resource:
+
+1.	Go to Menu ➤ Networking ➤ Load Balancers.
+
+ 
+2.	Make sure that the Sandbox compartment is selected.
+
+ 
+3.	Click Create Load Balancer.
+
+ 
+4.	In the Add Details step, provide the configuration, as shown in Figure 2-52:
+	a.	Name your load balancer uuid-lb.
+	b.	Set the visibility to Public.
+	c.	Select the Small shape: 100Mbps.
+	d.	Select Public Load Balancer.
+	e.	Set the VCN to the uuid-vcn VCN.
+	f.	Choose the load balancer subnets: c-net and d-net.
+ 
+5.	Click Next Step.
+
+ 
+6.	In the Choose Backends step, provide the configuration, as shown in Figure 2-53:
+	a.	Make sure Weighted Round Robin is selected.
+	b.	Click Add Backends and select both compute instances.
+	c.	For each backend instance, change the port to 5000.
+
+
+7.	Still in the Choose Backends step, provide the health check policy configuration, as shown in Figure 2-54:
+	a.	Make sure the protocol is set to HTTP.
+	b.	Set the port to 5000.
+	c.	Set the URL path to /identifiers.
+	d.	Make sure the status code is set to 200.
+
+ 
+8.	Click Next Step.
+
+ 
+9.	In the Configure Listener step, provide the configuration, as shown in Figure 2-55:
+	a.	Choose the HTTP protocol and set the port to 80.
+	b.	Name the listener uuid-lb-listener.
+
+ 
+10.	Click Create Load Balancer.
+
+
+
+
+The health check configuration we’ve defined is responsible for overseeing and detecting whether all of the registered load balancing backends are operating as expected. The UUID service has been implemented as a simple REST API. REST APIs leverage HTTP standard methods to provide CRUD operations over the API-managed resources. This is why the most natural way to perform a REST API health check is to test one of its resources using HTTP GET. The health check policy, which we have just configured, will send HTTP GET /identifiers requests every 10 seconds to each backend server. If it does not receive an HTTP 200 OK response within three seconds, it will retry two times and mark the node as unavailable. After a load balancer has been provisioned, it can take a few moments for the load balancer to confirm that the backends are healthy.
+
+
+
+If needed, you can check the state of each individual backend, as shown in Figure 2-57. To do so, follow these steps:
+1.	Go to Menu ➤ Networking ➤ Load Balancers.
+
+ 
+2.	Click the name of your load balancer.
+
+ 
+3.	In the Resources section, click Backend Sets.
+
+ 
+4.	Click the name of the backend set.
+
+ 
+5.	In the Resources section, click Backends.
+
+If you should find one of the backends in a Critical state, follow this checklist to troubleshoot the issue:
+The target compute node is running.
+
+The UUID Service systemd service is started.
+
+The operating system firewall accepts connections on port 5000.
+
+There is an ingress stateful rule in the default security list that allows the incoming traffic to port 5000.
+
+The rules in the load balancer’s subnet security list are correct.
+
+The load balancer set backends are properly defined.
+
+The load balancer backend set health check configuration is correct.
+
+All in all, after a while, you will be able to perform the final test for this chapter. To do so, you need to identify the public IP address your load balancer has been given from the Oracle Cloud address pool. In my case, it is 132.145.240.240. When you send a few requests to the /identifiers resource on port 80 of your load balancer, they will be evenly routed in a round-robin manner to the first (uuid-1) and second (uuid-2) instances of the UUID service API. Every time you send a request to your load balancer, it is interchangeably served by one of the two UUID service instances, as proven by the generator JSON element in each response.
+
+LB_INSTANCE=132.145.240.101
+$ curl $LB_INSTANCE:80/identifiers
+{
+"generator":"uuid1",
+"uuid":"709f6aac-0720-461a-9fd3-732748253bca"
+}
+$ curl $LB_INSTANCE:80/identifiers
+{
+"generator":"uuid2",
+"uuid":"cfe329bd-cd2c-49a6-ae4f-29f23bf5d2fe"
+}
+$ curl $LB_INSTANCE:80/identifiers
+{
+"generator":"uuid1",
+"uuid":"e22b5858-e70f-46ab-bd16-0da3d55aca73"
+}
+$ curl $LB_INSTANCE:80/identifiers
+{
+"generator":"uuid2",
+"uuid":"1c9662d9-1426-4e2d-bae3-bd4207dbd73b"
+}
+
+
+
+
+We have completed the exercise. Before we move on, let’s terminate the cloud resources. You can now terminate all resources you’ve created in this chapter, excluding the learning compartment that we are going to use in the next chapters.
+
+
+Cleanup
+To avoid unnecessary costs or trial credit consumption, no matter how low they are, let’s terminate the resources we’ve created in this chapter. Some resources depend on other resources; therefore, it is important to stick to the required sequence when you delete them. This won’t be a problem in future chapters because in many cases the automation will do it for us in one shot. In this chapter, however, we are doing everything manually in the OCI Console, so we have to follow these steps:
+1.	Go to Menu ➤ Networking ➤ Load Balancers.
+
+ 
+2.	Make sure that the Sandbox compartment is selected.
+
+ 
+3.	Click the three-dot menu, click Terminate, and wait until the resource is terminated 
+
+
+
+Now, in a similar way, use the OCI Console to terminate (or delete) the remaining resources.
+Both compute instances (Menu ➤ Compute ➤ Instances)
+
+Custom image (Menu ➤ Compute ➤ Custom Images)
+
+VCN with associated networking resources
+
+
+
+
+
+
+
+
+
+************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************
+
+
+
+3.Automating Cloud Infrastructure
+
+
+
+
+Cloud computing cannot exist without automation. The entire concept of the rapid self-provisioning of pooled cloud resources (compute instances, storage, virtual networking, and many others) is built on an assumption that the whole provisioning process, from the beginning to the end, is fully automated. Simply because there are no manual steps involved, it is possible to represent the complete cloud infrastructure in the form of scripts and templates that are used to remotely manage cloud resources
+
+
+Scripts and templates can be treated as source code and stored in a version control system like Git. This boosts team collaboration as well as leads to faster delivery of enhancements and, as a consequence, problem resolution. New team members can furthermore understand the infrastructure just by reading the code that is always up-to-date, in contrast to the traditional documentation that can, as time goes by, easily skew from the real state. You prepare the scripts and templates, which, during execution, interact with the so-called cloud management plane through the interfaces covered in the next section. The cloud management plane provisioning engine is already automated by your cloud provider. It is responsible for creating, updating, and deleting the resources in the cloud. Again, there are absolutely no manual steps throughout the entire process. Everything considered together leads to the shortest provisioning time possible, repeatability, and self-service.
+
+You can and actually should go beyond automating the cloud infrastructure management only. Cloud infrastructure is part of and, at the same time, a prerequisite for your cloud-based solutions. You indeed run business or platform software on cloud infrastructure. It makes therefore more sense to automate the entire solution delivery process. Imagine your developer checks in an application code change that effectively adds a new service. The service listens on a port that hasn’t been used until now. The same commit can include an infrastructure script or template change that would add a new security list to allow the inbound traffic on that port. The new code revision is detected by the build server that creates the new security rule and reprovisions one or more virtual machines or containers that host the service in the test environment. Finally, the integration and regression tests are executed to assess the quality of the change. In this way, a simple code change can produce a tested deployment running in the cloud. This is called continuous delivery. The process does not need to end with the test environment. Some use cases would benefit from releasing a limited number of service instances in the newest version, known as a canary release, straight to the production environment to evaluate their behavior under real-world conditions.
+
+Automation is the key enabler for continuous delivery that can become an important part of the DevOps culture in your organization. What does it mean, and what are its benefits? Looking only at the name, the Dev part comes from the word development, and the Ops part comes from the word operations. In the traditional model, developers handled deliverables to the operations team whose members prepared the configuration and deployed the artifacts to particular environments. This cascade often led to misunderstandings and errors, causing the delivery process to be longer than it should be. DevOps breaks this approach and blends both roles. Processes related to the field of traditional operations are now fully automated and often triggered already by the actions done by application developers. In a popular understanding, a person who holds a DevOps role is responsible for building and maintaining the aforementioned automation. Repeatability, which is a result of thorough automation, decreases the risk of errors previously related to manual actions. Moreover, the time saved by automating the recurring manual tasks can be used to enhance the insights into running systems and provide better governance over the entire application landscape. The term DevOps culture is actually broader and goes far beyond the scope of this book.
+
+Cloud Management Plane
+To fulfill its duties, the cloud platform provides a set of secure interfaces you can interact with to control your cloud assets. These interfaces, referenced also as APIs, are your gateway to the cloud management plane, which is the engine that delivers cloud resources based on physical and virtual equipment in data centers. Clients send requests to API endpoints to remotely execute various operations in the cloud.
+
+You need to remember that the cloud is by definition multitenant. Because manifold users interact with the same set of interface endpoints, the engine is not only responsible for managing and monitoring the cloud assets but also has to make sure that the resources used by different tenants (cloud accounts) are properly isolated. Moreover, the API is also responsible for protecting cloud assets from unauthorized access
+
+
+The most common way for cloud providers to offer their cloud interfaces is in the form of secure REST APIs. Cloud resources and their lifecycle events are represented as REST resources and corresponding HTTP methods (GET, PUT, POST, DELETE). A successfully authenticated and authorized client can order the cloud management plane to perform an operation on one or more cloud resources on his behalf. This is done by sending a properly formed request over HTTPS. The cloud management plane validates and translates the request to a set of operations performed on virtual and/or physical resources to accomplish the requested action.
+
+How does it actually work in practice from a client’s point of view? Let’s take a quick look at Listing 3-1, which presents a simplified API request that would eventually list the details of a particular instance pool. To increase the clarity of this example, I’ve used parameter placeholders for the OCID of the instance pool cloud resource ({ic-id}) and the OCID of the compartment ({c-id}). In a real request, you would replace them with the correct Oracle Cloud identifiers.
+
+
+GET /20160918/instancePools/{ic-id}?compartmentId={c-id} HTTP/1.1
+Host: iaas.eu-frankfurt-1.oraclecloud.com
+Accept: application/json
+Authorization: ...
+
+
+
+The request asks for the instance pool details of a specified instance pool that exists within a given compartment. The first part of the REST resource, /20160918, denotes the version of the Oracle Cloud Infrastructure API, while the second segment, namely, instancePools, clearly indicates the type of cloud resource we are dealing with.
+
+The operation to fetch the instance pool details is performed in a synchronous way, which means that the response will be delivered as soon as the results have been collected. Listing  corresponding response BELOW. Please note that I’ve shortened the OCIDs and the request ID header to make the structure more readable.
+
+
+HTTP/1.1 200 OK
+Content-Type: application/json
+Content-Length: 931
+opc-request-id: /D8613...
+{
+  "id" : "ocid1.instancepool....",
+  "compartmentId" : "ocid1.compartment....",
+  "definedTags" : { },
+  "displayName" : "instance-pool",
+  "freeformTags" : { },
+  "instanceConfigurationId" : "ocid1.instanceconfiguration....",
+  "lifecycleState" : "RUNNING",
+  "placementConfigurations" : [ {
+    "availabilityDomain" : "feDV:EU-FRANKFURT-1-AD-1",
+    "primarySubnetId" : "ocid1.subnet...."
+  }, {
+    "availabilityDomain" : "feDV:EU-FRANKFURT-1-AD-2",
+    "primarySubnetId" : "ocid1.subnet...."
+  } ],
+  "size" : 4,
+  "timeCreated" : "2018-12-21T18:47:29.767Z"
+}
+
+
+
+Depending on the type of the requested action, the cloud management plane engine may perform either a synchronous or an asynchronous operation. Synchronous operations result in blocking calls, which means that the client waits for the results that are returned in the corresponding response. In the case of an asynchronous operation, you would immediately receive a response that contains a work request ID you can use to track the state of the requested operation. At the time of writing, three capabilities support work requests and perform some operations in an asynchronous way.
+Container Engine for Kubernetes
+
+Object storage
+
+Load balancing
+
+Using APIs for these three capabilities entails the need for careful design decisions an API client has to make when implementing the procedural provisioning scripts. This applies when using custom API calls, SDKs, and the CLI. Luckily, you do not need to worry about this design aspect if you manage your infrastructure as code using the declarative approach with Terraform.
+
+The APIs are intended to deliver the richest set of operations that can be performed on the cloud resources. In other words, if you cannot find an API resource for a particular operation, the operation either is not supported at the moment or can be achieved through a sequence of multiple API calls that perform more granular actions on cloud assets.
+
+
+
+
+You can find the comprehensive reference of the available Oracle Cloud Infrastructure REST APIs at https://docs.cloud.oracle.com/iaas/api.
+
+
+SECURING API CALLS
+You may wonder how secure the remote management of cloud resources is when using REST APIs. Well, if it wasn’t secure, there would be no cloud computing I guess. There are three aspects of API calls security we have to briefly discuss.
+Transport layer security
+
+Authentication
+
+Authorization
+
+First, the data packets that travel through the public Internet over HTTPS are encrypted. TLS 1.2 protocol mechanisms protect the communication from being eavesdropped on or altered while on the way. This industry-standard protocol provides transport layer security transparently, and no involvement from the cloud team is required.
+
+The enforcement of authentication, which is a way to validate who the request sender really is, requires a different approach. Each request has to be signed using the sender’s private key and the RSA-SHA256 algorithm. The signature is eventually included within the request’s authorization header. Listing 3-3 shows the detailed structure of the header, including placeholders for user- and tenancy-specific data.
+Authorization: Signature version="1",keyId="{tenancy-ocid}/{user-ocid}/{public-key-fingerprint}",algorithm="rsa-sha256",headers="(request-target) date host",signature="{signature}"
+Listing 3-3Authorization Header with Request Signature
+To generate a signature, you first need to build a signing string that is composed of the parts of the request including, but not limited to, a resource target, such as /20160918/vcns, and a hash of a request payload, when present. The signing string is then encrypted using the private key and gets encoded to text using the Base64 algorithm. Yes, it does sound a bit complex, but do not worry. You do not need to perform these steps in your daily job on your own, unless you really want. You nearly always use software development kit (SDK) for a particular language or specialized provisioning tools (CLI, Terraform) that prepare the authorization header and invoke the OCI API for you.
+
+
+Not every successfully authenticated user should be allowed to perform a particular operation. For example, if there are multiple projects maintained under the same cloud account, you will probably prefer to keep the resources that belong to project A isolated from project B users. Even for a single project, it may still make sense to limit some access rights to specific sets of resources for particular groups of users. This will be the task of the authorization function, which verifies what an authenticated user is really entitled to do. In the next chapter, you will learn about identity and access management users, groups, and policies that altogether let you configure the authorization mechanisms for your cloud account.
+
+At this stage, it is crucial to highlight that every API call is always made on behalf of a named Oracle Cloud Infrastructure IAM user. For each request, in the authorization header, a client declares a tenancy OCID, a user OCID, and a fingerprint of a public key that has been uploaded to Oracle Cloud Infrastructure for this particular IAM user. Moreover, the signature, which is also part of the header, is encrypted with the corresponding private key. This all leads to the conclusion that you need to possess a keypair, called an API signing keypair, before you sign the API requests. The public key will have to be uploaded to Oracle Cloud Infrastructure and associated with a user of your choice. In this way, OCI will know how to decrypt your request.
+
+API SIGNING KEY
+In this section, we are going to generate a new keypair that will serve as an API signing keypair and upload the public key to Oracle Cloud Infrastructure under a particular IAM user. In this way, we will empower anyone with the private key to leverage the OCI API and manage OCI resources remotely on behalf of this IAM user. The private key will be additionally secured with a password. Every time you try using the private key, you will be prompted for password, unless you persist it in your local configuration
+
+
+Generate a Keypair
+The API signing keypair must be an RSA keypair in PEM format. PEM format uses human-readable characters, which makes it slightly easier to work with (especially copying the public key) than when working with binary formats. We are going to use theopenssl program to generate a new keypair that consists of two related 2,048-bit keys: one private to sign the request and one public to verify the genuineness of the request. This is how you generate a new keypair using openssl that should be available out of the box on your Linux, macOS, and Windows Subsystem for Linux:
+$ mkdir ~/.apikeys
+$ cd ~/.apikeys
+$ openssl genrsa -out oci_api_pem -aes128 2048
+
+chmod go-rwx oci_api_pem
+$ ls -l | grep pem | awk '{ print $1" "$9 }'
+-rw------- oci_api_pem
+$ openssl rsa -pubout -in oci_api_pem -out oci_api_pem.pub
+Enter pass phrase for oci_api_pem:
+writing RSA key
+$ ls -l | grep pem | awk '{ print $1" "$9 }'
+-rw------- oci_api_pem
+-rw-r--r-- oci_api_pem.pub
+
+
+
+
+It is recommended that you restrict the access permissions to your private key so that only the file owner is entitled to read or amend the file. You can perform this operation using the chmod command, as shown in the code snippet. At this stage, the keypair is ready. Listing 3-4 shows the public key we’ve just generated.
+$ cat oci_api_pem.pub
+
+
+
+
+Uploading the Public Key
+We’ve reached the point when we need to decide on whose behalf the API requests are sent. In other words, we have to select an existing IAM user and upload the public key that will get associated with this user. If you are working with a new trial or PAYG account, you are probably logged in as the default IAM user who represents the tenancy owner and belongs, out of the box, to the Administrators group. This group will let you perform all the exercises described in this chapter.
+
+
+
+
+This is how you upload a public key using the OCI Console:
+1.	Go to Menu ➤ Identity ➤ Users.
+
+ 
+2.	Click the name of your tenancy administrator user.
+
+ 
+3.	Click API Keys in the Resources menu.
+
+ 
+4.	Click Add Public Key.
+
+ 
+5.	Paste the public key.
+
+ 
+6.	Click Add.
+
+
+
+You can have up to three public API keys for each IAM user. The API will recognize which is the right one to use for each incoming request based on a fingerprint of the public key included in the authorization header of the request
+
+The user is allowed to perform only the operations on cloud resources that are allowed by existing IAM policy statements for the group the user belongs to. You will learn about them in the next chapter. For now, please make sure you will be using an IAM user who belongs to a group that has tenancy administration rights, such as default Administrators group; otherwise, some commands presented in the next sections may not work.
+
+Preparing for SDK, CLI, and Terraform
+If you’ve completed all the steps described in the “API Signing Key” section, you are ready to begin automating cloud infrastructure management tasks. Let’s wrap up and list the required details you will have to provide, at least once during the initial setup, when coding your custom API calls based on the SDK for your favorite programming language or, more often, running CLI scripts or provisioning infrastructure configuration with Terraform. These are the details you should prepare or know where to find them:
+API Signing Keypair in PEM format:
+Public key
+
+Private key
+
+Fingerprint of the public key
+
+IAM User OCID, available under Menu ➤ Identity ➤ Users
+
+Tenancy OCID, available under Menu ➤ Administration ➤ Tenancy Details
+
+Region Identifier, available under Menu ➤ Administration ➤ Region Management on the Infrastructure Regions tab
+
+We are now ready to discuss and apply the three most popular automation techniques. We will talk about SDKs first.
+
+
+
+SDK
+The OCI SDK is a library for a particular programming language that lets your software interact with the Oracle Cloud Infrastructure cloud management plane. The SDK exposes the OCI API calls as functions or methods that are easier to use and faster to work with for a developer. In this way, custom logic that manages and monitors OCI resources can be embedded in your applications.
+
+
+
+
+
+
+
+
+CLI
+The OCI command-line interface (CLI) is a command-line utility that lets you interact with Oracle Cloud Infrastructure REST APIs in a convenient, scripted way. The CLI is slightly more powerful than the OCI Console because you may find features available as CLI commands that are not implemented in the OCI Console. Furthermore, it is usually faster to execute a script instead of clicking your way through the graphical interface of the OCI Console. If you look closer at the CLI, you will discover that it is built on the Python SDK for Oracle Cloud Infrastructure. In other words, the OCI CLI is implemented in Python as the oci-cli module, which uses the classes from the oci module
+
+The CLI is implemented as an open source project with code available on GitHub at https://github.com/oracle/oci-cli. It can be installed on the Linux, macOS, and Windows operating systems.
+
+INSTALLATION
+You install the CLI using a script dedicated to your operating system. The scripts can be downloaded from the GitHub account for the OCI CLI. As a matter of fact, there are two scripts available.
+A shell script for Linux/macOS/Windows Subsystem for Linux
+
+A PowerShell script for native CLI execution on Windows
+
+If executed, each of the two scripts performs similar steps.
+
+To install the CLI on Linux, macOS, or Windows Subsystem for Linux, open a Terminal window and execute this command:
+$ bash -c "$(curl -L https://raw.githubusercontent.com/oracle/oci-cli/master/scripts/install/install.sh)"
+
+
+
+In the first place, the presence of Python binaries in the PATH variable is verified, and any missing native package dependencies are downloaded and put in place, if needed. The installer will prefer Python 3 to Python 2. Yet, the CLI works fine with any of the two. In the previous section, I mentioned that the CLI is basically a Python module. This is why the installer creates a new virtual environment dedicated to the CLI so that its dependencies are isolated from any other Python-based development you may be working on in the meantime. During the installation process, you will be asked to provide a directory path for the virtual environment and another path to store a lightweight oci utility. The utility can be thought of as the CLI executable, which exposes the oci-cli Python module classes in the form of a convenient command-line utility. You can leave the defaults if you do not have any specific directory in mind. At the end, the installer will update your PATH variable so that you can execute the oci utility in a straightforward manner. In some shells, the oci utility might not be visible right after installation. In such a case, you have to either restart the console or simply source the file in which the CLI added itself to the PATH variable. On Linux and Windows Subsystem for Linux, it is usually ~/.bashrc, while on Mac it is usually the ~/.bash_profile file.
+$ oci --version
+Command 'oci' not found.
+$ source ~/.bashrc
+As soon as the installation has been completed, you should be able to check the version of the CLI.
+$ oci --version
+2.6.6
+
+
+The first line of the oci utility script will tell you the location of the virtual environment. This code snippet shows how to activate the virtual environment of your CLI and list the SDK version the CLI is using:
+$ head -n 1 `which oci`
+#!/Users/mjk/lib/oracle-cli/bin/python3
+$ cd ~/lib/oracle-cli/
+$ source bin/activate
+(oracle-cli) $ python3 -m pip freeze | grep oci
+oci==2.5.1
+oci-cli==2.6.6
+(oracle-cli) $ deactivate
+$
+We have done this to illustrate the CLI relationship to the Python SDK. In your daily work with the CLI, you won’t explicitly activate the virtual environment but will use the oci utility instead.
+
+
+
+
+CONFIGURATION
+The CLI config file is a simple properties file that stores the details required for signing the API requests that are sent to the Oracle Cloud Infrastructure REST API on behalf of a named IAM user. If you expect that the CLI configuration is similar to the configuration file used in the context of the Python SDK for OCI, you are right.
+
+
+The structure is the same as the one used in the previous section about the SDK. Moreover, the CLI expects the configuration file at the same default ~/.oci/config path.
+You can use a simple built-in CLI configuration wizard. You will need to provide the same information I’ve listed in the “Preparing for SDK, CLI, and Terraform” section. Additionally, you will be given an opportunity to create a new API signing keypair, in case you didn’t prepare one earlier.
+
+$oci setup config
+Enter a location for your config [/Users/mjk/.oci/config]:
+Enter a user OCID: ocid1.user.oc1..aa.........
+Enter a tenancy OCID: ocid1.tenancy.oc1..aa.........
+Enter a region (e.g. ap-seoul-1, ap-tokyo-1, ca-toronto-1, eu-frankfurt-1, uk-london-1, us-ashburn-1, us-gov-ashburn-1, us-gov-chicago-1, us-gov-phoenix-1, us-langley-1, us-luke-1, us-phoenix-1): eu-frankfurt-1
+Do you want to generate a new RSA key pair? (If you decline you will be asked to supply the path to an existing key.) [Y/n]: n
+Enter the location of your private key file: /Users/mjk/.apikeys/oci_api_pem
+Enter the passphrase for your private key:
+Fingerprint: e6:99:f5:82:db:a9:75:fb:cd:3c:30:74:00:b3:61:2b
+Do you want to write your passphrase to the config file? (if not, you will need to supply it as an argument to the CLI) [y/N]: y
+Config written to /Users/mjk/.oci/config
+
+
+
+If you have decided to generate a new API signing keypair using oci setup config , please remember to upload the public key to the cloud for your IAM user. If you do not remember how to do it, please go back to the “Uploading the Public Key” section earlier in this chapter.
+
+Storing the password for your private key is optional. If you decide against doing it, you will be prompted for the password every time you issue a CLI command. If you decide in favor, please remember not to copy this file anywhere else also to keep its permissions restricted to the file owner.
+$ ls -l .oci
+-rw-------  1 mjk  staff   322B Jun 13 21:26 config
+
+Now, you should be ready to test the CLI. We are going to list the available versions of Ubuntu-based images. Such a query is run in the context of the root compartment whose OCID is the same as the OCID of the tenancy. Luckily, we already stored the root compartment OCID in the CLI configuration file and can use a combination of grep and sed tools to extract this value. This is how you run your first OCI command that sends a request to the OCI REST API:
+$ TENANCY_OCID=`cat ~/.oci/config | grep tenancy | sed 's/tenancy=//'`
+$ oci compute image list --compartment-id $TENANCY_OCID --operating-system "Canonical Ubuntu" --output table --query "data [*].{Image:\"display-name\"}"The OCI REST API uses JSON for the payload. The CLI will also output JSON as its default format. You can change it and use a tabular output by applying the --output table option. If you want to limit what gets printed, you can use the --query option that consumes a valid JMESPath, which is a query language for JSON.
+
+
+Nearly every CLI command requires a compartment OCID. If you know that you are going to work with one given compartment for the majority of time, you can define a default value for the --compartment-id option. Default values for CLI commands options can be defined in the ~/.oci/oci_cli_rc file. Listing 3-7 presents a minimalistic oci_cli_rc file with just one profile with a single default value.
+[DEFAULT]
+compartment-id = ocid1.compartment.oc1..aa.........
+
+
+The [DEFAULT] part is the name of the profile. This also applies to the configuration file shown in Listing 3-6. You can store multiple profiles in one configuration file (or in the file with default values) and dynamically select the profile with the --profile option when you issue a CLI command. For example, you can have a separate profile for each compartment. This can be helpful when you work with just a few compartments and want to simplify the way you choose them as you execute CLI commands.
+
+
+Actually, there is more than just the default values you can store in the oci_cli_rc file. For example, it is possible to create named JMESPath queries and reference them as you use CLI commands. We are going to test this now.
+
+Please copy the template of the oci_cli_rc file to the ~/.oci/ directory and edit the file to replace the value of the compartment_id property with the OCID of your Sandbox compartment.
+$ cp ~/git/oci-book/chapter03/2-cli/oci_cli_rc.template ~/.oci/oci_cli_rc
+$ vi ~/.oci/oci_cli_rc
+Listing 3-9 presents the oci_cli_rc file. The DEFAULT profile includes the compartment-id for your Sandbox compartment. The predefined section called OCI_CLI_CANNED_QUERIES is used to store common queries that can be reused in your CLI calls. A query called list_ubuntu_1804 can be used to filter the results based on the version of the operating system and display image names only.
+[DEFAULT]
+compartment-id = ocid1.compartment.oc1..aa.........gzwhsa
+[OCI_CLI_CANNED_QUERIES]
+list_ubuntu_1804 = data[?"operating-system-version"=='18.04'].{Image:"display-name"}
+Listing 3-9OCI CLI RC File with Predefined Query
+
+
+
+
+If you want to learn more about CLI configuration, you can refer to the official documentation at https://docs.cloud.oracle.com/iaas/Content/API/SDKDocs/cliconfigure.htm.
+
+
+
+USING THE CLI
+I mentioned before that the CLI may offer features that are not available in the OCI Console, but if something is possible with the OCI Console, it is also possible when using the CLI. This is why if you see that there are some repeatable tasks you perform in the OCI Console and they cost you too much time, you may consider automating them using the CLI. In this section, you will see how to launch a compute instance using the OCI CLI.
+
+I am assuming that you already created the oci_cli_rc file, as described in the previous section. Listing 3-10 shows the minimal content required from now on. The OCID value of the Sandbox compartment is present within the DEFAULT profile.
+
+
+
+Let’s start by making sure we are about to provision OCI resources in the correct compartment. You should see the name of the Sandbox compartment as a result of this command:
+$ oci iam compartment get --output table --query "data.{CompartmentName:\"name\"}"
+
+If you read Chapter 2, you may remember that a compute instance must exist within a subnet that is part of a VCN. This is a CLI command that creates a new VCN, named cli-vcn, which uses the 192.168.3.0/24 address space:
+$ vcn_ocid=`oci network vcn create --cidr-block 192.168.3.0/24 --display-name cli-vcn --query "data.id" | tr -d '"'`
+$ echo $vcn_ocid
+ocid1.vcn.oc1.eu-frankfurt-1.aa.........lg4b7w
+
+I’ve filtered the output using the --query parameter, removed the parentheses with the tr program, and saved the newly generated VCN OCID as a bash variable named vcn_ocid. Why? We will need the VCN OCID as an input parameter when we create an Internet gateway and a subnet. This is a CLI command that provisions a new Internet gateway within the VCN:
+
+
+$ igw_ocid=`oci network internet-gateway create --vcn-id $vcn_ocid --display-name cli-igw --is-enabled true --query "data.id" | tr -d '"'`
+$ echo $igw_ocid
+ocid1.internetgateway.oc1.eu-frankfurt-1.aa.........2ptvoa
+To enable the connectivity with the Internet, we will add a routing rule that directs all outbound traffic from the VCN to the Internet gateway. This is the command that adds a new routing table with the relevant route rule:
+$ route_rules="[{\"cidrBlock\":\"0.0.0.0/0\", \"networkEntityId\":\"$igw_ocid\"}]"
+$ rt_ocid=`oci network route-table create --vcn-id $vcn_ocid --display-name cli-rt --route-rules "$route_rules" --query "data.id" | tr -d '"'`
+$ echo $rt_ocid
+ocid1.routetable.oc1.eu-frankfurt-1.aa.........ukqcjq
+Before invoking the oci network route-table create command, a supplementary variable called route_rules with a single route rule referencing the Internet gateway has been created. Again, we are persisting the cloud identifier of the route table in a variable. We will need it while creating a subnet. This is how you create a subnet using the CLI:
+$ ad1=`oci iam availability-domain list --query data[0].name | tr -d '"'`
+$ echo $ad1
+feDV:EU-FRANKFURT-1-AD-1
+$ subnet_ocid=`oci network subnet create --vcn-id $vcn_ocid --display-name cli-vcn --cidr-block "192.168.3.0/30" --prohibit-public-ip-on-vnic false --availability-domain $ad1 --route-table-id $rt_ocid --query data.id | tr -d '"'`
+$ echo $subnet_ocid
+ocid1.subnet.oc1.eu-frankfurt-1.aa.........sqyz6a
+This time, we made two calls to the OCI REST API using the CLI. Initially, we fetched the name of the first availability domain in our current region and saved it to a new variable. Second, we created a new AD-specific subnet with a narrow addressing space of 192.168.3.0/30, which gives us just a single usable IPv4 address: 192.168.3.2. Why just one? OCI reserves the first two addresses and the last address in each VCN subnet.
+
+We are ready to provision a new compute instance. Please make sure there is an SSH public key present under ~/oci_id_rsa.pub. You created an SSH keypair in Chapter 2. The keypair will be required to enable remote access to the instance. This is how you launch a new compute instance using the CLI:
+$ image_ocid=`oci compute image list --shape "VM.Standard2.1" --operating-system "CentOS" --operating-system-version 7 --sort-by TIMECREATED --query data[0].id | tr -d '"'`
+$ echo $image_ocid
+ocid1.image.oc1.eu-frankfurt-1.aa.........hl2cma
+$ vm_ocid=`oci compute instance launch --display-name cli-vm --availability-domain "$ad1" --subnet-id "$subnet_ocid" --private-ip 192.168.3.2 --image-id "$image_ocid" --shape VM.Standard2.1 --ssh-authorized-keys-file ~/oci_id_rsa.pub --wait-for-state RUNNING --query data.id | tr -d '"'`
+Action completed. Waiting until the resource has entered state: RUNNING
+$ echo $vm_ocid
+ocid1.instance.oc1.eu-frankfurt-1.ab.........wsbmoq
+Each compute instance must be based on an image that provides an operating system and, optionally, additional preinstalled software. The OCI CLI command that launches a compute instance requires an OCID of the image. This is why we query for the OCID of the newest shape-compatible CentOS 7 base operating system image in the first place. Subsequently, we issue the oci compute instance launch command providing a display name (--display-name) to be used, a preferred private IP address (--private-id), and a desired shape (--shape) that defines the profile of the allocated hardware resources and identifiers for the subnet (--subnet-id) and the image (--image-id). A target availability domain (--availability-domain) must be the same as the one used for the subnet. Finally, we tell OCI to wait until the instance enters the RUNNING state. If we had skipped that part, the CLI would have returned before the provisioning process had completed. Figure 3-8 presents the instance in the RUNNING state as shown in the OCI Console.
+
+
+
+
+Do you remember that we discussed the oci_cli_rc configuration file? Have you spotted any parameter that was always the same while we were executing the commands to launch a compute instance? Each command defined a --query parameter with the same data.id string as a value. In theory, looking at this usage pattern, you could consider adding it to the oci_cli_rc configuration file. In reality, this query is a bit too trivial to be stored in the oci_cli_rc file, but feel free to do so, if you want.
+
+As a matter of fact, you will use the CLI more often to query for data. The compute instance we’ve just launched is running in a public subnet and has been assigned an ephemeral public IPv4 address. Let’s find out the exact value of this public IP address. As we’ve saved the OCID of the compute instance as a variable (vm_ocid), we can reuse this value now. This is how you query for a public IP address of a compute instance running in a public subnet:
+$ oci compute instance list-vnics --instance-id "$vm_ocid" --query data[0].\"public-ip\" --raw-output
+130.61.89.229
+The CLI is based on a procedural approach when provisioning resources or querying for data. You specify the actions in a particular sequence that is taken by the CLI. These actions, issued as the CLI commands, are often mapped 1:1 into OCI REST API requests. Dependencies between resource types must be respected and taken into consideration in planning the action sequence. Similarly, if you delete the resources, the sequence must be usually inverted. This is how you terminate and delete previously created resources:
+$ oci compute instance terminate --instance-id $vm_ocid --wait-for-state TERMINATED
+Are you sure you want to delete this resource? [y/N]: y
+Action completed. Waiting until the resource has entered state: TERMINATED
+$ oci network subnet delete --subnet-id $subnet_ocid --wait-for-state TERMINATED
+Are you sure you want to delete this resource? [y/N]: y
+Action completed. Waiting until the resource has entered state: TERMINATED
+$ oci network route-table delete --rt-id $rt_ocid --wait-for-state TERMINATED
+Are you sure you want to delete this resource? [y/N]: y
+Action completed. Waiting until the resource has entered state: TERMINATED
+$ oci network internet-gateway delete --ig-id $igw_ocid --wait-for-state TERMINATED
+Are you sure you want to delete this resource? [y/N]: y
+Action completed. Waiting until the resource has entered state: TERMINATED
+$ oci network vcn delete --vcn-id $vcn_ocid
+Are you sure you want to delete this resource? [y/N]: y
+In the procedural approach, the responsibility to understand what actions have to be taken and in which sequence is delegated to the programmer. This can increase the complexity of the scripts, especially if you want to implement various types of changes to the state of an existing infrastructure. In such a case, you need to begin with finding out what the current state is, before you plan the actions that would bring the infrastructure to the expected state. It would have been much easier just to define the expected state and let a provisioning tool detect what kind of actions have to be taken depending on the current state of the infrastructure. This would be a declarative approach.
+
+
+
+
+
+
+
+
+
+************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************
+4.
+
+
+Compartments
+Oracle Cloud Infrastructure uses compartments to group related cloud resources. Nearly every cloud resource, such as compute instance, object storage bucket, or managed Kubernetes cluster, must belong to just one compartment. You decide in which compartment a newly created cloud resource will exist while creating that resource. If you find out you need to move a resource to a different compartment, you will have to terminate the old one and provision a new one with the same configuration in a target compartment, unless the particular cloud resource type supports moving between compartments. Compartments provide logical isolation, which makes it much easier to govern the management permission policies and track the costs incurred by the related groups of resources. The isolation is purely logical. This means that it is still technically possible to let the resources, for example, compute instances, in one compartment communicate with the resources, for example, other compute instances and object storage buckets, in another compartment. There are three reasons to use compartments.
+Easier resource management
+
+Granular access control
+
+Cost split
+
+First, it is easier to understand what the assets in your cloud tenancy are and manage these resources if you logically group the related resources. In this way, you are able to apply more precise filters to your queries and receive shorter and more accurate lists of results. This becomes even more visible as the number and the variety of your cloud resources start to grow. Second, compartments normally become the primary scope of your access control policy statements. The statements are stored in documents called identity and access management policies. Each statement will allow some kind of access to a particular type of cloud resource that exists in a given compartment. At this stage, it is worth noting that child compartments inherit the access management policies from their parent compartments. Third, you can filter costs by compartment and know what cloud resource consumption costs are incurred by each project environment and production system as long as you choose to use different compartments for each of them.
+
+Compartments are global, and every individual compartment spans all regions your cloud account is subscribed to. It is possible and in many cases advised to arrange your compartments in a hierarchical structure that can consist of up to six levels of child compartments. If you are working on a single proof-of-concept project or are just learning OCI, you will most probably store all your cloud resources in a single compartment. You could call it Sandbox or anything more meaningful to you. As soon as you consider working with multiple projects and running a set of production systems in your cloud tenancy, you ought to carefully plan the compartment hierarchy. How would you usually approach this task? Well, it is easy to spot that the most natural candidates to derive your compartment hierarchy from are project environments and production systems. Why? Simply because they are the ones that usually provide the typical context for resource management, access control, and cost tracking—the three main reasons to use compartments.
+
+
+
+
+OCI Console, you need to go to Menu ➤ Identity ➤ Compartments.
+
+You need to click the name of a particular compartment to see its details as well as a detailed list of the child compartments it contains. Here, you can alter the name and description of a compartment, check its OCID, and manage its child compartments
+
+To add a new child compartment in the OCI Console, you just need to click the Create Compartment button and provide the required details.
+
+
+$ oci iam compartment get --output table --query 'data.{Name:"name"}'
+
+As soon as we make sure that our CLI commands are executed in the context of the expected compartment, we are ready to create a new child compartment. To do so, just run this command and do not forget to use the -c parameter if needed:
+
+$ EXP_COMPARTMENT_OCID=`oci iam compartment create --name Experiments --description "Sandbox area for experiments" --query "data.id" | tr -d '"'`
+
+The preceding command has created a new compartment called Experiments as a child compartment to the Sandbox compartment. At this stage, you should be able to see the newly created compartment in the list of child compartments for the Sandbox compartment,
+
+From now on, it is possible to create various cloud resources inside this compartment in any region and any availability domain of your choice. The only thing to remember is to choose this compartment for the context of your actions. In the case of the OCI Console, you do it by selecting the compartment name in the List Scope combo box 
+
+It is possible to delete unneeded compartments. You can perform this operation both in the Console or using the CLI. The action is asynchronous and usually takes some time. Prior to that, you still have to terminate and delete all resources and subcompartments inside the compartment you are about to delete; otherwise, you won’t be allowed to do so. This is a command that initiates compartment deletion:
+$ oci iam compartment delete -c "$EXP_COMPARTMENT_OCID"
+Are you sure you want to delete this resource? [y/N]: y
+
+
+
+$ oci iam compartment delet --compartment-id ocid1.compartment.oc1..aaaaaaaaf64hxfsmzutogydgx6frqacf63l6727mdbspcrxjb7swjuzt36ja
+
+
+
+
+Last but not least, there is a service limit on the number of compartments. At the time of writing, it is set to 50 per tenancy. If you find out you need more, you can always request a service limit increase. To do so in the OCI Console, you need to follow these steps:
+1.	Go to Menu ➤ Governance ➤ Limits, Quotas and Usage.
+
+ 
+2.	Click “Request a service limit increase”.
+
+ 
+3.	Fill in the form and click Submit Request.
+
+
+
+
+Earlier in this section, I mentioned that one of the main motivations to use compartments is to be able to analyze the costs of individual production systems, projects, or even environments. In the OCI Console, you can do the following:
+1.	Go to Menu ➤ Account Management ➤ Cost Analysis.
+
+ 
+2.	Select a compartment in the filter.
+
+ 
+3.	Choose the desired period of time.
+
+ 
+4.	Click Apply Filters.
+
+costs incurred by the Sandbox compartment since the beginning of the calendar year in Polish Zloty (PLN), which is the local currency in my home country.
+
+
+
+
+
+Users
+Each action performed on Oracle Cloud Infrastructure resources is always done on behalf of a named user. As you read Chapter 3, you learned that every API call requires the OCID of a user simply to be able to sign a request. No matter if you are using the Console, API, SDK, CLI, or Terraform, you will always need a user account. Oracle Cloud Infrastructure supports two types of user accounts.
+
+Local users
+
+Federated users
+
+
+When you subscribe to a new cloud account, there is a default administrator user for the cloud account created in the Oracle Identity Cloud Service (IDCS). The e-mail address that is used during registration becomes the username of this global administrator user. This is a federated user account. As a matter of fact, all tenancies are by default federated with IDCS, but you are free to switch to any other SAML-compliant identity provider or create nonfederated users that are local to OCI. If you are not sure whether you understand, do not worry. Let me explain. When you want to sign in to the OCI Console, you are presented with a two-section login screen, as shown in Figure 4-10. The section in the left part is for federated users. This will take you to the single-sign on (SSO) login screen delivered by your identity provider. By contrast, you will use the section on the right to sign in as a local, nonfederated user.
+
+
+
+This will be the local administrator for the Sandbox compartment. Now, we are going to create another local user, sandbox-user, this time using the CLI. The command we are about to use requires the tenancy OCID to be used as one of the parameters. You should be able to find this value in your CLI configuration file, most probably available at the path ~/.oci/config unless you’ve used a custom path for the CLI configuration file. Alternatively, you can also find this in the OCI Console under Menu ➤ Administration ➤ Tenancy Details. We are now ready to execute the following CLI command:
+$ TENANCY_OCID=`cat ~/.oci/config | grep tenancy | sed 's/tenancy=//'`
+$ oci iam user create --name sandbox-user --description "Sandbox user" --query "data.id" -c $TENANCY_OCID
+
+
+
+
+First, we assigned the tenancy OCID to a bash variable to simplify the syntax of the CLI command that follows. Finally, we used an iam user create command that leverages a JMESPath query to output the newly assigned user OCID.
+
+Let me use this opportunity to show you how to build some more advanced JMESPath queries. We are going to list the names of all OCI users whose names start with the sandbox word. We expect to see a list of two names of the users we’ve just created. Again, we have to pass the tenancy OCID as a parameter.
+
+
+$ oci iam user list -c $TENANCY_OCID --query "data [?starts_with(name,'sandbox')].name" --all
+
+
+At this point of the time, there are two new nonfederated local users ready. We still have to generate a one-time password for them; otherwise, neither of them would be able to sign in to the OCI Console as one of these users. This is how you do it for the sandbox-user user:
+$ USER_OCID=ocid1.user.oc1..aa.........dzqpxa
+$ oci iam user ui-password create-or-reset --user-id $USER_OCID --query "data.password"
+
+
+
+kg2-tJOc<OWF7-6&X_QP
+
+
+
+
+
+We are going to let the two new users make remote API calls. You will need to generate two API signing keypairs, one for each of the two new local users, and upload their public keys under their accounts. You can find more information about the API signing keys in Chapter 3. This is the fast track:
+$ cd ~/.apikeys
+$ openssl genrsa -out api.sandbox-user.pem -aes128 2048
+Generating RSA private key, 2048 bit long modulus
+.........+++
+..+++
+e is 65537 (0x10001)
+Enter pass phrase for api.sandbox-user.pem:
+Verifying - Enter pass phrase for api.sandbox-user.pem:
+$ chmod go-r api.sandbox-user.pem
+$ openssl rsa -pubout -in api.sandbox-user.pem -out api.sandbox-user.pem.pub
+Enter pass phrase for api.sandbox-user.pem:
+writing RSA key
+$ openssl genrsa -out api.sandbox-admin.pem -aes128 2048
+Generating RSA private key, 2048 bit long modulus
+.................................+++
+.........................................+++
+e is 65537 (0x10001)
+Enter pass phrase for api.sandbox-admin.pem:
+Verifying - Enter pass phrase for api.sandbox-admin.pem:
+$ chmod go-r api.sandbox-admin.pem
+$ openssl rsa -pubout -in api.sandbox-admin.pem -out api.sandbox-admin.pem.pub
+Enter pass phrase for api.sandbox-admin.pem:
+writing RSA key
+$ ls -l | awk '{print $1, $9}'
+total
+-rw------- api.sandbox-admin.pem
+-rw-r--r-- api.sandbox-admin.pem.pub
+-rw------- api.sandbox-user.pem
+-rw-r--r-- api.sandbox-user.pem.pub
+Now, you can upload the public keys (.pub suffix) to the corresponding user accounts. We are going to use the CLI, but, if you want, you can do it in the OCI Console as well
+
+
+
+
+
+
+Groups and Policies
+The access to various types of cloud resources is given to the groups, not the individual users. We will focus on local groups only, but you may benefit from knowing that it is also possible to map your identity provider groups to the local groups. Policy statements define what kind of access is allowed to whom and in which scope. We will take a closer look at policy statements in a second. First, let’s discuss groups.
+
+GROUPS
+A group is basically a collection of users. A user can belong to more than one group. It is possible to dynamically add and remove users from groups. You create groups in a similar manner as you’ve created users usually using the Console or the CLI. It is time to create a new group for the sandbox-admin user.
+
+1.	Go to Menu ➤ Identity ➤ Groups.
+
+ 
+2.	Click Create Group.
+
+ 
+3.	Provide sandbox-admins as the group name, description, and click Create.
+
+ 
+ The Administrators group is the default group present in every cloud account. At any given time, Oracle Cloud Infrastructure enforces that there must be at least one user in this group; otherwise, you could easily get unintentionally locked out from your account.
+ 
+ 
+ 
+ 
+ You may remember as I mentioned that cloud resources in Oracle Cloud Infrastructure are uniquely identified not by their names but by the OCIDs. This is true for the groups as well, with one small exception. While it is usually technically possible to provision multiple cloud resources of the same type with the same name, you cannot do it either with the groups or with the users. There is an additional constraint that does not allow any name duplicates among groups or users.
+
+ We are going to create another group, this time for the regular users for the Sandbox compartment such as the sandbox-user. This time, for the sake of variety, we will use the CLI. Please remember to make sure the TENANCY_OCID bash variable value is still set to the OCID of your tenancy before running this command:
+ $ oci iam group create --name sandbox-users --description "Group for the regular users of the Sandbox compartment" --query "data.id" -c $TENANCY_OCID
+ "ocid1.group.oc1..aa.........rj2sba"
+ Run this CLI command to list the groups whose names start with sandbox. We are going to format the output as a table.
+ $ oci iam group list -c $TENANCY_OCID --all --query "data[?starts_with(name,'sandbox')].{Name:name,OCID:id}" --output table
+ +----------------+------------------------------------+
+ | Name           | OCID                               |
+ +----------------+------------------------------------+
+ | sandbox-admins | ocid1.group.oc1..aa.........hlotwa |
+ | sandbox-users  | ocid1.group.oc1..aa.........rj2sba |
+ +----------------+------------------------------------+
+ 
+ The two new groups are still empty. In the OCI Console, adding or removing users from a group can be done in two ways. The first option is to use the group details view, just like this:
+ 
+ 1.	 Go to Menu ➤ Identity ➤ Groups.
+
+ 
+ 2.	 Click the name of the group to which you want to add a user.
+
+ 
+ 3.	 On the Group Members tab, click Add User to Group.
+
+ 
+ 4.	 Select the user you want to add to the group.
+
+ 
+ Alternatively, you can perform the same operation from the user details screen.
+ 1.	 Go to Menu ➤ Identity ➤ Users.
+
+ 
+ 2.	 Click the name of the user you want to add to a group.
+
+ 
+ 3.	 On the Groups tab, click Add User to Group.
+
+ 
+ 4.	 Select the group to which you want to add to the user.
+
+ 
+ Finally, you are more than welcome to do this task using the CLI. The iam group add-user command requires the user OCID and the group OCID, so either find them in the OCI Console or run these two queries:
+ $ USER_OCID=`oci iam user list -c $TENANCY_OCID --query "data[?name=='sandbox-admin'] | [0].id" --all --raw-output`
+ $ GROUP_OCID=`oci iam group list -c $TENANCY_OCID --query "data[?name=='sandbox-admins'] | [0].id" --all --raw-output`
+ To add a user to a group, use the oci iam group add-user CLI command.
+ $ oci iam group add-user --user-id $USER_OCID --group-id $GROUP_OCID
+ The sandbox-admin user gets immediately added to the sandbox-admins group. You can verify it in the OCI Console in the group details view, as shown in Figure 4-16.
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ As a next step, please add a new profile for the sandbox-user user to the ~/.oci/config file like you’ve done for the sandbox-admin user in the previous section. Listing 4-3 presents the expected structure of your ~/.oci/config file.
+ [DEFAULT]
+ tenancy=...
+ region=...
+ user=...
+ fingerprint=...
+ key_file=...
+ pass_phrase=...
+ [SANDBOX-ADMIN]
+ user=ocid1.user.oc1..aaaaaaaa3n5.........7d5dca
+ fingerprint=91:64:1b:4e:4e:35:4a:06:b2:8f:6f:53:ae:7d:0d:ee
+ key_file=~/apikeys/api.sandbox-admin.pem
+ pass_phrase=put-here-sandbox-admin-private-key-password
+ [SANDBOX-USER]
+ user=ocid1.user.oc1..aaaaaaaatimmpj37ao............cdzqpxa
+ fingerprint= 61:68:a5:1c:40:ef:51:fd:1a:74:6b:d9:9f:1c:b2:b8
+ key_file=~/apikeys/api.sandbox-user.pem
+ pass_phrase=put-here-sandbox-user-private-key-password
+ 
+ 
+ 
+ Last but not least, we are going to create two profiles in the ~/.oci/oci_cli_rc file to set the default compartment for each CLI query. Please replace the OCIDs in Listing 4-4 with the OCID of your Sandbox compartment. If you do not remember what kind of file that is, you will find more information in Chapter 3.
+ [DEFAULT]
+ compartment-id = ocid1.compartment.oc1..aa.........gzwhsa
+ [SANDBOX-ADMIN]
+ compartment-id = ocid1.compartment.oc1..aa.........gzwhsa
+ [SANDBOX-USER]
+ compartment-id = ocid1.compartment.oc1..aa.........gzwhsa
+ 
+
+
+
+POLICY STATEMENTS
+How does privilege management work? You define which group is entitled to perform particular actions on specific cloud resource types using policy statements. Each policy statement refers either to one particular compartment or to the entire tenancy. Figure 4-18 illustrates a simple policy statement that grants read-only access (read policy verb) over selected cloud resource types that belong to the instance-family aggregate resource type to the members of the groupABC. The aggregate resource type is a logical grouping of real cloud resource types such as compute instances or instance images. The sample policy statement refers only to the cloud resources that exist inside the projectABC compartment.
+
+
+A policy verb defines the access level to a cloud resource. There are four levels available: inspect, read, use, and manage. The inspect access is basic and usually lets the group members only list the resources. The read access includes the same scope as the inspect access but extended with the ability to read the details of the cloud resources. The use access typically allows the group members to perform all actions in the scope of the read access as well as starting, stopping, and updating the existing cloud resources. Finally, the manage access grants all permissions for the cloud resource type. The key thing about policy verbs is that their exact meaning is highly contextual and depends on the resource type they are prefixing in the policy statement. Let me explain it using an example. Table 4-1 presents how the policy verbs map to individual permissions in the case of the load-balancers resource type. Each permission effectively allows the group members to call a particular set of APIs.
+
+
+POLICIES
+Individual policy statements cannot exist on their own but have to be contained in the so-called policies. A policy is a cloud resource that consists of one or more statements that determine the access a group of users has over a particular class of cloud resources in a particular compartment or the entire tenancy. Individual policy statements cannot exist outside of a policy; therefore, you will always work with policy statements contained in policies. At this stage, we need to highlight one important notion. The users and groups do exist in the scope of the entire tenancy. We can say they are global. Policies, on the other hand, are created in compartments, just like the majority of regular cloud resources such as compute instances or virtual networks. At the time of writing, a new cloud account arrives with two policies by default. To see them using the OCI Console, take these steps:
+1.	
+Go to Menu ➤ Identity ➤ Policies.
+
+ 
+2.	
+Make sure that the root compartment is selected.
+
+ 
+ 
+ 
+ If you prefer to use the CLI, this is the query to list the policies that are present in the root compartment:
+ $ oci iam policy list -c $TENANCY_OCID --all --query 'data[*].{Name:name,Statements:length(statements)}' --output table
+ 
+ 
+ The Tenant Admin Policy contains only one, but important, statement.
+ $ oci iam policy list -c $TENANCY_OCID --all --query "data[?name=='Tenant Admin Policy'].statements[0]"
+ [
+   "ALLOW GROUP Administrators to manage all-resources IN TENANCY"
+ ]
+ 
+ 
+ The role of this policy is to let the members of the default group Administrators manage all cloud resources in your tenancy. This policy is protected; you neither can delete it nor can add any other statements.
+ 
+ 
+ Earlier in this chapter, we created a new user called sandbox-admin and added him to the newly created sandbox-admins group. We also added a dedicated profile in the ~/.oci/config file for this user. If we tried to execute any CLI command on behalf of this user, the command would fail with the NotAuthorizedOrNotFound service error because there are no policy statements that would allow the members of the sandbox-admins group to interact with the API. We are ready to change it by adding a new policy to the root compartment. The policy is going to ship with just a single statement that allows the members of the sandbox-admins group to perform all kinds of operations on all resources in the Sandbox compartment. This is how you do it using the CLI:
+ $ oci iam policy create -c $TENANCY_OCID --name sandbox-admins-policy --description "Policy for the Sandbox compartment admins group"  --statements '["allow group sandbox-admins to manage all-resources in compartment Sandbox"]'
+ 
+ 
+ The command has created a new policy cloud resource called sandbox-admins-policy. Even though the policy was created in the root compartment, the scope of the statement refers to the Sandbox compartment. The IAM policy contains one statement.
+ 
+ 
+ This statement is pretty powerful because it allows the members of the sandbox-admins group to perform all kinds of operations on the cloud resources in the Sandbox compartment, including the creation of policies with statements that grant other groups to take actions in the Sandbox compartment or its subcompartments.
+
+
+Everything looks fine. We were able to list the available load balancer shapes. If you repeat the same command, but this time using the SANDBOX-USER profile, you will see an error because the other group, sandbox-users, is not mentioned in any policy for the Sandbox compartment.
+
+
+We will reference the sandbox-user-policy.json file, as we execute the oci iam policy create CLI command that adds a new policy in the Sandbox compartment with the statements read from the JSON file. Do not forget to use the SANDBOX-ADMIN profile when you execute the command.
+$ cd ~/git/oci-book/chapter04/2-policies/
+$ oci iam policy create --profile SANDBOX-ADMIN --name sandbox-users-policy --description "Policy for regular Sandbox compartment users"  --statements "file://~/sandbox-user-policy.json"
+To verify whether the new sandbox-users-policy policy has been successfully created in the Sandbox compartment, you can run this command:
+
+
+
+
+
+Audit and Search
+
+As a cloud tenancy owner or a person responsible for the cloud account you manage, you need to keep an eye on all these different cloud resources that exist across different compartments at any given moment. In addition, you should be aware of the actions taken by the users. When I talk about an action over one particular or sometimes many cloud resources at once, I basically think about an interaction with the API. I mentioned this in the previous chapter, as I discussed the automation options. Any kind of activity, no matter if it is done in the OCI Console, with the use of API, SDK, CLI, or Terraform, results in an API call under the hood. In this section, I will introduce you briefly to the searching and auditing capabilities in Oracle Cloud Infrastructure, which are truly indispensable when you want to control things properly.
+
+SEARCHING
+Imagine you want to find all users and groups whose display name contains the term sandbox. In the previous sections of the current chapter, I fetched the lists of all users and groups with two separate CLI commands: iam user list and iam group list. The JMESPath-powered filter I applied with the --query parameter parsed the data received in the response and displayed the matching elements locally on my client machine. What if my cloud tenancy had dozens of users? We would unnecessarily receive a really large response with all the users and only then apply a local JMESPath-powered filter. This does not seem like an effective solution. Furthermore, what if we wanted to search for cloud resources of various types that match a given name just using a single API call?
+
+Oracle Cloud Infrastructure offers a dedicated Search API to perform cross-resource-type and cross-compartment full-text search or structured queries to simplify and enhance the way you collect information about cloud resources. This is especially useful when you need to find a broad range of resources that are scattered across different compartments.
+
+
+
+As long as there are policy statements that give access to these compartments and resource types to the group your user belongs to, you can easily search for the resources using the Search API. There are two types of searches supported.
+Free-text queries
+
+Structured queries
+
+You will usually employ the free-text queries to get a brief overview of resources based on their metadata text-pattern match. The structured queries will be handier if you have already certain resource types or conditions in mind.
+
+Free-Text Search
+Free-text queries are nothing more than full-text searches performed over all cloud resource metadata indexed by Oracle Cloud Infrastructure. If a given search term is found in any of the indexed metadata fields, the cloud resource is included in the results, as long as this type of resource and its compartment scope are visible for the user who runs a free-text search. To run a free-text query in the OCI Console, place the searched term, for example, sandbox, in the search box present in the top bar
+
+
+
+The same query can be run with the use of the CLI. To do so, we are going to leverage the search resource free-text-search command and specify the term that we are interested in finding using the --text parameter. Please note that we still can use JMESPath (the --query parameter) to locally filter and display only the fields we are really interested in.
+$ oci search resource free-text-search --text sandbox --query 'data.items[*].{Type:"resource-type",Name:"display-name",OCID:"identifier",State:"lifecycle-state"}'
+
+
+As I said earlier, you will usually employ this type of search just to get some initial, high-level overview of these resources whose metadata match a particular text pattern. Depending on the term you are searching for, the result set can be really large. All in all, this is a full-text search over all kinds of cloud resources in your tenancy or the compartments your user has access to. This is why you should not forget about pagination, which you can control, in the case of CLI commands, with the --limit and --page parameters. You can read more about that in a dedicated section, later in this chapter.
+
+
+Structured Queries
+Structured queries, on the other hand, use a special query language that gives you more power and control over the types of resources and the compartment scope you would like to include in your search. For example, this is a query that will list all “running” or “terminating” compute instances in the Sandbox compartment:
+
+
+To run it in the OCI Console, open a free-text search page and click the Advanced Search button, or you can append /search to your URL to access this page directly. For example, if you are using the Frankfurt region, go to this URL: https://console.eu-frankfurt-1.oraclecloud.com/search. You will see the text
+
+
+The same query can be run with the CLI using the search resource structured-search command. The query will then be passed as the --query-text parameter.
+$ oci search resource structured-search --query-text "query instance resources where ( lifeCycleState = 'RUNNING' || lifeCycleState = 'TERMINATING' ) && compartmentId = 'ocid1.compartment.oc1..aa.........gzwhsa'"
+
+
+
+
+Coming back to the initial task, namely, listing users and groups whose metadata such as display name or description contain the term sandbox, the following is the proper query:
+query user, group resources matching 'sandbox-'
+As you can see, instead of applying the where clause, we are incorporating the matching clause. This is an example of how you achieve a free-text query over a selected subset of resource types. If you’ve used the free-text search, you would see other types of resources as well.
+
+Similarly to the free-text search, you can apply an additional JMESPath-powered filter to the result set also in case of the structured queries. Just do not confuse the --query-text parameter and the --query parameter. The first uses the Search API to find and return in a response only matching resources. The latter, namely, the --query parameter, applies the JMESPath formula to filter the results locally on your client machine.
+
+
+
+
+oci search resource structured-search --query-text "query user, group resources matching 'sandbox-'" --query 'data.items[*].{Type:"resource-type",Name:"display-name",OCID:"identifier"}'
+
+
+
+To read more about the syntax of the query language for structured searches, please consult the official documentation. You will find it at https://docs.cloud.oracle.com/iaas/Content/Search/Concepts/queryoverview.htm.
+
+Targeted searches done with the use of structured queries usually bring smaller result sets when compared to the free-text search. However, you may still benefit from employing proper pagination. Let’s see how to do it.
+
+
+
+Pagination
+Result sets can be really large nowadays. You can find dozens, hundreds, thousands, or even more items that match your query. Sometimes, it makes sense to verify just a few initial results; in other cases, you need to carefully analyze the entire result set item by item. For example, to calculate the total number of CPUs of your running compute instances at a given time, you would need to process the entire result set of your query. Fetching all the results at once may seem costly and, in some cases, can crash the application because of memory reasons. This is why you should always think about pagination. Pagination assumes you fetch the result set in pages by making a sequence of related search calls. The items are sorted; therefore, if you continue collecting results page by page, you will eventually reach the end of the result set. In this way, you will know you’ve managed to process the entire result set. The OCI Console provides pagination out of the box. When using the CLI, you will need to define the --limit and --page parameters and base the contents of the opc-next-header field on each consequent request. It does not matter if you are using the search resource structured-search command or the search resource free-text-search command. In both cases, the mechanism works in the same way.
+
+Let’s see how it works with an example. We are going to run the same free-text query for the sandbox term. This time, we will apply pagination and list up to three items at once. Hence, as you can guess, the --limit parameter in the CLI command will take 3 as the value. If you look closer at the JMESPath filter, you will see I am additionally displaying the opc-next-page element under the nextpage name.
+$ oci search resource free-text-search --text sandbox --query "{results: data.items[*].{type: \"resource-type\", name: \"display-name\"}, nextpage: \"opc-next-page\"}" --limit 3
+
+$ NEXTPAGE=eyJ.........cOY
+
+
+
+Perfect. We’ve received the first three items from the result set. Now, in the next query, you will add the --page parameter to the CLI command and use the value received in the nextpage field of the previous query result.
+$ oci search resource free-text-search --text sandbox --query "{results: data.items[*].{type: \"resource-type\", name: \"display-name\"}, nextpage: \"opc-next-page\"}" --limit 3 --page "$NEXTPAGE"
+
+
+
+
+
+
+
+
+AUDITING
+Oracle Cloud Infrastructure collects information about every call to the API. As a result, any kind of interaction with the API, regardless of its origin, whether the OCI Console, SDK, CLI, or Terraform, is a subject of auditing. The audit logs are stored for 90 days, unless you change this value. You can retain the audit log entries for as long as 365 days. To search for the occurrence of a particular event that took place in a chosen timeframe in the OCI Console, take these steps:
+1.	Go to Menu ➤ Governance ➤ Audit.
+
+ 
+2.	Choose the compartment to which you would like to narrow the results.
+
+ 
+3.	Choose the start date and the end date for your timeframe.
+
+ 
+4.	Provide a search keyword such as LaunchInstance.
+
+ 
+5.	Click Search.
+
+ 
+6.	Click the Keep Searching label to make sure all audit log entries are processed.
+
+
+
+
+
+
+
+
+************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************
+
+5. Data Storage in the Oracle Cloud
+
+There are many ways to store data in Oracle Cloud. A lot will depend on the type of data, application context, and data usage patterns that apply to a particular use case or user story. This chapter will focus solely on one of the most popular approaches to store data in the cloud, namely, object storage.
+
+Buckets and Objects
+Imagine you are working for a real estate developer. You are dealing with various types of data items such as real estate marketing materials, apartment blueprints, parking lot plans, construction schedules, and so on. Even though each of these items is typically a file, you may generalize a bit and consider them objects . In other words, you can see these items as the content that your cloud-based application would process and serve. To ease the data asset management, it would be helpful to be able to group these objects. In this example, the grouping could be based on different real-estate projects, which own particular objects. Now, what if you were able to safely forget about nonbusiness tasks such as making sure the data is always available and securely replicated to survive any unexpected events? This would simply let you focus solely on the business nature of the individual data items as required by your business processes. This is where object storage comes into play. It takes the burden of various, purely technical activities that occur in the data lifecycle. The data items are automatically replicated. Furthermore, you do not need to worry about whether there is still enough space on a disk volume because you never consider individual disk volumes in this case. By contrast, from a user perspective, you work with a flat, nearly endless storage space. Last but not least, data is by default encrypted at rest using the 256-bit Advanced Encryption Standard (AES-256).
+
+I’ve mentioned that you can group related objects such as, in the case of the earlier example, apartment blueprints and parking lot plans that belong to the same real estate project. To do so, you need some kind of logical container. Object storage lets you store the associated objects in logical containers called buckets . In the previous chapter, we talked about compartments and their role in isolating cloud resources based on the projects and systems maintained under your cloud account. The same rule applies here as well. Each bucket has to exist in exactly one compartment. This forces you to place the new bucket in the context of some particular project environment, production system, or general-purpose compartment such as Sandbox. Compartments and buckets may still be insufficient in more sophisticated ways to organize the objects as you would want. Often, we would prefer to deal with a hierarchical structure with a number of hierarchy levels to express a more detailed grouping. This can be achieved by prefixing object names in a proper way to simulate a folder-like multilevel hierarchy inside a bucket. You can prefix object names with /-separated “paths” and end up with complete object names such as /waw/bemowo/125.pdf or /waw/bemowo/245.pdf. This naming convention allows you to list the objects based on a particular prefix and perform various bulk operations on prefix-based subsets of objects in a bucket when using the CLI.
+
+
+Each cloud tenancy comes with an own namespace in which the buckets exist. The namespace name is generated only once, at the very beginning, and cannot be changed. Object storage requires bucket names to be unique only within a single cloud account. There are no conflicts possible with the existing bucket names taken by other tenants. As a result, it becomes obvious that all direct and indirect (CLI, SDK, Terraform) API calls to the object storage endpoint have to be aware of the namespace.
+
+You can find the name of the object storage namespace associated with your cloud tenancy in the Console like this:
+1.	Go to Menu ➤ Administration ➤ Tenancy Details.
+
+ 
+2.	Find the Object Storage Namespace label.
+
+ 
+Alternatively, you can use the CLI to get the name of the object storage (os) namespace (ns) like this:
+$ oci os ns get
+{
+  "data": "jakobczyk"
+}
+
+
+The object storage namespace name is immutable and does not change. The name of the object storage namespace is a random and unique string. Older tenancies, such as mine, may have their namespace name the same as tenancy name. You may recall that, in Chapter 2, I wrote that every Oracle Cloud Infrastructure cloud resource is uniquely identified with a structured identifier called an OCID. Well, there are exceptions to that rule: buckets and objects are uniquely identified by names. They are always named in the context of the namespace dedicated to your cloud tenancy,
+
+
+/n<namespace/<b>bucket/<o>object
+At this stage, I need to note that object storage in Oracle Cloud Infrastructure is regional in scope. This basically means that a particular bucket, together with the objects it stores, resides in the region in which the bucket was initially created. If you find yourself needing to perform cross-regional object transfers to another bucket located in a different region, there is an API that supports this kind of operation.
+
+
+Working with Objects
+Buckets in which objects reside are either public or private. To protect the data most of the time, you will be using private buckets, but you are free to create public buckets whenever you want. There are two types of authenticated groups that can access objects in private buckets.
+
+IAM users
+
+Instance principals
+
+
+
+you are able to let unauthenticated clients access particular objects in private buckets by issuing pre-authenticated requests that are valid for a given period of time. Anyone who knows the link is able to access the particular object. Pre-authenticated requests will be covered at the end of this chapter.
+
+
+Let’s look at the basic interactions with object storage. We will perform them using the CLI. Again, the CLI commands you are about to issue will simply result in API requests
+
+BASICS
+Objects can be thought of as data entities. This implies that there is a standard set of operations that can be performed on them such as create, read, update, and delete, commonly known as CRUD . No surprise here. Similar operations can be performed on buckets. We are now going to use the oci os bucket create CLI command to create a new bucket called blueprints in the Sandbox compartment. To stick to the best practices, we will perform this and a few consecutive operations as the sandbox-admin user. To do so, remember to apply the proper CLI profile.
+
+
+oci os bucket create --name blueprints --profile SANDBOX-ADMIN
+
+{
+  "data": {
+    "approximate-count": null,
+    "approximate-size": null,
+    "auto-tiering": null,
+    "compartment-id": "ocid1.compartment.oc1..aaaaaaaal5rpi6vswp3r5bgmkpu2ozzv3ny5l7kkij6bhdk3jj6m63jvhkvq",
+    "created-by": "ocid1.user.oc1..aaaaaaaabapwlfeskxdhlocetdnbv432qb7sikrbnlba6khtqwr2krs4egwq",
+    "defined-tags": {
+      "Oracle-Tags": {
+        "CreatedBy": "sandbox-admin",
+        "CreatedOn": "2021-07-04T14:13:01.962Z"
+      }
+    },
+    "etag": "7001429e-c8ec-40f7-866d-64acc41a09d6",
+    "freeform-tags": {},
+    "id": "ocid1.bucket.oc1.eu-frankfurt-1.aaaaaaaac26uxhn6scp6jh54by6zspmaj2sj4cyazp554hzynp5fsgzwspaq",
+    "is-read-only": false,
+    "kms-key-id": null,
+    "metadata": {},
+    "name": "blueprints",
+    "namespace": "frfj2l73u6ea",
+    "object-events-enabled": false,
+    "object-lifecycle-policy-etag": null,
+    "public-access-type": "NoPublicAccess",
+    "replication-enabled": false,
+    "storage-tier": "Standard",
+    "time-created": "2021-07-04T14:13:01.983000+00:00",
+    "versioning": "Disabled"
+  },
+  "etag": "7001429e-c8ec-40f7-866d-64acc41a09d6"
+}
+
+
+
+There are a couple of interesting elements in the response that are worth explaining. The only parameter we provided the CLI command with was the bucket name. This is why the bucket took the default configuration values whenever needed. As a result, the newly created bucket has been provisioned as a standard storage tier bucket with no public access allowed.
+
+
+There are two storage tiers : standard and archive. They do not differ much. The archive storage tier is basically cheaper at the cost of no immediate access to the objects that have to be restored first. This is an operation that can take a few hours. What would you use the archive storage for? Think about rarely accessed data that has to be stored for a given period of time because of some regulatory or compliance reasons. Another example could be old logs or measurements you do not necessarily need at the moment but would prefer to keep somewhere just in case. In this chapter, we are going to deal with standard storage tier buckets.
+
+
+No public access allowed means the bucket is private and the objects can be accessed only by authenticated IAM users, by instance principals, or through pre-authenticated requests. If we had been dealing with a public bucket, the objects would have been visible and downloadable for everyone. Figure 5-4 shows the bucket details in the OCI Console.
+
+
+This is the CLI command that lists the buckets present in an active compartment and displays them in a form of a table:
+$ oci os bucket list --query 'data[*].{Bucket:name}' --output table --profile SANDBOX-ADMIN
+
+
+
+
+
+Moving to the next step, we want to create permissions that allow the members of the sandbox-users group to list the objects that exist in this bucket as well as be able to add new and delete existing objects. To do so, prepare a file with the relevant policy statements first, as shown in Listing 5-1. I’ve called this file sandbox-users.policies.storage.json , but the name doesn’t matter as long as you reference it properly in the next command. Alternatively, you can find this file in the Git repository at the following path: chapter05/1-policies/sandbox-users.policies.storage.json.
+[
+"allow group sandbox-users to read buckets in compartment Sandbox where target.bucket.name='blueprints'",
+"allow group sandbox-users to manage objects in compartment Sandbox where target.bucket.name='blueprints'"
+]
+
+
+The read policy verb for buckets allows the users to list the buckets and get the detailed configuration of each bucket. Yet, we are using a condition with the target.bucket.name variable that basically limits the permission and allows the users to work only with the bucket named blueprints. Similarly, we are using the manage policy verb for objects to grant all kinds of operations in the scope of objects, but only those that are present in the blueprints bucket.
+
+
+As soon as the file is ready, we can create a new policy in the Sandbox compartment using the oci iam policy create CLI command in the same way we added new policies in the previous chapter. Working as the sandbox-admin, you are only able to create policies in the Sandbox compartment. In Chapter 4, we set the Sandbox compartment as the default compartment for the SANDBOX-ADMIN profile in the ~/.oci/oci_cli_rc file. In this way, you can skip the required --compartment-id (or its -c alias) parameter because the CLI will be able to read and apply the default value. The following CLI command will create a new IAM policy based on the file supplied. I am assuming you have cloned the code related to the book; therefore, you can enter the directory that contains the policy file and execute the CLI command like this:
+
+
+
+cd ~/git/oci-book/chapter05/1-policies
+$ oci iam policy create --name sandbox-users-storage-policy --statements file://sandbox-users.policies.storage.json --description "Storage-related policy for regular Sandbox users" --profile SANDBOX-ADMIN
+
+
+What about executing one of the most basic commands to put a file into the bucket? In the first place, we need a sample file. Real data is precious and should be protected nowadays, so let’s generate a random, meaningless file that we will pretend is a real estate apartment blueprint PDF. This is how you generate a random binary file using Bash:
+
+
+
+
+mkdir ~/data
+$ cd ~/data
+$ SIZE=$((4096+(10+RANDOM % 20)*1024))
+$ head -c $SIZE /dev/urandom > 101.pdf
+$ ls -lh 101.pdf | awk '{ print $9 " (" $5 ")" }'
+101.pdf (21K)
+
+
+
+
+
+oci os object put -bn blueprints --file 101.pdf --profile SANDBOX-USER
+
+
+
+It was pretty easy, wasn’t it? We have used the oci os object put command to upload the 101.pdf file to the blueprints bucket. The CLI profile SANDBOX-USER authenticates as the sandbox-user user. This user belongs to the sandbox-users group. A few moments ago, we granted this group of users the manage-level access over objects in the blueprints bucket in the Sandbox compartment. As a careful reader, you may wonder how the CLI knows the name of the target object storage namespace. The name is stored neither in the CLI config file nor in the oci_cli_rc file. The answer is it does not. As a result, the CLI must query the API for the default object storage namespace associated with the tenancy, in the background, using the same API as the one we queried with the oci os ns get command. If you want to avoid this additional internal call to the API, you can pass the namespace name to object storage CLI commands using the -ns option like this:
+
+oci os ns get
+$ oci os object put -ns frfj2l73u6ea -bn blueprints --file 101.pdf --profile SANDBOX-USER
+
+
+
+
+
+To download the object to your local drive and save it under a different name, for example, 101-copy.pdf, execute this CLI command:
+$ oci os object get -bn blueprints --name 101.pdf --file 101-copy.pdf --profile SANDBOX-USER
+Downloading object  [####################################]  100%
+Finally, to delete the file from the bucket, use this CLI command:
+$ oci os object delete -bn blueprints --name 101.pdf --profile SANDBOX-USER
+Are you sure you want to delete this resource? [y/N]: y
+
+
+What about updating an object? You have to be aware that the objects are immutable. To update an object, you basically need to overwrite it, effectively replacing the old version with the new one.
+
+Alright. These were the basics.
+
+
+OBJECT NAME PREFIXES
+What if we are going to store the blueprints from different real estate projects in one bucket? A property in the Bemowo district in Warsaw can have an apartment on sale with the same number as another apartment in a different property in the Wola district. We could use name prefixes to avoid mixing up these two apartments. This time, we are going to generate an entire set of files that we will pretend are apartment blueprints. We are going to use three groups of files. The first group will consist of blueprints of apartments in a property in the Bemowo district in Warsaw.
+
+
+
+
+mkdir -p warsaw/bemowo
+$ for i in 101 102 105 107 115; do SIZE=$((4096+(10+RANDOM % 20)*1024)); head -c $SIZE /dev/urandom > warsaw/bemowo/$i.pdf; done
+
+
+The second group will imitate the blueprint files of apartments in building A that belong to a property in the Wola district in Warsaw.
+$ mkdir -p warsaw/wola/a
+$ for i in 115 120 124 130; do SIZE=$((4096+(10+RANDOM % 20)*1024)); head -c $SIZE /dev/urandom > warsaw/wola/a/$i.pdf; done
+The third group will pretend to be the blueprint files of flats in building B in the same property in the Wola district in Warsaw.
+$ mkdir -p warsaw/wola/b
+$ for i in 119 120 121; do SIZE=$((4096+(10+RANDOM % 20)*1024)); head -c $SIZE /dev/urandom > warsaw/wola/b/$i.pdf; done
+Good. You should end up with something like this:
+
+
+
+find warsaw -type f -exec ls -lh {} + | awk '{ print $9 " (" $5 ")"}'
+warsaw/bemowo/101.pdf (29K)
+warsaw/bemowo/102.pdf (30K)
+warsaw/bemowo/105.pdf (18K)
+warsaw/bemowo/107.pdf (23K)
+warsaw/bemowo/115.pdf (33K)
+warsaw/wola/a/115.pdf (32K)
+warsaw/wola/a/120.pdf (21K)
+warsaw/wola/a/124.pdf (15K)
+warsaw/wola/a/130.pdf (31K)
+warsaw/wola/b/119.pdf (21K)
+warsaw/wola/b/120.pdf (29K)
+warsaw/wola/b/121.pdf (18K)
+
+The CLI comes with a convenient trio of bulk commands that let you upload, download, and delete objects in groups. We are now going to upload the blueprints from the warsaw/bemowo local directory to the blueprints bucket as new objects prefixed with the waw/bemowo/ string like this:
+$ oci os object bulk-upload -bn blueprints --src-dir warsaw/bemowo/ --object-prefix "waw/bemowo/" --include "*.pdf" --profile SANDBOX-USER
+
+
+If you want, you can use the --include option to limit the uploaded files from the source directory to the ones that match a given pattern.
+
+In a similar way, we will upload the files from the warsaw/wola directory, this time prefixing the objects with the waw/wola/a and waw/wola/b strings depending on the local subdirectory in which each file was originally located.
+
+
+
+the operations we’ve just performed. Prefixes are indeed helpful because they let you re-create a folder-like hierarchy in a particular bucket. The ListObject Object Storage Service API offers a convenient query parameter called prefix that lets you specify a subset of objects to be listed based on the object name prefix. You can access this API using the oci os object list CLI command like this:
+$ oci os object list -bn blueprints --prefix "waw/wo" --query 'data[*].name' --profile SANDBOX-USER
+[
+  "waw/wola/a/115.pdf",
+  "waw/wola/a/120.pdf",
+  "waw/wola/a/124.pdf",
+  "waw/wola/a/130.pdf",
+  "waw/wola/b/119.pdf",
+  "waw/wola/b/120.pdf",
+  "waw/wola/b/121.pdf"
+]
+$ oci os object list -bn blueprints --prefix "waw/wola/b" --query 'data[*].name' --profile SANDBOX-USER
+[
+  "waw/wola/b/119.pdf",
+  "waw/wola/b/120.pdf",
+  "waw/wola/b/121.pdf"
+]
+$ oci os object list -bn blueprints --prefix "waw/wola/b/12" --query 'data[*].name' --profile SANDBOX-USER
+[
+  "waw/wola/b/120.pdf",
+  "waw/wola/b/121.pdf"
+]
+
+
+
+
+
+LISTING OBJECTS IN PAGES
+In your daily work, you may easily encounter buckets that contain hundreds or thousands of objects. Listing all of them at once is impossible. You need to revert to the paging mechanism. You may remember the Search API and its paging mechanism that I described in the previous chapter. The bad news is that, at the time of writing, the Search API does not support object storage objects. The good news is that the Object Storage ListObjects API features its own paging mechanism, which is actually slightly simpler than the one used in the Search API. If you decide to use the limit parameter, in the response besides the list of objects you will receive the next-start-with element that is nothing more than the name of the next object. In every subsequent query, you can take the value of the previous next-start-with element and use the start parameter to instruct the API where to start listing the elements, as shown in this code snippet:
+
+
+
+OBJECT METADATA
+Another useful aspect related to storing files of different kinds and business purposes in object storage buckets is the possibility to attach custom metadata . In this way, you can provide additional contextual information by annotating selected objects without changing their content. Back to our example scenario with the real estate projects, we could decide to annotate the blueprints that refer to two-level apartments. Because we do not want to change the object content, we can leverage custom metadata that basically consists of key-value pairs that you associate with an existing object. This is how you put a new object with some custom metadata (apartment-levels key) into a bucket:
+
+head -c 4096 /dev/urandom > warsaw/wola/a/122.pdf
+$ METADATA='{ "apartment-levels": "2" }'
+$ oci os object put -bn blueprints --name "waw/wola/a/122.pdf" --file warsaw/wola/a/122.pdf --metadata "$METADATA" --profile SANDBOX-USER
+Uploading object  [####################################]  100%
+
+At first glance, nothing particular seems to have happened. Yet, if you view object details in the OCI Console, you will see a new custom key-value pair
+
+
+If you consider programmable interactions with the API, there is no need to download a particular file to inspect its custom metadata. The HeadObject API lets you read only the object’s metadata and the entity tag. We will talk about the importance of entity tags in the next section. This is how you access this API using the oci os object head CLI command:
+$ oci os object head -bn blueprints --name "waw/wola/a/122.pdf" --profile SANDBOX-USER
+
+In both cases, you can see that any custom key will be prefixed with the opc-meta- prefix to avoid conflicts with any standard metadata such as content-length or content-type. You need to be aware that the objects are immutable; therefore, to attach new metadata to an object already present in a bucket, we have to replace the object. It does not matter if the new version contains the same content.
+
+
+
+
+
+CONCURRENT UPDATES
+Let’s discuss something called race conditions . Suppose there are two applications that want to update the same object, at the same time, incrementally adding their partial changes. If they fetch the object straight one after another, they will be processing the same base version, each unaware of the fact that there is another application working on the same object in parallel. Everything seems fine until the moment in which both applications decide to upload a new version of the object, effectively replacing the base version. The result is easy to predict. The application that performs an update second will wipe out the changes done by the application that saved the object first. This situation can be called a lost update
+
+The impact of a lost update depends on the business scenario. Think of application logic that changes underground parking lot maps by coloring the parking spaces that have been sold. In this case, a lost update would result in showing some parking spaces as available even though they have been sold. Usually, we would prefer to completely eliminate that kind of issue. The object storage API addresses this problem with entity tags (ETags) that can be used to implement optimistic concurrency control. An ETag is an identifier generated for each version of the object, no matter whether the content has changed or remained the same. If you put the same object twice, effectively overwriting it with the same content during the second upload, you will still end up having two different ETags generated
+
+head -c 8096 /dev/urandom > warsaw/bemowo/parking.pdf
+$ oci os object put -bn blueprints --name waw/bemowo/parking.pdf --file warsaw/bemowo/parking.pdf --profile SANDBOX-USER
+
+{
+  "etag": "fa6687c7-eaf5-407d-a860-0acdee494ecf",
+  "last-modified": "Sun, 04 Jul 2021 14:39:39 GMT",
+  "opc-content-md5": "aBbkNLrsZcj0hLK9SE5X/Q=="
+}
+
+oci os object put -bn blueprints --name waw/bemowo/parking.pdf --file warsaw/bemowo/parking.pdf --profile SANDBOX-USER
+WARNING: This object already exists. Are you sure you want to overwrite it? [y/N]: y
+
+{
+  "etag": "1328bf32-d6ad-4b07-b57f-f9f441823af4",
+  "last-modified": "Sun, 04 Jul 2021 14:40:09 GMT",
+  "opc-content-md5": "aBbkNLrsZcj0hLK9SE5X/Q=="
+}
+
+
+
+
+How would you include the optimistic concurrency control in your application logic to avoid race conditions? An update operation on an object can be performed in steps. First, the current object’s ETag is read, and the object content gets downloaded. Next, the application changes the object locally. Finally, the API is told to put a new version of the object into the bucket, effectively overwriting the old version, but only if the ETag hasn’t changed in the meantime. Such a conditional PUT can be achieved using the If-Match HTTP header
+
+
+
+ETAG=`oci os object head -bn blueprints --name waw/bemowo/parking.pdf --query 'etag' --profile SANDBOX-USER --raw-output`
+
+echo $ETAG
+
+oci os object get -bn blueprints --name waw/bemowo/parking.pdf --file local.parking.pdf --profile SANDBOX-USER
+Downloading object  [####################################]  100%
+$ ls -lh local.parking.pdf | awk '{ print $9 " (" $5 ")" }'
+local.parking.pdf (7.9K)
+$ head -c 2048 /dev/urandom >> local.parking.pdf
+$ ls -lh local.parking.pdf | awk '{ print $9 " (" $5 ")" }'
+local.parking.pdf (9.9K)
+$ oci os object put -bn blueprints --name waw/bemowo/parking.pdf --file local.parking.pdf --if-match "$ETAG" --profile SANDBOX-USER
+WARNING: This object already exists. Are you sure you want to overwrite it? [y/N]: y
+Uploading object  [####################################]  100%
+{
+  "etag": "0698bdb4-ddd0-4d12-a030-cd7e55dc25af",
+  "last-modified": "Sat, 09 Mar 2019 17:56:35 GMT",
+  "opc-content-md5": "z2gpBufEwHkU2SsbutTQsA=="
+}
+We began with reading the ETag of a particular object. The oci os object head CLI command uses a lightweight HeadObject API, which fetches only the metadata associated with an object including the ETag. In our case, we found out that the current ETag has the value ending with bd7f242d5a34. In the second step, we downloaded the object’s content using the oci os object get CLI command and appended 2KB of random data to the local copy to simulate a local change. In the last part, we used the oci os object put CLI command with the --if-match option to make sure that the object gets overwritten only if it hasn’t been altered since we fetched the ETag at the beginning. In the response to the conditional PUT operation, we can see that the new object version has been assigned a completely new ETag that ends with cd7e55dc25af. If another application tried to issue the conditional PUT command using an ETag that is no longer in sync, it would receive an error with status HTTP 412 (Precondition Failed).
+$ head -c 1024 /dev/urandom >> local.parking.pdf
+$ ls -lh local.parking.pdf | awk '{ print $9 " (" $5 ")" }'
+local.parking.pdf (11K)
+$ oci os object put -bn blueprints --name waw/bemowo/parking.pdf --file local.parking.pdf --if-match "$ETAG" --profile SANDBOX-USER
+ServiceError:
+{
+    "code": null,
+    "message": "The service returned error code 412",
+    "opc-request-id": "f3fee86d-8e97-93b4-1c5e-da3ed572ed35",
+    "status": 412
+}
+
+
+
+
+
+Programming Object Storage
+To interact with the object storage API, we have been using CLI commands in the examples presented in this chapter until that point. In the real world, however, the great majority of all API calls to the object storage comes from applications. In this section, I will show you how to use one of the SDKs, namely, the OCI SDK for Python, to let your applications use Oracle Cloud Infrastructure object storage. I will also take this opportunity and explain how to deal with large files by employing a multipart file upload method.
+
+In Chapter 3, I guided you through a simple process of SDK installation and configuration. In Chapter 4, we created new groups and users as well as added two new profiles to the SDK/CLI configuration file: SANDBOX-ADMIN and SANDBOX-USER. Finally, in the first part of this chapter, we created the required policies in this way to allow the group members of the sandbox-users group to manage objects in the blueprints bucket. I am assuming all of this is still in place.
+
+All operations performed on object storage cloud resources with the use of the OCI SDK for Python are done through the methods of the ObjectStorageClient class 
+
+
+
+MULTIPART UPLOADS
+When dealing with very large files such as those bigger than 100MB, it is recommended that you split the original file into smaller parts and leverage the multipart upload API to divide the file into manageable chunks to the cloud. This approach makes the upload process less prone to the negative impact of any network issues because you would just need to reupload the single part that failed to be delivered to the cloud. Furthermore, the multipart upload mechanism makes it possible to parallelize the upload of individual parts, which results in a faster completion of the upload operation. At the time of writing, the maximum size for an uploaded object is 10TB. Additionally, each individual part must be smaller than 50GB. You can create up to 10,000 parts.
+
+A multipart upload operation consists of four phases, which are conceptually illustrated in Figure 5-10. First, you have to split a large file into smaller parts (1). The way you do this is up to you and the tools of your choice. Next, you make your first API call by sending a CreateMultipartUpload request to start a new multipart upload (2). In the request, you specify the storage namespace, bucket name, and target object name. In the response, you will be provided with an upload ID of the newly activated multipart upload. At this stage, you can begin uploading the parts (3). For each part, you are sending an UploadPart request to the object storage API. The sequence does not matter. As I mentioned, you can even upload multiple parts in parallel. In addition to the storage namespace, the bucket name, the target object name, and the upload ID, the UploadPart operation expects you to provide an upload part number, different for each part. In other words, you are responsible for numbering the parts. The part numbers do not need to be contiguous. The parts will be eventually combined to form a target object based on the ascending sequence of part numbers. The UploadPart operation returns a unique entity tag (ETag) for each part you upload. Make sure you collect the entity tags because you will need them as soon as you are ready to commit the multipart upload. To have the target object built by object storage from the uploaded parts, you need to commit the multipart upload (4). You do this by sending a CommitMultipartUpload request to the API. In the request, you specify a list of pairs where each pair contains an assigned part number and the corresponding ETag. Only the parts included in the list will be used to build the target object, no matter how many parts you’ve uploaded in total.
+
+
+

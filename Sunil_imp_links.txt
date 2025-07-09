@@ -1,0 +1,14 @@
+https://www.developermarch.com/developersummit/conference.html 
+https://dzone.com/articles/continuous-integration-delivery-and-deployment-cic 
+https://dzone.com/articles/how-to-deal-with-developers-that-tend-to-be-relaxe 
+https://dzone.com/articles/top-20-spring-mvc-interview-questions-and-answers
+https://medium.freecodecamp.org/learn-these-4-things-and-working-with-lambda-expressions-b0ab36e0fffc
+http://cloc.sourceforge.net/
+https://education.oracle.com/cart
+https://dzone.com/articles/how-to-prepare-java-certification-in-7-steps
+https://dzone.com/articles/what-is-spring-aop-1
+https://docs.spring.io/spring-framework/docs/4.2.x/spring-framework-reference/html/index.html 
+https://www.quora.com/What-are-the-best-resources-for-learning-Java-8-for-a-beginner
+https://doc.lagout.org/programmation/Java/Java%20SE%208%20for%20the%20Really%20Impatient%20%5BHorstmann%202014-01-24%5D.pdf
+spring in action and spring documentation
+https://dzone.com/articles/top-5-courses-to-learn-java-concurrency-in-2019 

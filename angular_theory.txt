@@ -1,0 +1,287 @@
+Angular:
+------------------------
+
+main.ts---> appmodule--->app component--->templateurl(for view)-->then the selectors in app component will be same in index.html used to load respective html in template url
+
+
+
+
+ng is the command for angular
+ng new <projectName> used to create new angular project
+
+after creating the project, there are some imp folders in project structure 
+
+package.json :: package.json comes from traditional nodejs projects and it defines all the npm based dependencies , dev-dependencies and npm scripts etc required for the angular project.
+tsconfig.json: this is used to define the typescript compilation related options
+.angular-cli.json :: .angular-cli.json is a file used by @angular/cli tool which is used to automate the angular workflow by automating different operations related to development and testing of angular apps. .angular-cli serves as a blueprint to the @angular/cli tool.
+it also contains the file/html which need to be loaded initially
+@angular/cli uses webpack under the hood to automate the angular workflow.
+
+src:: this is the location in which we will have all our app source code along with the assets etc.
+
+src folder will have internal folders again which allows us to store the app related source code and assets(images), welcome file etc.
+
+
+under src folder, here are some of the inner folders again
+
+app, assets, environment.....
+app:app directory is where we define the building blocks of our angular project like modules , components , services etc.
+assets: it contains the static elements(like images, graphs..) of the application
+environment:environments directory hold our environment specific settings , e.g. different configuration files for development , production, testing and staging etc.
+index.html: this is the starting file of our angular app.
+main.ts: this is the main type script of the angular app and the check for env also made in this ts
+
+
+
+app folder of src:
+
+app is the building block which maintains all the source code etc..., this app folder has internal sub folders
+app directory is where we place the building blocks of our angular app including modules , components , component styles , component templates , services and so on
+app.module.ts:In this file , we declare our angular module , the @NgModule decorator is used to initialize different aspects of the angular app
+
+app.components.ts this file simply defines an angular component and this is where we have defined our app-root selector also.
+here in this we have selectors which are used for custome tags in index.html
+it also contaisn the templateurrl:this is used to navigate to the respective html file declared in app.component.html folder
+it also contains styleurls: used for external css
+it also has the class with some text which is used in template
+
+
+app.component.html this is the template file for our app component and this represents the visual part of our component which is rendered in the browser.
+
+
+{{ }} curly braces is used for binding component data to template. 
+
+components:
+-----------
+components are the building blocks of the angular app.
+basic component structure
+
+import { Component } from '@angular/core';  // import Component class from angular core 
+
+// define the component metadata usnig the decorator and export the class so it can be 
+// imported by other modules 
+@Component({// decorator
+  selector: 'app-root',// custome tag used in html files <app-root></app-root>,this will load the respective html file
+  templateUrl: './app.component.html',//html file to load
+  styleUrls: ['./app.component.css']// css used
+})
+export class AppComponent {// class file used for data and the app component is used in app module in app.module.ts in @NgModule, decorator
+  title = 'app';// data to be used in html files
+}
+
+
+creating new components: ng g component <<componentname>>
+
+now new folder is created with comonent name and internally new ts,html,css will be created and follow same process for binding data to html and also new custome tag etc...
+after creating new component, we have to bind the new component in app module.ts. for execution
+
+
+
+templates:
+----------------------
+
+default language for template is HTML and templates seperate view from rest of framework, this templates are used to chaneg the view without breaking the existing layers/views
+2 ways to create templates, inline & External
+
+templateUrl: './app.component.html',//external template and we use this statement in component
+
+inline template is the one which we directly create the html in component as below
+
+for inline template we should mention template, not templateUrl
+
+single component can have only one template
+@Component({// decorator
+  selector: 'app-root',// custome tag used in html files <app-root></app-root>,this will load the respective html file
+  template: `<html>
+<h1>hello</h1>
+<.html>`,//html file to load
+  styleUrls: ['./app.component.css']// css used
+})
+export class AppComponent {// class file used for data and the app component is used in app module in app.module.ts in @NgModule, decorator
+  title = 'app';// data to be used in html files
+}
+
+
+Interpolation
+
+Interpolation is one of the form of data binding where we can access component’s data in a template. For interpolation, we use double curly braces {{ }}.
+
+
+Template Expressions
+
+The text inside {{ }} is called as template expression.
+
+{{ expression }}
+Angular first evaluates the expression and returns the result as a string. The scope of a template expression is component instance.
+That means, if we write {{ courseName }}, courseName should be the property of the component to which this template is bound to.
+
+Template Statement
+
+Template Statements are the statements which responds to an user event.
+(event) = statement
+For example (click) = “changeName()”
+
+This is called event binding. In Angular, all events should be placed in ( ).
+
+
+
+Directives:
+---------------------
+
+
+directives:used to change the behaviour of elements or components
+used to create reusable and independent code
+an create custome elements
+
+component directives {selectors, templateurl,styleurls} under @component decorator is component directives
+structural --- adding or removing some elements from DOM.we will use '*' for structural
+*directive-name=expression
+
+ngIf
+ngFor
+ngSwitch
+
+ngIf condition is false, then it wont hide the div or element, it will remove the complete div/element inorder to make the application run fast
+*ngIf
+ngFor: used for iteration
+*ngFor
+ngSwitch:
+[ngSwitch]
+
+
+<div *ngIf="expression">
+
+</div>
+
+if the condition is true the the complete div is displayed , else the complete div is removed, but not hidden.
+
+we can use if with else directly
+<div *ngIf="exp else someid">
+</div>
+<ng-template #someid></ng-template>
+
+if true the div will be displayed else the ng template whose id is same as if condition id will be displayed
+
+ng-template cannot exist alone. it is used to hide/display some components based on some above conditions
+see above example.
+
+*ngFor is mainly used to iterate over data.
+
+*ngFor="let i of collection"// similar to for(string s: data)
+
+
+ngSwitch : used to add or remove the DOM based on the expression in switch.
+
+[ngSwitch]="value";
+
+internally it will perform 2 operations like
+
+ngSwitch takes the value and then executes the ngSwitchCase with that value and then add/remove the element in view.
+
+custom directives:
+--------------------
+
+
+
+
+
+
+
+
+Forms:
+------------------------------------------------------
+
+
+2 types of forms:
+
+template driven form: used for small and medium forms 
+Model driven or Reactive forms : user to create large forms
+
+
+Templatedriven form
+*import FormsModule in component
+*add the FormsModule in imports of app.module.ts
+
+<form (ngSubmit)="onSubmit()" #sampleForm="ngForm">
+      <label>User Name</label>
+      <input type="text" required [(ngModel)]="userName" name="user" #user="ngModel"/>
+      <div [hidden]="user.valid">
+          Course Id is required
+        </div>
+        <button type="submit" [disabled]="!sampleForm.form.valid">Submit</button>
+    </form>
+
+ngSubmit--submit event
+ngForm angular form whose name is Sampleform
+[(ngModel)]-- used to bind data 2 ways, when ever there is a change in the data, the same data is reflected in model too
+[hidden]--used to hide the respective div based on condition, user.validate(user is id of text field and valid check for the empty value)
+when ever we use ngModel, its mandatory to use name too in form control
+[disabled] same as hidden, but here it will not hide, just desabled the button
+
+
+
+custom validations for templated driven forms.
+----------------------------------------------------------------------------------------
+we need to import
+import { NG_VALIDATORS, FormControl, Validator } from '@angular/forms';
+
+Import NG_VALIDATORS which is provider with extensive collection of validators
+
+add the below in providers of new
+providers: [
+        { provide: NG_VALIDATORS, useExisting: EmailValidator, multi: true } ]
+Register EmailValidator directive with NG_VALIDATORS so that Angular recognizes the role of the directive in the validation process. Multi:true adds EmailValidator class to the existing list of validators available in NG_VALIDATORS
+
+Inherit Validator interface
+Override validate() method which takes FormControl as a parameter and returns an object
+
+our new validator 
+
+import { Directive } from '@angular/core';
+import { NG_VALIDATORS, FormControl, Validator } from '@angular/forms';
+
+@Directive({
+    selector: '[validateEmail]',
+    providers: [
+        { provide: NG_VALIDATORS, useExisting: EmailValidator, multi: true }
+    ]
+})
+export class EmailValidator implements Validator {
+
+    validate(control: FormControl): { [key: string]: any } {
+        const emailRegexp = /^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/;
+        if (!emailRegexp.test(control.value)) {
+            return { "emailValid": true };
+        }
+        return null;
+    }
+}
+
+and use the selector in the form input for that field validation
+
+
+
+Modeldriven or Reactive forms
+---------------------------------------------------------------------------------------
+
+
+reactive forms are the angular way of creating the forms
+Angular reactive forms facilitate a reactive style of programming that favors explicit management of the data flowing between a non-UI data model (typically retrieved from a server) and a UI-oriented form model that retains the states and values of the HTML controls on screen. Reactive forms offer the ease of using reactive patterns, testing, and validation.
+
+As we create and manipulate form control objects directly in the component class, we can push model values into the form controls and fetch user-changed values back from the form. The component can observe changes in form control state and react to those changes.
+One advantage of working with form control objects directly is that value and validity updates are always synchronous and under our control.
+
+we will use formbuilder to create the reactive form
+
+*import the ReactiveFormsModule
+we can use the built in validators directly
+*import ReactiveFormsmodule in app.module
+add ReactiveFormsModule in imports of module.ts
+
+
+when we create new component of type form, we need to import
+FormBuilder--- to build new reactive form
+FormGroup-- to group all the form coltrols
+Validators-- for validations
+
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';

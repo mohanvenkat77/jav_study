@@ -1,0 +1,12 @@
+1. download maven (apache-maven-3.5.2-bin.zp)from https://maven.apache.org/download.cgi
+2. Unzip the downloaded maven under C:
+or 
+Raise AHD for Maven latest version installation
+after installation
+
+
+1. Add new variable in system variables M2_HOME & MAVEN_HOME with the location where the maven has unzipped
+2. Append path variable with the bin location of maven as %M2_HOME%\bin; open command prompt and check for echo %PATH%, if you were able to see the updated maven path in console, then its fine. else remove the appended path (%M2_HOME%\bin;) and add the exact path of mavne bin to path variable as  sample: D:\ApacheMaven_3.5.0_O\apache-maven-3.5.0-bin\apache-maven-3.5.0\bin;
+3. a.open eclipse--window--preferences--maven--installations--add--add the maven location
+   b. window--preferences--maven--usersettings--location of settings xml (which will be in .m2 folder of users/<username>)
+	

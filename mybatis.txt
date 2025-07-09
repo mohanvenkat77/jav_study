@@ -1,0 +1,52 @@
+Mybatis:
+
+Persistance framework that automates the mapping between sql db and java objects,.net obj. used to build the Database oriented applications more quickly and with less code.
+It is an alternative to JDBC and Hibernate. It automates the mapping between SQL data and the Java objects
+
+Important files in my batis;
+1. Configuration.xml file (This file contains the information about the type of Environment, Mapper file, transactionManager, alias names, datasources etc..)
+	sample file: see the document fig-1
+	a. Environment : we configure the environment of the database that we use in our application. In MyBatis, you can connect to multiple databases by configuring multiple environment elements. To configure the environment, we are provided with two sub tags namely transactionManager and dataSource.
+	b. Alias : instead of providing the complete path of Object when required, we just have the alias name for this path and we can use the alias name when ever required
+	c. TransactionManager: MyBatis supports two transaction managers namely JDBC and MANAGED
+		If we use the transaction manager of type JDBC, the application is responsible for the transaction management operations, such as, commit, roll-back, etc...
+		If we use the transaction manager of type MANAGED, the application server is responsible to manage the connection life cycle. It is generally used with the Web Applications.
+	d. DataSource: It is used to configure the connection properties of the database, such as driver-name, url, user-name, and password of the database that we want to connect. It is of three types namely -
+		i. UNPOOLED - For the dataSource type UNPOOLED, MyBatis simply opens and closes a connection for every database operation. It is a bit slower and generally used for the simple applications.
+		ii. POOLED - For the dataSource type POOLED, MyBatis will maintain a database connection pool. And, for every database operation, MyBatis uses one of these connections, and returns them to the pool after the completion of the operation. It reduces the initial connection and authentication time that required to create a new connection.
+		iii. JNDI - For the dataSource type JNDI, MyBatis will get the connection from the JNDI dataSource (properties files).
+	e. Mappers: Mapper XML file is the important file, which contains the mapped SQL statements/stored procedure calls. Mapper’s element is used to configure the location of these mappers xml files in the configuration file of MyBatis
+
+2. Mapper.xml: mapper xml is the configuration file which contains the sql statements/Stored procedure calls and these statements are called as mapped statements or mapped sql statements (select, insert,updtae,delete)
+All the statements have unique id. To execute any of these statements you just need to pass the appropriate id to the methods in Java Application.
+
+	Sample file: See in document fig-2
+
+3. Result maps: It is the most important elements in MyBatis which mainly used to map the resultset of database query to java ojject. 
+	Sample Result set/map: See document fig-3
+	
+	
+
+for annotation based configuration we need to have the annotations on the methods of interfaces.
+
+we can also use the annotation based configuration instead of XML based mapper config, In annotation based mapper, we need to write the query in the java class itself with annotations as @SELECT(SELECT * FROM EMPLOYEE) --for select operation
+See document for sample
+
+
+We can call the stored procedures from the mybatis mapper as well. it is same as normal Select in mybatis, and we need to provide the statementType = "CALLABLE"
+
+
+sample 
+
+<select id = "callById" resultMap = "output type" parameterType = "input type passed to query" statementType = "CALLABLE">
+      {call procedure_name(#{value pased as IN/OUT for procedure, jdbcType = type of value passed (INTEGER/VARCHAR), mode = IN/OUT})}
+      {call read_record_byid(#{id, jdbcType = INTEGER, mode = IN})} -- SAMPLE
+</select>
+
+Stored procedure using annotations: we need to have this annotated methods in the interfaces and we need to provide this interface path in the config xml under mapper tag
+
+interface Example{
+@Select(value= "{ CALL getTotalCity( #{total, mode=OUT, jdbcType=INTEGER} )}")
+@Options(statementType = StatementType.CALLABLE)
+Object callGetTotalCityAnnotations(Param param);
+}

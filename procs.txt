@@ -1,0 +1,74 @@
+For Auto generated value:
+
+<insert id="logincredentialsprocedureinisert7" statementType="CALLABLE">
+		{call dbo.logincredentialsprocedureinisert1( #{username, mode=IN,
+		jdbcType=VARCHAR},
+		#{password, mode=IN, jdbcType=VARCHAR},
+		#{role, mode=IN, jdbcType=VARCHAR},
+		#{loginId, mode=OUT, jdbcType=INTEGER })}
+</insert>
+
+
+CREATE PROCEDURE dbo.logincredentialsprocedureinisert7
+  @Name VARCHAR(500),
+  @URL  VARCHAR(2000),
+  @ROLE  VARCHAR(2000),
+  @loginId INT OUTPUT
+AS
+BEGIN
+    SET NOCOUNT ON;
+    INSERT dbo.logincredentials(USERNAME, PASSWORD, ROLE) SELECT @Name, @URL,@ROLE
+    SET @loginId = @@IDENTITY
+	RETURN @loginId
+END 
+
+System.out.println(svo.get("loginId"));// after suddessful insert, get the returned value as this, loginId is declared as out
+
+
+For Role:
+
+
+
+<select id="selectRole" resultType="String" statementType="CALLABLE">
+		<!-- //PROCEDURE -->
+		{call dbo.logincredentialsprocedure( #{username, mode=IN,
+		jdbcType=VARCHAR},
+		#{password, mode=IN, jdbcType=VARCHAR},
+		#{role,
+		mode=OUT, jdbcType=VARCHAR})}
+		<!-- NORMAL QUERY SELECT ROLE FROM dbo.logincredentials where username=#{username} 
+			and password=#{password} -->
+	</select>
+
+Create  PROCEDURE dbo.logincredentialsprocedure
+(
+
+@USERNAME VARCHAR(200),
+@PASSWORD VARCHAR(200),                      
+@ROLE VARCHAR(200)  OUT        
+)
+AS
+BEGIN
+SELECT ROLE FROM dbo.logincredentials WHERE USERNAME= @USERNAME and PASSWORD= @PASSWORD
+END;
+
+
+
+For complete list:
+
+
+
+<select id="logincredentialsprocedureall" resultMap="studentVo"
+		statementType="CALLABLE">
+		<!-- //PROCEDURE -->
+		{call dbo.logincredentialsprocedureall}
+		<!-- NORMAL QUERY SELECT ROLE FROM dbo.logincredentials where username=#{username} 
+			and password=#{password} -->
+	</select>
+
+
+Create  PROCEDURE dbo.logincredentialsprocedure ()
+AS
+BEGIN
+SELECT * FROM dbo.logincredentials
+END

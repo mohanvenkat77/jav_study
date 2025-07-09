@@ -1,0 +1,144 @@
+
+in order to have logs created for java application in spring
+
+
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+	<property name="LOG_PATH" value="C:/Logs" />
+	
+	<!-- Console logs -->
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{dd-MM-yyyy HH:mm:ss.SSS} %magenta([%thread]) %highlight(%-5level) %logger{36}.%M - %msg%n</pattern>
+        </encoder>
+    </appender>
+	
+	<!-- logs to a file mdsApp.log -->
+	<appender name="SAVE-TO-FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    	<file>${LOG_PATH}/mdsApp.log</file>
+    	<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+        	<Pattern>
+            	%d{dd-MM-yyyy HH:mm:ss.SSS} [%thread] %-5level %logger{36}.%M - %msg%n
+        	</Pattern>
+    	</encoder>
+    	
+    	<!-- Roll the log files based on Period 
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${LOG_PATH}/archived/mdsApp.%d{yyyy-MM-dd}.log</fileNamePattern>	
+			<maxHistory>10</maxHistory>
+        	<totalSizeCap>1KB</totalSizeCap>
+		</rollingPolicy> -->
+		
+		
+		<!-- Roll the log files based on only size -->
+		<rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+        	<fileNamePattern>${LOG_PATH}/mdsApp_%i.log</fileNamePattern>
+        	<minIndex>2</minIndex>
+        	<maxIndex>3</maxIndex>
+    	</rollingPolicy>
+    	<triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+        	<maxFileSize>1MB</maxFileSize>
+    	</triggeringPolicy>
+		
+	</appender>
+	
+	<!-- error logs to a file  mdsAppError.log -->
+	<appender name="ERROR-FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    	<file>${LOG_PATH}/mdsAppError.log</file>
+    	<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+        	<Pattern>
+            	%d{dd-MM-yyyy HH:mm:ss.SSS} [%thread] %-5level %logger{36}.%M - %msg%n
+        	</Pattern>
+    	</encoder>
+    	
+    	<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+    		<fileNamePattern>${LOG_PATH}/archived/mdsAppError.%d{yyyy-MM-dd}.log</fileNamePattern>
+    		<maxHistory>10</maxHistory>
+        	<totalSizeCap>1MB</totalSizeCap>
+    	</rollingPolicy>     	
+	</appender>  
+	
+	<!-- Dev environment -->
+	<springProfile name="dev">
+        <root level="error">
+			<appender-ref ref="ERROR-FILE"/>
+		</root>
+		<!-- Send logs to both console and file -->
+        <logger name="com.mds" additivity="false" level="debug">
+            <appender-ref ref="SAVE-TO-FILE" />
+            <appender-ref ref="STDOUT" />
+        </logger>
+    </springProfile>
+    
+    <!-- Prod environment -->
+    <springProfile name="prod">
+        <root level="error">
+			<appender-ref ref="ERROR-FILE"/>
+		</root>
+        <logger name="com.mds" additivity="false" level="info">
+            <appender-ref ref="SAVE-TO-FILE" />
+        </logger>
+    </springProfile>
+
+</configuration>
+
+
+
+interceptor is the one which will executed before actual request is handled
+
+package com.mds.interceptor;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
+
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
+
+/* 	RequestInterceptor class is used intercept all the requests
+ * 
+ * 	preHandle() :  		It is executed before actual handler is executed. 
+ *	postHandle() : 		It is executed after handler is executed. 
+ *	afterCompletion() : It is executed after the complete request is finished. 
+ */
+
+@Component
+public class RequestInterceptor extends HandlerInterceptorAdapter {
+	
+	private final Logger logger = LoggerFactory.getLogger(this.getClass());
+	
+	@Override
+	public boolean preHandle(HttpServletRequest request, 
+			HttpServletResponse response, Object object) throws Exception {
+		
+		logger.info("\nend point "+request.getRequestURI() + " invoked at STARTTIME : " + System.currentTimeMillis());
+
+		request.setAttribute("STARTTIME",System.currentTimeMillis());
+	
+		return true;
+	}
+	
+	@Override
+	public void postHandle(HttpServletRequest request, HttpServletResponse response, 
+			Object object, ModelAndView model)
+			throws Exception {
+		
+		logger.info("\n"+request.getMethod() + " request executed at ENDTIME : " + System.currentTimeMillis());
+		request.setAttribute("ENDTIME",System.currentTimeMillis());  
+		
+	}
+	
+	@Override
+	public void afterCompletion(HttpServletRequest request, HttpServletResponse response, 
+			Object object, Exception arg3)
+			throws Exception {
+			
+			long totalTime = ((Long)request.getAttribute("ENDTIME")-(Long)request.getAttribute("STARTTIME"));
+			logger.info("\nTotal Time Took for completion : "+ totalTime+" ms");
+	}
+	
+}

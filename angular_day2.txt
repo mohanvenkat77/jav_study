@@ -1,0 +1,131 @@
+eclipse-->help--->eclipse marketplace-->typescript-->install ts-->open dynamic webproject-->rt click-->configure-->enable typescript
+
+
+
+directives:used to change the behaviour of elements or components
+used to create reusable and independent code
+an create custome elements
+
+component directives {selectors, templateurl,styleurls} under @component decorator is component directives
+structural --- adding or removing some elements from DOM.we will use '*' for structural
+*directive-name=expression
+
+ngIf
+ngFor
+ngSwitch
+
+ngIf condition is false, then it wont hide the div or element, it will remove the complete div/element inorder to make the application run fast
+*ngIf
+ngFor: used for iteration
+*ngFor
+ngSwitch:
+[ngSwitch]
+
+
+custome directives:
+ng generate directive <<customer directive>>
+creates 2 ts files in app folder
+import for new directive and new entry will be added in app moodule decleration section
+
+now the logic for our custome directive has to be written in directive.ts file
+
+Directive: directive
+templateRef used for selecting template
+ViewcontainerRef: used to have the view
+input: Input received from view
+
+import {Directive, TemplateRef, ViewContainerRef, Input} from
+@Directive({
+selector:`[requiredName]`;// same like ngIf
+})
+export class classname{
+//logic
+constructor(private templateRef, private viewContainerref)
+
+@input() set requiredName (){// our logic which represents the custome tag
+}
+
+}
+
+add the declarations of new directive in ngModule
+
+
+attribute directive:
+-----------------------
+changes the appreance or behaviour of component or element
+ngStyle
+ngClass
+
+ngStyle used to change only one cssproperty style of view
+[style.background-color]="color"
+[ngStyle]="{// used to change multiple styles.
+color:colorName,// the colorname will be in the app component class
+font-weight:weight,
+border-bottom:value
+}"
+
+---[ngStyle]="expression---
+
+[] script to view
+() view to script like (click),(mouehover) etc...
+
+
+
+ngClass--used to set or change the css classes for given DOM element dynamically
+
+check ilp
+
+[class.<css_class_name>]=""
+[class.border]="" for single
+[ngClass]="{}" multiple 
+
+
+customer attribute directive same as custome directive
+
+
+ng generate directive <<attributeName>>
+
+entries in ngModule declerations, imports
+
+
+ilp for custome attribute clearly
+
+
+
+Data binding:
+-----------------------
+
+one way is by interpolation {{}}
+
+
+[] script to view [value]="message"
+message:string="Hi !";
+<imput type=text [value] ="message">
+<img [src]="imgurl"> or <img bind-src="imgurl">
+
+() view to script like (click),(mouehover) etc... on only events , eventbinding will happen here
+
+
+
+day-3
+-------------------
+
+Pipes: used to format data before displaying to user.
+uppercase, lowercase, title case etc..
+parameters to pipe
+{{expression | pipe:value1:value2:v3}} example currency;
+
+{{25000 | currency:'INR':boolean:digitinfo}}
+
+currency is for currency
+INR: rupees
+true: displays the symbol like ($,...)
+digitinfo (5.2-3) minimum 5 digits before . and min 2 to max 3 after .
+
+{{4000|currency:'INR':true:'5.2-3}}---r04,000.00
+}
+
+
+
+
+login page with drop down to login as 3, signup page, on login--welcome page, signup--reg-form

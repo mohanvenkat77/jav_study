@@ -1,0 +1,348 @@
+How you debug an application.
+	CLIENT-- WEB/MOBILE/ANY
+	GATEWAY
+	BACKEND CODE
+	Long runniing query
+https://www.edureka.co/blog/interview-questions/java-interview-questions/
+https://www.digitalocean.com/community/tutorials/java-string-interview-questions-and-answers
+java
+	String
+	Multithreading
+	Exception
+	Collections
+	Java-8 features--lambda, functionalInterface, optional, memory, nullable
+	filters, streams, skip, limit, compare etc
+	OOPs
+	Singleton
+		Static member: It gets memory only once because of static, itcontains the instance of the Singleton class.
+		Private constructor: It will prevent to instantiate the Singleton class from outside the class.
+		Static factory method: This provides the global point of access to the Singleton object and returns the instance to the caller.
+	marker interface and its importance
+	Arraylist vs LinkedList
+	Hashmap vs Hashtable
+	Comprable vs Comprator
+	Multi sorting in java-8
+	
+Microservices
+	Architecture
+	API gateway
+	Service registery
+	Service mesh
+	Communication bw services
+	12 best practicies(12 factor rule)
+	Circuit breaker
+	monolithic vs Microservices
+Spring boot
+	Spring vs Spring boot
+	DB Connection
+	Multiple DB connections
+	pre,post filters(check code)
+	annotations and their differences
+Spring Security
+	API security
+	OAuth2
+REST Webservices
+Hibernate
+	Session vs Session factory
+		SessionFactory objects are one per application and Session objects are one per client.
+	SessionFactory is to create and manage Sessions. Session is to provide a CRUD interface for mapped classes, and also access to the more versatile Criteria API.
+	SessionFactory is thread safe where as Session is not thread safe
+	SessionFactory is a factory class for Session objects. It is available for the whole application while a Session is only available for particular transaction.
+	Session is short-lived while SessionFactory objects are long-lived. SessionFactory provides a second level cache and Session provides a first level cache.
+	SessionFactory is an interface. SessionFactory can be created by providing Configuration object, which will contain all DB related property details pulled from either hibernate.cfg.xml file or hibernate.properties file. SessionFactory is a factory for Session objects.
+	We can create one SessionFactory implementation per database in any application. If your application is referring to multiple databases, then you need to create one SessionFactory per database.
+	The SessionFactory is a heavyweight object; it is usually created during application start up and kept for later use. The SessionFactory is a thread safe object and used by all the threads of an application.
+	A Session is used to get a physical connection with a database. The Session object is lightweight and designed to be instantiated each time an interaction is needed with the database. Persistent objects are saved and retrieved through a Session object.
+	The session objects should not be kept open for a long time because they are not usually thread safe and they should be created and destroyed them as needed. The main function of the Session is to offer, create, read, and delete operations for instances of mapped entity classes.
+	sessionfactory is an immutable object and it will be created as a singleton while the server initializes itself.
+	
+	Session:
+	It is one instance per client/thread/one transaction.
+	It is not thread-safe.
+	It is lightweight.
+	sessions will be opened using sessionfactory.openSession() and some database operations will be done finally session will be closed using session.close().
+	A session obtains a database connection lazily (i.e. only when required).
+	
+	// by hibernate.cfg.xml
+	public static Session getCurrentSessionFromConfig() {
+  // SessionFactory in Hibernate 5 example
+  Configuration config = new Configuration();
+  config.configure();
+  // local SessionFactory bean created
+  SessionFactory sessionFactory = config.buildSessionFactory();
+  Session session = sessionFactory.getCurrentSession();
+  return session;
+}
+
+// without xml file
+
+public static Session getCurrentSession() {
+  // Hibernate 5.4 SessionFactory example without XML
+  Map<String, String> settings = new HashMap<>();
+  settings.put("connection.driver_class", "com.mysql.jdbc.Driver");
+  settings.put("dialect", "org.hibernate.dialect.MySQL8Dialect");
+  settings.put("hibernate.connection.url", 
+    "jdbc:mysql://localhost/hibernate_examples");
+  settings.put("hibernate.connection.username", "root");
+  settings.put("hibernate.connection.password", "password");
+  settings.put("hibernate.current_session_context_class", "thread");
+  settings.put("hibernate.show_sql", "true");
+  settings.put("hibernate.format_sql", "true");
+
+  ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
+                                    .applySettings(settings).build();
+
+  MetadataSources metadataSources = new MetadataSources(serviceRegistry);
+  // metadataSources.addAnnotatedClass(Player.class);
+  Metadata metadata = metadataSources.buildMetadata();
+
+  // here we build the SessionFactory (Hibernate 5.4)
+  SessionFactory sessionFactory = metadata.getSessionFactoryBuilder().build();
+  Session session = sessionFactory.getCurrentSession();
+  return session;
+}
+
+//JPA entities
+public static SessionFactory getCurrentSessionFromJPA() {
+  // JPA and Hibernate SessionFactory example
+  EntityManagerFactory emf = 
+      Persistence.createEntityManagerFactory("jpa-tutorial");
+  EntityManager entityManager = emf.createEntityManager();
+  // Get the Hibernate Session from the EntityManager in JPA
+  Session session = entityManager.unwrap(org.hibernate.Session.class);
+  SessionFactory factory = session.getSessionFactory();
+  return factory;
+}
+
+hibernate.dialect: This property makes Hibernate generate the appropriate SQL for the chosen database.
+hibernate.connection.driver_class: The JDBC driver class.
+hibernate.connection.url: The JDBC URL to the database instance.
+hibernate.connection.username: The database username.
+hibernate.connection.password: The database password.
+hibernate.connection.pool_size: Limits the number of connections waiting in the Hibernate database connection pool.	
+hibernate.connection.autocommit: Allows autocommit mode to be used for the JDBC connection.
+
+
+<?xml version = "1.0" encoding = "utf-8"?>
+<!DOCTYPE hibernate-configuration SYSTEM 
+"http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+   <session-factory>
+   
+      <property name = "hibernate.dialect">
+         org.hibernate.dialect.MySQLDialect
+      </property>
+      
+      <property name = "hibernate.connection.driver_class">
+         com.mysql.jdbc.Driver
+      </property>
+      
+      <!-- Assume test is the database name -->
+      
+      <property name = "hibernate.connection.url">
+         jdbc:mysql://localhost/test
+      </property>
+      
+      <property name = "hibernate.connection.username">
+         root
+      </property>
+      
+      <property name = "hibernate.connection.password">
+         root123
+      </property>
+      
+      <!-- List of XML mapping files -->
+      <mapping resource = "Employee.hbm.xml"/>
+      
+   </session-factory>
+</hibernate-configuration
+
+
+A Session is used to get a physical connection with a database. The Session object is lightweight and designed to be instantiated each time an interaction is needed with the database. Persistent objects are saved and retrieved through a Session object.
+
+The session objects should not be kept open for a long time because they are not usually thread safe and they should be created and destroyed them as needed. The main function of the Session is to offer, create, read, and delete operations for instances of mapped entity classes.
+
+Instances may exist in one of the following three states at a given point in time −
+
+transient − A new instance of a persistent class, which is not associated with a Session and has no representation in the database and no identifier value is considered transient by Hibernate.
+
+persistent − You can make a transient instance persistent by associating it with a Session. A persistent instance has a representation in the database, an identifier value and is associated with a Session.
+
+detached − Once we close the Hibernate Session, the persistent instance will become a detached instance.
+
+Session session = factory.openSession();
+Transaction tx = null;
+
+try {
+   tx = session.beginTransaction();
+   // do some work
+   ...
+   tx.commit();
+}
+
+catch (Exception e) {
+   if (tx!=null) tx.rollback();
+   e.printStackTrace(); 
+} finally {
+   session.close();
+}
+	load vs get
+	eager vs lazy loading
+	connect to DB
+	save vs update vs saveUpdate vs merge
+	1st level vs 2nd level caching
+	how to enable caching
+Kafka
+	pre-requisite for kafka set-up
+	kafka rebalancer
+	how to avoid duplicate messages
+	kafak offset (earliest/latest)
+	
+DB Questions
+
+	nth Salary query
+		Option-1: by using rank
+			Select emp.salary from (select sal, rank() over(order by salary desc) rn from employee where rn = n;
+		Option-2: by using inner select and order by desc
+			select salary from (select salary from employee order by salary desc) where rownum = n;
+			
+	inner/right outer/left outer queries
+	self join
+	
+	public vs private methods
+		Methods/Functions/ procesures defined in package specification are public and any methods/procedures/functions not defined in spec but implemented inside the package are private. private has scope only to that particular package. private are implemented at 1st.
+		
+	Procedure:
+		It is like a method which contains some logic to perform some specific operation
+		it has IN, OUT, INOUT params
+		create or replace procedure procedure_name(params) 
+		is
+		declare
+		
+		begin
+		
+		
+		exception
+		
+		end
+		
+	Function:
+		The PL/SQL Function is very similar to PL/SQL Procedure. The main difference between procedure and a function is, a function must always return a value, and on the other hand a procedure may or may not return a value
+		CREATE [OR REPLACE] FUNCTION function_name [parameters]  
+		[(parameter_name [IN | OUT | IN OUT] type [, ...])]  
+		RETURN return_datatype  
+		{IS | AS}  
+		BEGIN  
+			< function_body >  
+		END [function_name]; 
+		
+	procedure vs function
+		Functions will have return but procedures not
+		procedures are called by using schema name/ package name, but functions can be called directly
+		procedures: package.procedure()
+		functions can be called directly inside the select statement but the procedures cannot be called
+		
+	cursor
+		It is a pointer/temporary area which holds the data returned by the select query.
+		2 types of cursors
+			a. Implicit:
+				The implicit cursors are automatically generated by Oracle while an SQL statement is executed, if you don't use an explicit cursor for the statement.
+				These are created by default to process the statements when DML statements like INSERT, UPDATE, DELETE etc. are executed.
+				Orcale provides some attributes known as Implicit cursor's attributes to check the status of DML operations. Some of them are: %FOUND, %NOTFOUND, %ROWCOUNT and %ISOPEN
+				When you execute the SQL statements like INSERT, UPDATE, DELETE then the cursor attributes tell whether any rows are affected and how many have been affected. If you run a SELECT INTO statement in PL/SQL block, the implicit cursor attribute can be used to find out whether any row has been returned by the SELECT statement. It will return an error if there no data is selected.
+			b. Explicit:
+				The Explicit cursors are defined by the programmers to gain more control over the context area. These cursors should be defined in the declaration section of the PL/SQL block. It is created on a SELECT statement which returns more than one row.
+				CURSOR cursor_name IS select_statement;
+				You must follow these steps while working with an explicit cursor.
+					Declare the cursor to initialize in the memory.
+					Open the cursor to allocate memory.
+					Fetch the cursor to retrieve data.
+					Close the cursor to release allocated memory.
+					
+	trigger
+		Trigger is invoked by Oracle engine automatically whenever a specified event occurs.Trigger is stored into database and invoked repeatedly, when specific condition match.
+		Triggers are stored programs, which are automatically executed or fired when some event occurs.
+		Triggers are written to be executed in response to any of the following events.
+			A database manipulation (DML) statement (DELETE, INSERT, or UPDATE).
+			A database definition (DDL) statement (CREATE, ALTER, or DROP).
+			A database operation (SERVERERROR, LOGON, LOGOFF, STARTUP, or SHUTDOWN).
+			Triggers could be defined on the table, view, schema, or database with which the event is associated.
+		
+		CREATE [OR REPLACE ] TRIGGER trigger_name   
+		{BEFORE | AFTER | INSTEAD OF }   
+		{INSERT [OR] | UPDATE [OR] | DELETE}   
+		[OF col_name]   
+		ON table_name   
+		[REFERENCING OLD AS o NEW AS n]   
+		[FOR EACH ROW]   
+		WHEN (condition)    
+		DECLARE  
+		   Declaration-statements  
+		BEGIN   
+		   Executable-statements  
+		EXCEPTION  
+		   Exception-handling-statements  
+		END;  
+		
+		CREATE [OR REPLACE] TRIGGER trigger_name: It creates or replaces an existing trigger with the trigger_name.
+		{BEFORE | AFTER | INSTEAD OF} : This specifies when the trigger would be executed. The INSTEAD OF clause is used for creating trigger on a view.
+		{INSERT [OR] | UPDATE [OR] | DELETE}: This specifies the DML operation.
+		[OF col_name]: This specifies the column name that would be updated.
+		[ON table_name]: This specifies the name of the table associated with the trigger.
+		[REFERENCING OLD AS o NEW AS n]: This allows you to refer new and old values for various DML statements, like INSERT, UPDATE, and DELETE.
+		[FOR EACH ROW]: This specifies a row level trigger, i.e., the trigger would be executed for each row being affected. Otherwise the trigger will execute just once when the SQL statement is executed, which is called a table level trigger.
+		WHEN (condition): This provides a condition for rows for which the trigger would fire. This clause is valid only for row level triggers.
+			
+		Following are the two very important point and should be noted carefully.
+			OLD and NEW references are used for record level triggers these are not avialable for table level triggers.
+			If you want to query the table in the same trigger, then you should use the AFTER keyword, because triggers can query the table or change it again only after the initial changes are applied and the table is back in a consistent state.
+
+	view
+		a view is a virtual table based on the result-set of an SQL statement.
+		A view contains rows and columns, just like a real table. The fields in a view are fields from one or more real tables in the database.
+		You can add SQL statements and functions to a view and present the data as if the data were coming from one single table.
+		Views can be used as security mechanisms by letting users access data through the view, without granting the users permissions to directly access the underlying base tables of the view.
+		Can hide certain columns in a table. For example you may want to allow employees to see other employees' phone number column, but only certain employees to be able to access an employee's salary column!
+		Can provide huge time savings in writing queries by already having a group of frequently accessed tables joined together in a view.
+		Views allow you to use functions and manipulate data in ways that meet your requirements. For example, you store a person's birth date, but you like to calculate this to determine their age.
+
+	union vs union all
+		UNION and UNION ALL are SQL operators used to concatenate 2 or more result sets. This allows us to write multiple SELECT statements, retrieve the desired results, then combine them together into a final, unified set.
+		The main difference between UNION and UNION ALL is that:
+			UNION: only keeps unique records
+			UNION ALL: keeps all records, including duplicates
+			
+		There must be the same number of columns retrieved in each SELECT statement to be combined.
+		The columns retrieved must be in the same order in each SELECT statement.
+		The columns retrieved must be of similar data types.
+
+	group by
+	rank
+	partitions
+		 A PARTITION BY clause is used to partition rows of table into groups. It is useful when we have to perform a calculation on individual rows
+		 
+	delete vs drop vs truncate
+		TRUNCATE TABLE statement is a DDL command so it can not be rolled back.
+		The Truncate command resets the AUTO_INCREMENT counters on the table.
+		
+		DELETE is a DML Command so it can be rolled back.
+		The conditions are specified in the WHERE clause of the DELETE statement. If we omit the WHERE clause then all of the records will be deleted and the table will be empty.
+		The DELETE statement scans every row before deleting it. Thus it is slower as compared to TRUNCATE command.
+		
+		DROP is a DDL Command. Objects deleted using DROP are permanently lost and it cannot be rolled back
+		Unlike TRUNCATE which only deletes the data of the tables, the DROP command deletes the data of the table as well as removes the entire schema/structure of the table from the database
+	
+	
+	DML vs DDL
+		DDL commands are auto-committed, so changes that happen in the database will be permanent.
+		DML commands are not auto-committed, so database changes are not permanent.
+		DDL commands made changes permanent; therefore, we cannot roll back these statements
+		DML commands do not make changes permanent; therefore, rollback is possible for these statements.
+		DDL commands have no use of a WHERE clause because here, filtration of records is not possible.
+		The DML statements can use a WHERE clause while manipulating data in a database.
+		The DDL command affects the entire database or table.
+		The DML commands will affect the single or multiple records based on the specified condition.
+		DDL: CREATE, DROP, ALTER, TRUNCATE, RENAME
+		DML: SELECT, INSERT, DELETE, UPDATE
+	
+	Exception

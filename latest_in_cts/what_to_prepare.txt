@@ -1,0 +1,122 @@
+JAVA Basics
+	JVM : 
+	JRE
+	JDK
+	MEMORY
+	Platform indeependent
+	
+JAVA features
+	7
+	8
+	11
+	17
+	Latest
+Java OOPS
+	Inheritance
+	Polymorphism
+		Method Overloading
+		Method Overriding
+	Encapsulation
+	Abstraction
+Java String concepts
+JAVA Exception handling, Collections exception handling
+Java Multithreading
+Java collections
+Java Generics
+Junits
+	Mock, PowerMock
+	Spy
+	Stub
+TDD, DDD, BDD
+Jenkins
+Sonar
+JWT
+
+•	Data Structures
+	o	Arrays
+	o	Linked Lists
+	o	Doubly Linked Lists
+	o	Maps
+	o	Sets
+	o	Graphs
+	o	Trees
+	o	Queues
+	o	Heaps
+	o	Disjoint Sets
+•	Algorithm Techniques
+	o	Recursion
+	o	Divide and Concur
+	o	Greedy Method
+	o	Backtracking
+	o	Dynamic Programming
+	o	Union Find
+•	Sorting Algorithms
+	o	Bucket Sort or Radix Sort
+	o	Bubble sorting
+	o	Merge Sort
+	o	Select Sort
+	o	Quick Sort
+•	String Algorithms
+	o	Pattern Searching Algorithms
+	o	String Matching Algorithms
+	o	Palindrome Check
+	o	String Transformations
+	o	Regular Expression
+	o	LCS
+•	Searching Algorithms
+	o	Linear Search
+	o	Binary Search
+	o	Jump Search
+	o	Interpolation Search
+	o	Exponential Search
+	o	Tree-Based Search
+	o	Hash-Based Search
+	o	Trie Search
+•	Graph and Tree Traversal Algorithms
+	o	DFS
+	o	BFS
+	o	Shortest Path Algorithms
+	o	Minimum Spanning Tree Algorithms
+	o	Connectivity Algorithms
+	o	Topological Sorting
+	o	Cycle Detection
+
+
+
+Authentication
+Authorisation
+Oauth2
+OWASP
+SSL, TSL
+Hibernate
+	Sessions
+	SessionFactory
+	Caches
+	Enabling Caching
+	Different databases eanbling
+	Native queries
+	How to roll back 1st tranaction when teh 2nd transaction fails
+	How to commit 1st transaction, when 2nd fails.
+Oracle/DB
+	DML
+	DDL
+	Triggers
+	Functions
+	Public vs Private functions
+	Procedures
+	Indexes
+	Constraints
+	Union vs Union all
+	Joins
+	Rank query
+	sequences
+Rest api
+Design patterns
+Spring
+Spring boot
+Microservices
+Kafka
+Azure/ Pipelines, creation
+Any Cloud
+Docker
+Kubernites

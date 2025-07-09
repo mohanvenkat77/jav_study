@@ -1,0 +1,483 @@
+Programming: https://www.javaguides.net/2024/02/java-8-program-to-find-maximum-number-and-minimum-number-in-list.html#:~:text=To%20find%20the%20maximum%20number%2C%20the%20program%20converts%20the%20list,value%2C%20which%20returns%20an%20OptionalInt.
+
+
+JVM: is a very important part of both JDK and JRE because it is contained or inbuilt in both. Whatever Java program you run using JRE or JDK goes into JVM and JVM is responsible for executing the java program line by line, hence it is also known as an interpreter.
+
+JRE: JRE is the software environment where the compiled Java byte codes executes. It contains the implementation of Java interpreter, garbage collector, class loader, java class libraries and related files.
+
+JDK: Java Development Kit, is a software used to develop Java applications. I contains JRE.
+Its main component is Compiler which is used to compile the java code 
+
+JIT: Just In Time Compiler (JIT) runs on the fly in the execution environment to make optimizations on the program. JIT compiler is a component that is part of the JVM and hence its implementation JRE. JIT runs when the Java program is interpreted and its objective is to optimize the Java program and make it efficient in terms of performance.
+
+MEMORY
+	Stack
+		Each thread has a private JVM stack, created at the same time as the thread. It is used to store data and partial results which will be needed while returning value for method and performing dynamic linking.
+
+		Java Stack stores frames and a new frame is created each time at every invocation of the method. A frame is destroyed when its method invocation completes
+		
+	Heap
+		The Heap area is the memory block where objects are created or objects are stored. Heap memory allocates memory for class interfaces and arrays (an array is an object). It is used to allocate memory to objects at run time
+		Note: Static Methods and Variables were previous stored in Class Area (Till Java 8). But, in current versions of Java static variables and methods are stored in Heap Memory.
+
+
+	Class(Method) area
+		The class method area is the memory block that stores the class code, variable code, method code, and the constructor of a Java program. It stores class-level data of every class such as the runtime constant pool, field and method data, the code for methods.
+	Program Counter Register
+	Native Method Stack
+	
+	
+Platform indeependent
+Latest is Java 22
+Java:7
+	try with resource
+	Swithc with String
+	Diamind operator <>
+		Before 1.5,
+		List ls = new ArrayList();
+			The problem with this approach is that you can put any object type in key and value, and only in runtime, we will get the error if the object is not of the desired type. There is no compile-time safety that can warn developers, which types are allowed and which are not.
+		In 1.5: Parameterized Types in Java 1.5(Generics means parameterized types)
+		List<String> list = new ArrayList<String>();
+			It enabled compile time safety. It helped in reducing runtime errors by a great number.
+		Java 1.7: Diamond operator
+			List<String> list = new ArrayList<>();
+		Parameterized types solved a few issues but seem heavy due to the same repeated type of information on both sides. We can reduce the syntax if we can provide type information on one side, and another side can detect and apply the type information.
+Java:8
+	Lambda expressions
+		a Lambda expression (or function) is an anonymous function, i.e., a function without any name or identifier, and with a list of formal parameters and a body. An arrow (->) is used to separate the list of parameters and the body.
+		Similar to other types in Java, lambda expressions are also typed, and their type is a functional interface type. To infer the type, the compiler looks at the left side of the assignment in a lambda expression.
+		Note that the lambda expression itself does not contain the information about which functional interface it is implementing. This information is deduced from the context in which expression is used.
+		A lambda expression cannot have a throws clause. It is inferred from the context of its use and its body.
+		Lambda expressions cannot be generic i.e. they cannot declare type parameters
+		benefits: code readability, 
+				flexibility to write the adaptible code
+				parallel working
+		EX: (a, b) -> a+b
+			a -> a*a
+			
+		Lambda expressions are used for implementing the Functional interfaces methods
+		@FunctionalInterface
+		interface Operator<T> {
+			T process(T a, T b);
+		}
+		Notice we are able to create the method implementations and immediately use them. We do not need to create a concrete class OperatorImpl that implements Operator interface.
+		Operator<Integer> addOperation = (a, b) ->  a + b;
+		System.out.println(addOperation.process(3, 3));     //Prints 6
+
+		Operator<String> appendOperation = (a, b) ->  a + b;
+		System.out.println(appendOperation.process("3", "3"));  //Prints 33
+	
+	
+	Functional Interfaces and Default Methods
+		A functional interface is an interface that contains only one abstract method. They can have only one functionality to exhibit
+		A functional interface can have any number of default methods. Runnable, ActionListener, and Comparable are some of the examples of functional interfaces
+		Functional Interface is additionally recognized as Single Abstract Method Interfaces. In short, they are also known as SAM interfaces
+		Functional interfaces are used and executed by representing the interface with an annotation called @FunctionalInterface. As described earlier, functional interfaces can contain only one abstract method. However, they can include any quantity of default and static methods. 
+		In Functional interfaces, there is no need to use the abstract keyword as it is optional to use the abstract keyword because, by default, the method defined inside the interface is abstract only. We can also call Lambda expressions as the instance of functional interface.
+		Java SE 8 included four main kinds of functional interfaces which can be applied in multiple situations
+			a. COMSUMER
+				this is a type in FunctionalInterface that accepts only one argument or parameter, process the same, but does not return any thing back
+					DoubleConsumer -- takes DOUBLE as parameter, INTConsumer, LongConsumer
+				BI-CONSUMER: takes 2 arguments but doesnot return anything
+				
+			b. PREDICATE
+				This taks an argument/parameter, process some oprtaion and the returns boolean
+				This too has DoublePrediacte/LongPredicate/IntPredicate
+				Bi-predicate: Takes 2 args as input
+				
+			c. FUNCTION
+				Takes one argument, process and then return some value after processing.
+				Bi-Function
+				FunctionalInterface
+				public interface BiFunction<T, U, R> 
+				{
+				 
+				   R apply(T t, U u);
+					.......
+				 
+				}
+				In the above code of interface, T and U are the inputs, and there is only one output which is R.
+			d. SUPPLIER
+				The Supplier functional interface is also a type of functional interface that does not take any input or argument and yet returns a single output. This type of functional interface is generally used in the lazy generation of values. Supplier functional interfaces are also used for defining the logic for the generation of any sequence
+				
+		The java.util.function package contains many built-in functional interfaces in Java 8.
+		Default methods:
+			before 1.8, Only abstract methods are defined in an Interface. In 1.8, we have the concept of default methods in interface which means that the default methods defined in Interface can have implementation/body as well in interface itself
+			The most important use of default methods in interfaces is to provide additional functionality to a given type without breaking down the implementing classes.
+			
+			public interface Vehicle {
+
+				void cleanVehicle();
+
+				default void startVehicle() {
+				System.out.println("Vehicle is starting");
+				}
+			}
+			Default methods can be called from the class that is implementing the interface
+			Default methods can also be overridden but not mandatory.
+			
+		Static methods: Static methods are same as Default but we cannot override them
+		Suppose you want to provide some implementation in your interface and you don’t want this implementation to be overridden in the implementing class, then you can declare the method as static.
+		Static method can be called by the interface name
+			
+			
+			
+	Functional Programming
+		The basic objective of this style of programming is to make code more concise, less complex, more predictable, and easier to test compared to the legacy style of coding
+		
+	Nullable/Optional
+		Optional calss was introduced in Java8 to handle NPE
+		By using Optional, we can specify alternate values to return or alternate code to run. This makes the code more readable because the facts which were hidden are now visible to the develope
+		Optional.empty() -- creates empty object
+		To make an object as Optional
+		Optional<String> s = Optional.of();// use .of() to create Optional type of object
+		.of() cannot take null, as it throws NPE, so we can use .ofNullable()
+		.isPresent() to check if it is present
+		
+		.isEmpty() intriduced in 1.11 which is same as .isPresent()
+		.ifPresent(perform any oprtaiion if present)
+		.ofNullable().orElse("defaultValue") --> if null, then assign the default value
+		.ofNullable().orElseGet(() -> "john")
+		The orElseGet() method is similar to orElse(). However, instead of taking a value to return if the Optional value is not present, it takes a supplier functional interface, which is invoked and returns the value of the invocation:
+		difference:
+			value.orElse(any method),
+				here the anyMethod is invoked irrespective of value check where as in
+				value.orElseGet(any method) here anyMethod is invoked onlyIf the 1st value is null
+		.elseThrow()
+		.get() withh return the value if the wrapped object is not null, else throws a no such element exception:
+		.filter()
+		.map()
+		The map call is simply used to transform a value to some other value. Keep in mind that this operation does not modify the original value.
+		map returns the optioal
+		Just like the map() method, we also have the flatMap() method as an alternative for transforming values. The difference is that map transforms values only when they are unwrapped whereas flatMap takes a wrapped value and unwraps it before transforming it.
+		Both map and flatMap can be applied to a Stream<T> and they both return a Stream<R>. The difference is that the map operation produces one output value for each input value, whereas the flatMap operation produces an arbitrary number (zero or more) values for each input value.
+		Basically it merges all the objects in to one in Flatmap
+
+
+	Stream APIs
+		Introduced in Java 8, Stream API is used to process collections of objects. A stream in Java is a sequence of objects that supports various methods that can be pipelined to produce the desired result. 
+
+		Use of Stream in Java:
+			The uses of Stream in Java are mentioned below:
+			Stream API is a way to express and process collections of objects.
+			Enable us to perform operations like filtering, mapping, reducing, and sorting.
+			No Storage
+			Pipeline of Functions
+			Laziness
+			Can be infinite
+			Can be parallelized
+			Can be created from collections, arrays, Files Lines, Methods in Stream, IntStream etc.
+		Stream does not store elements. It simply conveys elements from a source such as a data structure, an array, or an I/O channel, through a pipeline of computational operations.
+		Stream is functional in nature. Operations performed on a stream does not modify it's source. For example, filtering a Stream obtained from a collection produces a new Stream without the filtered elements, rather than removing elements from the source collection.
+		Stream is lazy and evaluates code only when required.
+		The elements of a stream are only visited once during the life of a stream. Like an Iterator, a new stream must be generated to revisit the same elements of the source
+		
+		There are two types of Operations in Streams:
+
+				Intermediate Operations
+				Terminate Operations
+				
+				Input --> stream-->Intermediate-->Intermediate-->Intermediate-->Terminate-->output
+				
+				Intermediate operations transform a stream into another stream.
+				It enables the concept of filtering where one method filters data and passes it to another method after processing.
+					Example: filter, map, flatmap, disticnt, sort, limit, skip, peek
+				Termination: End of stream
+				example: findFirst, forEach, reduce, count, collect, anyMatch, allMatch
+				
+		Short-Circuit Operations
+			Short-circuit operations are a subset of terminal operations that do not need to process the entire stream to produce a result. It can provide an early exit from the stream processing pipeline, potentially saving computation time.
+
+				Common Short-Circuit Operations
+
+				anyMatch(Predicate<T>): Stops processing and returns true if any element matches the given predicate.
+				allMatch(Predicate<T>): Stops processing and returns false if any element does not match the given predicate.
+				noneMatch(Predicate<T>): Stops processing and returns true if no elements match the given predicate.
+			findFirst(): Returns the first element encountered in the stream and then stops processing.
+			findAny(): Returns any element encountered in the stream and then stops processing.
+			
+		Parallel stream:
+			It is a very useful feature of Java to use parallel processing, even if the whole program may not be parallelized. Parallel stream leverage multi-core processors, which increases its performance. Using parallel streams, our code gets divide into multiple streams which can be executed parallelly on separate cores of the system and the final result is shown as the combination of all the individual core’s outcomes. It is always not necessary that the whole program be parallelized, but at least some parts should be parallelized which handles the stream. The order of execution is not under our control and can give us unpredictably unordered results and like any other parallel programming, they are complex and error-prone. 
+			
+			        list.parallelStream().forEach(System.out::print); 
+
+		Collections vs Streams:
+			Collection is an in-memory data structure, which holds all the values that the data structure currently has. Every element in the Collection has to be computed before we add it to the Collection. Operations such as searching, sorting, insertion, manipulation, and deletion can be performed on a Collection
+			On the other hand, IStream is an API that is introduced in Java 8 which is used to process collections of objects. A stream is a sequence of objects that supports various methods which can be pipelined to produce the desired result. The Stream API is used to process collections of objects.
+
+			Main features of the Java stream are as follows:
+
+			A stream is not a data structure instead it takes input from the Collections, Arrays, or I/O channels.
+			Streams don’t change the original data structure, they only provide the result as per the pipelined methods.
+			Each intermediate operation is lazily executed and returns another stream as a result, hence various intermediate operations can be pipelined. Terminal operations mark the end of the stream and return the result.
+
+
+			public class StreamIntermediateOperationsExample {
+				public static void main(String[] args) {
+					// List of lists of names
+					List<List<String>> listOfLists = Arrays.asList(
+						Arrays.asList("Reflection", "Collection", "Stream"),
+						Arrays.asList("Structure", "State", "Flow"),
+						Arrays.asList("Sorting", "Mapping", "Reduction", "Stream")
+					);
+
+					// Create a set to hold intermediate results
+					Set<String> intermediateResults = new HashSet<>();
+
+					// Stream pipeline demonstrating various intermediate operations
+					List<String> result = listOfLists.stream()
+						.flatMap(List::stream)               // Flatten the list of lists into a single stream
+						.filter(s -> s.startsWith("S"))      // Filter elements starting with "S"
+						.map(String::toUpperCase)            // Transform each element to uppercase
+						.distinct()                          // Remove duplicate elements
+						.sorted()                            // Sort elements
+						.peek(s -> intermediateResults.add(s)) // Perform an action (add to set) on each element without modifying the stream
+						.collect(Collectors.toList());       // Collect the final result into a list
+
+					// Print the intermediate results
+					System.out.println("Intermediate Results:");
+					intermediateResults.forEach(System.out::println);
+
+					// Print the final result
+					System.out.println("Final Result:");
+					result.forEach(System.out::println);
+				}
+			}
+		In streams, we have colelctions.groupBy. groupByConcurrent which are similar to GroupBy in SQL. Need to study on this, 
+Code: Stream through a string and print the characters that are repeated more than onnce and limit to 10 only.
+
+String s = "yursauydhsaklfndklfndslfugreoiglnfv";
+        s.chars().mapToObj(c -> (char) c) // mapping to String using mapToObj. s.chars() returns int stream
+                .collect(Collectors.groupingBy(Function.identity(), Collectors.counting())).entrySet()// using identity function to identify each char, counting() to count each char. this gives us map<kEY, Vlaue> key as string, value as count
+                .stream().filter(entry -> entry.getValue()>1).limit(10).forEach(a -> System.out.println(a.getKey()));
+Link: https://www.baeldung.com/java-groupingby-collector
+
+
+	Method references
+		A method reference is the shorthand syntax for a lambda expression that contains just one method call.
+		Object :: methodName 
+		list.forEach(System.out::println);  
+		Types:
+			Class::staticMethod  // static
+			obj::instanceMethod // another objects method
+			ObjectType::instanceMethod //Reference to an instance method of an arbitrary object of a particular type
+			ClassName::new // constructor
+			
+	Map Implementation Changes
+	In Java 8, HashMap replaces linked list with a binary tree when the number of elements in a bucket reaches certain threshold(treeify_threshold>=8). While converting the list to binary tree, hashcode is used as a branching variable. If there are two different hashcodes in the same bucket, one is considered bigger and goes to the right of the tree and other one to the left. But when both the hashcodes are equal, HashMap assumes that the keys are comparable, and compares the key to determine the direction so that some order can be maintained. It is a good practice to make the keys of HashMap comparable
+Java:11
+	New String methods
+		isBlank, lines, strip, stripLeading, stripTrailing, and repeat.
+	New File methods
+		We can use the new readString and writeString static methods from the Files class:
+	NotPredictae method added to predicate interface, We can use it to negate an existing predicate
+	Local variable in lambda expression(var)
+	Improved Http client The new HTTP API improves overall performance and provides support for both HTTP/1.1 and HTTP/2:
+	Running java files directly, without using javac for compilation
+	java filename.java
+	earlier it was javac filename.java, then java filename
+	
+	
+Java:17
+	Restore or Rebuild the "Always-Strict Floating-Point" Semantics
+	Enhanced faster the "pseudo-Random" Number Generators
+	Switch Pattern Matching (Preview)
+	public static int getLength(Object obj) {
+    return switch (obj) {
+        case String s -> s.length(); // variable pattern
+        case List list && !list.isEmpty() -> list.size(); // type pattern
+        case null -> 0;
+        default -> -1;
+    };
+}
+	Generate sealed Classes
+	In simple words, Sealed Classes work by specifying which classes or interfaces are allowed to extend or implement a particular class or interface. This is achieved by using the “sealed” modifier on the parent class or interface, and then specifying the allowed subclasses or implementing classes using the “permits” keyword.
+	
+	public sealed class Shape permits Circle, Square, Triangle {
+    // ...
+	}
+	In the example, the “sealed” modifier is used to specify that the Shape class is a sealed class. The “permits” keyword is then used to specify the allowed subclasses of Shape, which are Circle, Square, and Triangle.
+
+	By using a sealed class, we can ensure that the only allowed subclasses of Shape are Circle, Square, and Triangle. Any other attempt to extend Shape will result in a compilation error.
+
+	In addition to specifying allowed subclasses, sealed classes also allow developers to define “non-sealed” or “final” subclasses that cannot be further extended. Here is an example of a non-sealed subclass:
+	
+
+Reflexes in java:
+	It is a powerful feature in Java which is used to inspect and interact with the code at runtime and  It provides the ability to analyze and manipulate classes, fields, methods, and other elements of the Java code.
+	
+	
+	student.getClass()
+	studentClass.getDeclaredField("name").setAccessibility(true);// accessing the private field
+	// Modify the 'name' field
+            nameField.set(student, "Shanav");
+	
+
+
+	
+JVM Memory Model
+	Stack vs Heap
+	Stack memory is used to store local variables, object references, order of method execution. This memorey is alloated at run time. Order is LIFO
+	Heap memory is assigned dynamically and it is used to store the object created. It is created when JVM is starts and used as long as the app runs.
+	
+OOPs Concepts
+	Polymorphism: The word ‘polymorphism’ means ‘having many forms’. In java It allows us to perform a single action in different ways. In other words, polymorphism allows you to define one interface and have multiple implementations. The word “poly” means many and “morphs” means forms, So it means many forms.
+		Types
+			Runtime/Dynamic Method Dispatch (Overriding),
+			Compile time/static polymorphism (Overloading)
+	Abstraction:
+		Hiding internal implementation/functionality  and showing only required things
+		Done by Interface (100% abstraction)/ Abstract classes
+	Encapsulation:
+		Binding code and data together into a single unit.
+		By providing only a setter or getter method, you can make the class read-only or write-only
+		Provided control over data
+	Inheritance:
+		It is a behaviour where one class acquires the properties and behaviour of other class along with its own behaviour
+		Class acquiring behaviour is subClass/ child class and the other is Prent or super class
+		Override the parent method in child to have different behaviour
+		
+	Co-variant return type: Before Java5, it was not possible to override any method by changing the return type. But now, since Java5, it is possible to override method by changing the return type if subclass overrides any method whose return type is Non-Primitive but it changes its return type to subclass type.
+
+	Binding is connecting a method call to method body
+		Static binding
+		Dynamic binding
+	
+String: It is a collection or sequence of characters. An array of characters works same as Java string
+	char[] ch={'j','a','v','a','t','p','o','i','n','t'};  
+	String s=new String(ch);
+	this is same as 
+	String s="javatpoint";  
+	The java.lang.String class implements Serializable, Comparable and CharSequence interfaces.
+	
+	String can be created by using new or by assiging the value directly(string literal)
+	String s = new String() or String s = "";
+	
+	
+	String s = "abc"// creates "abc" IN STRING POOL
+	String s = new String("123")// create 1 object in heap and one String pool if 123 is not present in String pool
+	
+	String is Immutable, meaning that once a String is created its state cannot be changed after it has been initialized and If several references point to the same String without even knowing it, then it would be dangerous if any of the references modified that String value. This is why String objects are immutable and this immutability of string helps is proper memory management, thread safety and also ensures thread safety
+	
+	Example: String a = "1234"
+	a.concat("9999")
+	sout(a)// will print 1234 but not 12349999 because of immutability
+	a = a.concat("9999")// now it will print 12349999 as the reference is changed
+	
+	String class is final, reason is that no other class can override the methods of string class. So that it can provide the same features to new string as old one
+	
+	String comprasion:
+		.equals() // compares the content and returns boolean
+		== // compares the references 
+		compareTo()// compares the value and returns int value 
+		1(if 1st value is big)/0(if both are same)/-1(if 1st value is small) 
+
+	Java String intern() Method: When the intern method is invoked, if the pool already contains a String equal to this String object as determined by the equals(Object) method, then the String from the pool is returned. Otherwise, this String object is added to the pool and a reference to this String object is returned. 
+	.intern
+	public class InternExample{  
+	public static void main(String args[]){  
+	String s1=new String("hello");  
+	String s2="hello";  
+	String s3=s1.intern();//returns string from pool, now it will be same as s2  
+	System.out.println(s1==s2);//false because reference variables are pointing to different instance  
+	System.out.println(s2==s3);//true because reference variables are pointing to same instance  
+	}} 
+	
+	String vs String Buffer vs String builder
+	
+	String is immutable. To make staring as Mutable we use buffer and builder
+	StringBuffer()// created empty string with capacity as 16, when a capacity is exceeded 16, then the new capacity will be old*2)+2
+	StringBuffer(int) // creates and empty string with provided in capacity
+	StringBuffer(str)// creates stringbuffer with provided string
+	StringBuffer.reverse, charAT, Length, insert()
+	String returns new hashcode while performing concatenation but the StringBuffer class returns same hashcode.
+	String concat is slow where as buffer concat is fast
+	String overrides equals method of object class for comparing 2 string, where as stringuffer not
+	
+	String builder is same as buffer but non-synchronized
+	
+	buffer is synchronized but not the builder, so only single thread can access buffer, so is the buffer thread safe
+	Buffer is less effecient than builder as only 1 thread can access,
+	
+	String returns new hashcode while performing concatenation but the StringBuffer class returns same hashcode.
+	
+Creating immutable class:
+	All wrapper classes are Immutable (Sting, Boolean, Integer, Long, Float...)
+	1. declare class as final, so it cannot be extended by other
+	2. Mark members of class as final, so they cannot be changed. No setter for this member and can set the value in constructor.
+	
+	
+Exception handling:
+	Exception is an abnormal behaviour in code, In order to continue the flow of application, we need to handle the exception.
+	Exception handling is to handle the runtime exceptions.
+	Root class of Exception is Throwable 
+		Exceptions:
+			Checked: these are checked at compile time, These are also known as Compile time exceptions. Like SqlException, Ioexception
+			Un-checked: These are not checked at compile time but at Runtime, so called as Run time exception as well, and we need to handle these exception. Like NPE, ArrayOutOfBound
+			Error: irrecoverable like OutOfMemoryError
+			
+	To handle exceptions, we use TRY/CATCH/FINAL/THROW/THROWS
+		TRY: this block contains the code that might result in exception
+		CATHC: This is catch block used to catch the exception from TRY block. It is followed by TRY block.
+		Catch cannot be present without try, but try can be without catch but with final block
+		FINAL: is a block of necessary code that is executed whether an exception is handled or not. Say closing DB connections, closing file etc
+		THROW: Used to throw an exception
+		THROWS: used as part of method signature and informs that there is a possibility of that exception from that method
+		
+		Order of catch exceptions is from specific to generic. Generic is Exception and this should be in last catch block
+		
+		Exception handling in method Overriding:
+		If the superclass method does not declare an exception
+			If the superclass method does not declare an exception, subclass overridden method cannot declare the checked exception but it can declare unchecked exception.
+		If the superclass method declares an exception
+			If the superclass method declares an exception, subclass overridden method can declare same, subclass exception or no exception but cannot declare parent exception.
+			
+	Custom exception: These are user defined exception. we can create our own exceptions in java by extending Exception class and call super(message).
+	Basically, Java custom exceptions are used to customize the exception according to user need.
+		
+Multi-Threading
+
+	It is executing multiple threads paralelly.
+	A thread is sub-unit or a process.
+	
+	A process is a large task which is divided into smaller tasks and sub task is executed by different thread in Multithreading.
+	
+	A Thread is a light weeight process
+	However, we use multithreading than multiprocessing because threads use a shared memory area. They don't allocate separate memory area so saves memory, and context-switching between the threads takes less time than process
+	
+	Multitasking
+		Multitasking is a process of executing multiple tasks simultaneously. We use multitasking to utilize the CPU. Multitasking can be achieved in two ways:
+
+		Process-based Multitasking (Multiprocessing)
+		Thread-based Multitasking (Multithreading)
+	At a time one thread is executed only
+	
+	Life cycle of thread;
+		NEW: When a new thread is created, it is in NEW state where the code is not yet run
+		ACTIVE: When Thread invoked start method, the thread moves to active state. it has 2 states
+			a. runnable: A thread, that is ready to run is then moved to the runnable state. In the runnable state, the thread may be running or may be ready to run at any given instant of time. It is the duty of the thread scheduler to provide the thread time to run, i.e., moving the thread the running state
+			b. running: When the thread gets the CPU, it moves from the runnable to the running state. Generally, the most common change in the state of a thread is from runnable to running and again back to runnable.
+		BLOCKED/WAITING:Whenever a thread is inactive for a span of time (not permanently) then, either the thread is in the blocked state or is in the waiting state.
+		TIMED WAITING:Sometimes, waiting for leads to starvation. A real example of timed waiting is when we invoke the sleep() method on a specific thread. The sleep() method puts the thread in the timed wait state. After the time runs out, the thread wakes up and start its execution from when it has left earlier.
+		TERMINATING: A thread reaches the termination state because of the following reasons:
+
+			When a thread has finished its job, then it exists or terminates normally.
+			Abnormal termination: It occurs when some unusual events such as an unhandled exception or segmentation fault.
+			
+			
+	Creation of Thread:
+		
+
+Collections
+	Collection framework:
+	
+		List
+			ArrayList vs LinkedList vs Vector
+		Map
+			hashmap vs Hashtable vs Treemap
+		Set
+			HashSet vs LinkedSet vs TreeSet
+		
+		
+		Hashmap internal implementation
+		.equals & .hashCode overriding, why needed? and how?

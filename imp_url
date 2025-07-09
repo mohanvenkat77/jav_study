@@ -1,0 +1,247 @@
+http://ashismo.github.io/java-spring/2017/05/16/Spring-Batch-with-Spring-Boot
+SSH
+Name : GXPFT
+Host : 130.35.155.106	Port : 22
+Username : oaluser
+Use Key file : C:\Users\rkondals\Downloads\oalkey_ssh.key
+Local Port Forward
+Name : Default
+Host : 10.3.192.142	Port: 1521
+---------------------------------------------------------------------
+DB connection
+Name : GXPFT
+UserName : OALGENERIC[OALCN]
+password : FusionDev6#
+Connection Type :SSH
+Port forward :Default (GXPFT)
+Service Name : pgxpft.dpdbfront1.oal.oraclevcn.com
+
+
+
+Name : GXPBT
+UserName : oalgeneric[oalcn]
+password : FusionDev2#
+Connection Type :SSH
+Port forward :Default (GXPBT)
+Service Name : pgxpbt.dpdbfront1.oal.oraclevcn.com
+
+
+
+https://confluence.oraclecorp.com/confluence/pages/viewpageattachments.action?pageId=2160481061 
+KT Videos
+
+
+Oracle performance training
+***********************************************************************
+
+https://www.oracle.com/database/technologies/databaseappdev-vm.html https://www.oracle.com/downloads/developer-vm/community-downloads.html 
+From Aman Sharma to Everyone: (03:53 PM)
+ http://tech.e2sn.com/oracle-scripts-and-tools/session-snapper https://www.youtube.com/channel/UCroYqCt2GXIenwN83C0m7ag/videos 
+From Aman Sharma to Everyone: (03:59 PM)
+ https://www.amazon.in/Oracle-Core-Essential-Internals-Developers/dp/8132205049/ 
+
+
+*****************************************************************************
+
+
+
+https://confluence.oraclecorp.com/confluence/display/OICP/Developer+Connect developer connect
+
+
+License for Intellij
+http://slcibhf.us.oracle.com:1111/
+
+
+https://jonathanlewis.wordpress.com/category/oracle/statspack/
+
+
+https://pdit-service-requests.custhelp.com/app/ask/incidents.prod/1707,16500/incidents.cat/16501/RefDocID/213 -- SR
+
+https://oal.custhelp.com/AgentWeb/ -- SRs
+
+https://confluence.oraclecorp.com/confluence/display/OracleApplicationLabs/OAL+Employee+Access+to+the+OAL+OSvC#OALEmployeeAccesstotheOALOSvC-AccesstheBrowserAgentConsole steps for SRs
+
+
+https://alm.oraclecorp.com/oal/#projects/gxp/scm/OalIncoArcs.git/tree/arcs-root/main/patch/115/sql?revision=gsi-development -- DBCODE
+
+0022617289--ESS
+Payroll:
+0022617289
+Nani@965
+https://adit.oraclecorp.com/apex/f?p=275:1 -- performance utility
+
+MISCN_ALL_TENANT_CODES_VS -- Value list for tenant codes for CC
+
+https://blogs.oracle.com/prajkumar/oracle-fndload-scripts-- xdf,ldt creation
+https://blogs.oracle.com/prajkumar/oracle-fndload-scripts
+
+
+Creating bug and assiging to other team--https://oal.custhelp.com/app/ or
+same as creating bug but not copy, sample bug#:30191735
+
+
+path for putty/Winscp
+after login to putty, execute the command
+chenv cnmis 12.0 bsgdev -- for arcs
+then the path
+/rh2.1AS/nfs/src/bsgdev/cnmis/12.0/patch/115/sql
+
+Arcs out/in steps
+
+login to putty -- rws3220153.us.oracle.com
+run command  chenv cnmis 12.0 bsgdev 
+Navigate to local folder in UNIX /home/pkadthal/sample
+to checkout to your local unix folder run the command  arcs out patch/115/sql/miscn_coll_fwk_apps.sql
+Now copy this file to your local machine using WinScp
+Make changes to files locally and place the updated file in Sample folder again (Changes should also include the latest version number, can get the latest version by indent command)
+Now from sample folder, run the command to check-in   arcs in patch/115/sql/miscn_coll_fwk_apps.sql 
+
+indent /rh2.1AS/nfs/src/bsgdev/cnmis/12.0/patch/115/sql/miscn_coll_fwk_apps.sql -- complete path to get latest version
+
+arcs out patch/115/sql/miscn_coll_fwk_apps.sql
+ident /rh2.1AS/nfs/src/bsgdev/cnmis/12.0/patch/115/sql/miscn_coll_fwk_apps.sql
+arcs in patch/115/sql/miscn_coll_fwk_apps.sql
+
+arcs mkpsa patch/115/xdf/newfilename.xdf -- to create and add new file
+
+
+
+FOR Applying patches
+
+Create bug--http://aru.us.oracle.com:8080/ --bug db
+then ARU Checkin--http://aru.us.oracle.com:8080/ -- Aru checkin
+then raise patch request --https://adit.oraclecorp.com/apex/f?p=144:7:101315659184124::NO:7::
+
+
+
+Jira
+for advanced search
+
+assignee = currentUser() AND resolution = Unresolved order by updated DESC
+
+
+
+
+
+synonyms
+http://aru.us.oracle.com:8080/src/R12/120.7/miscn/patch/115/sql/miscn_coll_fwk_apps.sql&&120.7
+
+select grant on
+http://aru.us.oracle.com:8080/src/R12/120.7/miscn/patch/115/sql/miscn_coll_fwk_miscn.sql&&120.7
+
+gsiav.oraclecorp.com -- for xdf creations
+
+-- for sample XDF/ARCS in
+http://aru.us.oracle.com:8080/ARU/ViewCheckin/process_form?bug=29472626&release=1500&show=files#link_details
+
+All Confluence
+https://confluence.oraclecorp.com/confluence/display/OALMS/Micro+Services
+
+Oracle home
+my.oracle.com
+oim.oraclecorp.com
+
+Project set-up
+https://confluence.oraclecorp.com/confluence/display/OICP/Developer+Setup+Guide
+https://alm.oraclecorp.com/oal/#projects/gxp/scm/OalcnOrderSubExtraction.git/tree/?revision=cn-development
+https://bug.oraclecorp.com/
+https://confluence.oraclecorp.com/confluence/display/OICP/Developer+Setup+Guide
+https://alm.oraclecorp.com/oal/#projects/gxp/scm/OalcnOrderSubExtraction.git/tree/?revision=cn-development
+
+GSI PAAS Flow
+https://confluence.oraclecorp.com/confluence/display/OICP/GSI+-+PAAS+Integration%3A+OrderLine+Flow
+EventsTable PAAS
+https://confluence.oraclecorp.com/confluence/display/OICP/GSI+-+PAAS+Integration+Approach#GSI-PAASIntegrationApproach-EventsTable
+
+ARU-Automated release updates
+Code flow
+Search for package---miscn_sca.plb and then the procedure - PROCEDURE CALL_NOTIFY_ORDER( p_header_id in number)
+
+
+https://alm.oraclecorp.com/oal
+
+https://confluence.oraclecorp.com/confluence/display/OICP/INCO_1+GSI+-+Create+tables+ORDER_LINE_EVENT%2C+ORDER_LINE%2C+ORDER_LINE_PUSH
+https://confluence.oraclecorp.com/confluence/pages/viewpage.action?pageId=1352997443
+https://confluence.oraclecorp.com/confluence/pages/viewpage.action?pageId=1338110952
+
+--------------------imp----------------**********
+**********************************
+
+Discovery (Checking the health of the applications)
+https://confluence.oraclecorp.com/confluence/display/OALMS/Environment+Map
+https://adit.oraclecorp.com/apex/f?p=166:7:::NO
+
+
+Upgrading to Spring 2.x - https://confluence.oraclecorp.com/confluence/display/OALMS/Upgrading+to+Spring+Boot+2.x
+-Dspring.cloud.bootstrap.enabled=false
+
+Expenses
+https://eeho.fa.us2.oraclecloud.com/fscmUI/faces/FuseWelcome?_adf.ctrl-state=wrndrdoa8_5&fnd=%3B%3B%3B%3Bfalse%3B256%3B%3B%3B&_afrLoop=3797206426077952
+
+
+Cloud Txn File name too long error when cloning to local
+
+https://stackoverflow.com/questions/21123415/git-pull-aborted-with-error-filename-too-long/22831095
+- Step 1 - Do a git clone -c core.longpaths=true <repo-url>. Thee repo url will be the https link. This will create the local project and the branch will be master
+- Step 2 - Checkout to the branch you want to work in using git checkout <branch-name>
+
+OIM Stage
+https://oim-stage.oraclecorp.com/
+
+Jira
+https://jira.oraclecorp.com/jira/issues/?filter=-1
+
+Template for sub-tasks - https://jira.oraclecorp.com/jira/browse/OALICCF-11876
+
+Weekly patching to UAT
+https://confluence.oraclecorp.com/confluence/display/OICP/Weekly+Patching+to+UAT
+
+Hudson
+http://hudsonci.oraclecorp.com/hudson/oal/view/GXP/job/GXP-OalcnOrderSubExtraction-REMO-Build/
+
+Developer setup guide
+https://confluence.oraclecorp.com/confluence/display/OICP/Onboarding+to+OIC
+
+ALM
+https://alm.oraclecorp.com/oal/#projects/gxp/scm/OalcnOrderSubExtraction.git/tree/?revision=cn-development
+
+Confluence link
+https://confluence.oraclecorp.com/confluence/display/OICP/A-47_4+%3A+PaaS+-+OSX+Order+processing+to+store+more+attributes+for+order+header+SCA+Attributes
+
+Jenkins URLS
+https://hudsonci.oraclecorp.com/jenkins/oal-remo/job/GXP-OalcnOrderSubExtraction-REMO-Build/
+https://slc13lat.us.oracle.com:8443/jenkins/oal-remo/job/GXP-OalcnOrderSubExtraction-REMO-Build/
+http://hudsonci.oraclecorp.com/jenkins/oal-remo-deploy/job/REMO-Deploy-Pipeline/
+
+SCA UI
+https://gxpet.oracle.com/oalapp/web/cTwo/
+
+
+H2 console
+OSX - http://localhost:8080/oalapp/services/oalcn-ordsbx/h2-console/login.jsp
+Username - jdbc:h2:mem:testdb
+
+GsiExport - http://localhost:8084/oalapp/services/oalcn-gsiexp/h2-console/
+
+PASS DB Server Access
+https://confluence.oraclecorp.com/confluence/display/OALCloud/PaaS+DB+Server+Access#PaaSDBServerAccess-ConnectusingSQLDeveloper
+
+Cloud environments
+https://confluence.oraclecorp.com/confluence/display/OALCloud/Cloud+Environments
+
+SAAS
+https://eeho-dev4.fa.us2.oraclecloud.com/hcmUI/faces/FuseWelcome
+
+https://confluence.oraclecorp.com/confluence/pages/viewpage.action?pageId=703968654
+
+Order details report
+https://confluence.oraclecorp.com/confluence/display/OALMS/Feature+A08+-+Ability+to+schedule+SaaS+BIP+report%2C+fetch+report+data+and+trigger+report+data+processing+steps+in+an+order
+
+GSIAU
+https://gsiau.oraclecorp.com/
+
+Global merge request tracking page
+https://confluence.oraclecorp.com/confluence/display/OICP/Global+Code+Review+Request+Tracking
+
+kafka topics
+https://confluence.oraclecorp.com/confluence/display/OALMS/Kafka+in+OCI

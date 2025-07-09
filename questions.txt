@@ -1,0 +1,1794 @@
+=================================================================================================================================================================
+1. Spring configurations
+=================================================================================================================================================================
+
+
+Use @Configuration annotation on top of any class to declare that this class provides one or more @Bean methods and may be processed by the Spring container to generate bean definitions and service requests for those beans at runtime.
+
+spring-core, spring-context dependencies
+
+Annotating a class with the @Configuration indicates that the class can be used by the Spring IoC container as a source of bean definitions. The @Bean annotation tells Spring that a method annotated with @Bean will return an object that should be registered as a bean in the Spring application context
+
+@Configuration on a class makes that class as a configuration file and this class has beans
+ex:
+@Configuration --- makes this class as configuration file
+public class ApplicationConfiguration {
+ 
+    @Bean(name="demoService") -- bean creation for DemoManager class
+    public DemoManager helloWorld() 
+    {
+        return new DemoManagerImpl();
+    }
+}
+
+The above code will be equivalent to the following XML configuration −
+
+<beans>
+   <bean id = "demoService" class = "com.test.DemoManager" />
+</beans>
+
+
+public class VerifySpringCoreFeature --- main class where the context is loaded
+{
+    public static void main(String[] args)
+    {
+        ApplicationContext context = new AnnotationConfigApplicationContext(ApplicationConfiguration.class); --- loading the configuration class for beans
+ 
+        DemoManager  obj = (DemoManager) context.getBean("demoService"); --- getting the bean from the context
+ 
+        System.out.println( obj.getServiceName() );
+    }
+}
+
+
+The @Import annotation allows for loading @Bean definitions from another configuration class. Consider a ConfigA class as follows −
+
+@Configuration
+public class ConfigA {
+   @Bean
+   public A a() {
+      return new A(); 
+   }
+}
+You can import above Bean declaration in another Bean Declaration as follows −
+
+@Configuration
+@Import(ConfigA.class)
+public class ConfigB {
+   @Bean
+   public B b() {
+      return new B(); 
+   }
+}
+Now, rather than needing to specify both ConfigA.class and ConfigB.class when instantiating the context, only ConfigB needs to be supplied as follows −
+
+public static void main(String[] args) {
+   ApplicationContext ctx = new AnnotationConfigApplicationContext(ConfigB.class);
+   
+   // now both beans A and B will be available...
+   A a = ctx.getBean(A.class);
+   B b = ctx.getBean(B.class);
+}
+
+
+
+
+Lifecycle Callbacks
+The @Bean annotation supports specifying arbitrary initialization and destruction callback methods, much like Spring XML's init-method and destroy-method attributes on the bean element −
+
+public class Foo {
+   public void init() {
+      // initialization logic
+   }
+   public void cleanup() {
+      // destruction logic
+   }
+}
+@Configuration
+public class AppConfig {
+   @Bean(initMethod = "init", destroyMethod = "cleanup" )
+   public Foo foo() {
+      return new Foo();
+   }
+}
+Specifying Bean Scope
+The default scope is singleton, but you can override this with the @Scope annotation as follows −
+
+@Configuration
+public class AppConfig {
+   @Bean
+   @Scope("prototype")
+   public Foo foo() {
+      return new Foo();
+   }
+}
+
+
+
+@Bean: Indicates that a method produces a bean to be managed by the Spring container. This is one of the most used and important spring annotation. @Bean annotation also can be used with parameters like name, initMethod and destroyMethod.
+name – allows you give name for bean
+initMethod – allows you to choose method which will be invoked on context register
+destroyMethod – allows you to choose method which will be invoked on context shutdown
+
+@Configuration
+public class AppConfig {
+
+    @Bean(name = "comp", initMethod = "turnOn", destroyMethod = "turnOff")
+    Computer computer(){
+        return new Computer();
+    }
+}
+
+public class Computer {
+
+    public void turnOn(){
+        System.out.println("Load operating system");
+    }
+    public void turnOff(){
+        System.out.println("Close all programs");
+    }
+}
+
+@PreDestroy and @PostConstruct are alternative way for bean initMethod and destroyMethod. It can be used when the bean class is defined by us. For example;
+
+ public class Computer {
+
+    @PostConstruct
+    public void turnOn(){
+        System.out.println("Load operating system");
+    }
+
+    @PreDestroy
+    public void turnOff(){
+        System.out.println("Close all programs");
+    }
+}
+
+
+
+
+
+
+@ComponentScan: Configures component scanning directives for use with @Configuration classes. Here we can specify the base packages to scan for spring components.
+@Component: Indicates that an annotated class is a “component”. Such classes are considered as candidates for auto-detection when using annotation-based configuration and classpath scanning.
+@PropertySource: provides a simple declarative mechanism for adding a property source to Spring’s Environment. There is a similar annotation for adding an array of property source files i.e @PropertySources.
+@Service: Indicates that an annotated class is a “Service”. This annotation serves as a specialization of @Component, allowing for implementation classes to be autodetected through classpath scanning.
+@Repository: Indicates that an annotated class is a “Repository”. This annotation serves as a specialization of @Component and advisable to use with DAO classes.
+@Autowired: Spring @Autowired annotation is used for automatic injection of beans. Spring @Qualifier annotation is used in conjunction with Autowired to avoid confusion when we have two of more bean configured for same type.
+
+
+@Component is a generic stereotype for any Spring-managed component
+@Service annotates classes at the service layer
+@Repository annotates classes at the persistence layer, which will act as a database repository
+
+@Component: This marks a java class as a bean. It is a generic stereotype for any Spring-managed component. The component-scanning mechanism of spring now can pick it up and pull it into the application context.
+
+annotations - Spring Framework Tutorial - Edureka!
+
+@Controller: This marks a class as a Spring Web MVC controller. Beans marked with it are automatically imported into the Dependency Injection container.
+
+@Service: This annotation is a specialization of the component annotation. It doesn’t provide any additional behavior over the @Component annotation. You can use @Service over @Component in service-layer classes as it specifies intent in a better way.
+
+@Repository: This annotation is a specialization of the @Component annotation with similar use and functionality. It provides additional benefits specifically for DAOs. It imports the DAOs into the DI container and makes the unchecked exceptions eligible for translation into Spring DataAccessException.
+
+@Component auto detects and configures the beans using classpath scanning whereas @Bean explicitly declares a single bean, rather than letting Spring do it automatically.
+@Component does not decouple the declaration of the bean from the class definition where as @Bean decouples the declaration of the bean from the class definition.
+@Component is a class level annotation whereas @Bean is a method level annotation and name of the method serves as the bean name.
+@Component need not to be used with the @Configuration annotation where as @Bean annotation has to be used within the class which is annotated with @Configuration.
+We cannot create a bean of a class using @Component, if the class is outside spring container whereas we can create a bean of a class using @Bean even if the class is present outside the spring container.
+@Component has different specializations like @Controller, @Repository and @Service whereas @Bean has no specializations.
+
+
+
+
+
+
+
+
+
+https://springframework.guru/spring-framework-annotations/ annotations used in sprng
+
+
+
+
+
+=================================================================================================================================================================
+2. how to make spring application to spring boot
+=================================================================================================================================================================
+
+	 add <parent>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-parent</artifactId>
+    <version>2.1.7.RELEASE</version>
+    <relativePath/>
+</parent> to pom.xml
+
+Notice how we're using @SpringBootApplication as our primary application configuration class; behind the scenes, that's equivalent to @Configuration, @EnableAutoConfiguration, and @ComponentScan together.
+
+Finally, we'll define a simple application.properties file – which for now only has one property:
+
+server.port=8081
+
+That's why, if we have the starter on the classpath, we should usually define our own custom Security configuration by extending the WebSecurityConfigurerAdapter class:
+
+@Configuration
+@EnableWebSecurity
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http.authorizeRequests()
+            .anyRequest()
+            .permitAll()
+            .and().csrf().disable();
+    }
+}
+
+Let's start by defining our data model – a simple Book entity:
+
+@Entity
+public class Book {
+ 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private long id;
+
+    @Column(nullable = false, unique = true)
+    private String title;
+
+    @Column(nullable = false)
+    private String author;
+}
+And its repository, making good use of Spring Data here:
+
+public interface BookRepository extends CrudRepository<Book, Long> {
+    List<Book> findByTitle(String title);
+}
+Finally, we need to of course configure our new persistence layer:
+
+@EnableJpaRepositories("com.baeldung.persistence.repo") 
+@EntityScan("com.baeldung.persistence.model")
+@SpringBootApplication 
+public class Application {
+   ...
+}
+
+@EnableJpaRepositories to scan the specified package for repositories
+@EntityScan to pick up our JPA entities
+
+To keep things simple, we're using an H2 in-memory database here – so that we don't have any external dependencies when we run the project.
+
+Once we include H2 dependency, Spring Boot auto-detects it and sets up our persistence with no need for extra configuration, other than the data source properties:
+
+spring.datasource.driver-class-name=org.h2.Driver
+spring.datasource.url=jdbc:h2:mem:bootapp;DB_CLOSE_DELAY=-1
+spring.datasource.username=sa
+spring.datasource.password=
+
+
+
+
+Now that the core application is ready to go, let's focus on a simple centralized error handling mechanism using @ControllerAdvice:
+
+@ControllerAdvice
+public class RestExceptionHandler extends ResponseEntityExceptionHandler {
+
+    @ExceptionHandler({ BookNotFoundException.class })
+    protected ResponseEntity<Object> handleNotFound(
+      Exception ex, WebRequest request) {
+        return handleExceptionInternal(ex, "Book not found", 
+          new HttpHeaders(), HttpStatus.NOT_FOUND, request);
+    }
+
+    @ExceptionHandler({ BookIdMismatchException.class, 
+      ConstraintViolationException.class, 
+      DataIntegrityViolationException.class })
+    public ResponseEntity<Object> handleBadRequest(
+      Exception ex, WebRequest request) {
+        return handleExceptionInternal(ex, ex.getLocalizedMessage(), 
+          new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+    }
+}
+
+
+https://www.baeldung.com/spring-boot-start --- spring boot application
+
+	Spring Boot is not a replacement for the Spring, but it’s a tool for working faster and easier on Spring applications.It simplifies much of the architecture by adding a layer that helps automate configuration and deployment while making it easier to add new features.
+	Most of the changes for migrating Spring Framework application to Spring Boot are related to configurations.This migration will have minimal impact on the application code or other custom components.Spring Boot brings a number of advantages to the development.
+	It simplifies Spring dependencies by taking the opinionated view ( we will discuss it in more details).
+	Spring Boot provides a preconfigured set of technologies/framework to reduces error-prone configuration so we as a developer focused on building our business logic and not thinking of project setup.
+	You really don’t need those big XML configurations for your project.
+	Provide opinionated Maven POM to simplify your configurations.
+	Application metrics and health check using actuator module.
+	Externalization of the configuration files.
+	
+	spring-boot-starter-parent as parent in pom.xml
+	Spring Boot based application uses a standard method that follows the Java convention for an application entry point.This entry point is a Java class with the main method, annotated with @SpringBootApplication.
+
+	@SpringBootApplication // same as @Configuration @EnableAutoConfiguration @ComponentScan
+	public class ApplicationEntry {
+		public static void main(String[] args) {
+		SpringApplication.run(ApplicationEntry.class, args);
+		}
+	}
+
+	that @EnableAutoConfiguration scans all the classes in the same package or below the root.
+	We should use @ComponentScan annotation to automatically pick all Spring component and@Importannotations on the main class
+	Use @ImportResource annotation to import XML based configuration if you do not want to migrate to Java-based configurations or want to do this gradually.
+	
+	Spring Boot provides a starter for the web application which takes care of providing all the required dependencies to start the web application.
+
+<dependency>
+  <groupId>org.springframework.boot</groupId>
+  <artifactId>spring-boot-starter-web</artifactId>
+</dependency>
+
+Spring Boot includes auto-configuration support for the following templating engines
+
+Thymeleaf
+FreeMarker
+Mustache
+We need to add a specific starter to start working on the chosen templating engine.
+
+<dependency>
+  <groupId>org.springframework.boot</groupId>
+  <artifactId>spring-boot-starter-thymeleaf</artifactId>
+</dependency>
+
+Migrating Spring Security Application
+Use spring-boot-starter-security to enable Spring Security for your application.
+<dependency>
+  <groupId>org.springframework.boot</groupId>
+  <artifactId>spring-boot-starter-security</artifactId>
+</dependency>
+
+
+
+
+
+=================================================================================================================================================================
+3. spring boot configuration
+=================================================================================================================================================================
+
+
+
+
+
+
+
+=================================================================================================================================================================
+4. uses of spring boot
+=================================================================================================================================================================
+
+Spring: Spring Framework is the most popular application development framework of Java. The main feature of the Spring Framework is dependency Injection or Inversion of Control (IoC). With the help of Spring Framework, we can develop a loosely coupled application. It is better to use if application type or characteristics are purely defined.
+
+Spring Boot: Spring Boot is a module of Spring Framework. It allows us to build a stand-alone application with minimal or zero configurations. It is better to use if we want to develop a simple Spring-based application or RESTful services.
+
+
+Spring	Spring Boot
+Spring Framework is a widely used Java EE framework for building applications. ---	Spring Boot Framework is widely used to develop REST APIs.
+It aims to simplify Java EE development that makes developers more productive. ---	It aims to shorten the code length and provide the easiest way to develop Web Applications.
+The primary feature of the Spring Framework is dependency injection.	--- The primary feature of Spring Boot is Autoconfiguration. It automatically configures the classes based on the requirement.
+It helps to make things simpler by allowing us to develop loosely coupled applications.	 --- It helps to create a stand-alone application with less configuration.
+The developer writes a lot of code (boilerplate code) to do the minimal task.	--- It reduces boilerplate code.
+To test the Spring project, we need to set up the sever explicitly.	--- Spring Boot offers embedded server such as Jetty and Tomcat, etc.
+It does not provide support for an in-memory database.	 --- It offers several plugins for working with an embedded and in-memory database such as H2.
+Developers manually define dependencies for the Spring project in pom.xml.	--- Spring Boot comes with the concept of starter in pom.xml file that internally takes care of downloading the dependencies JARs based on Spring Boot Requirement.
+
+
+Spring Boot: Spring Boot makes it easy to quickly bootstrap and start developing a Spring-based application. It avoids a lot of boilerplate code. It hides a lot of complexity behind the scene so that the developer can quickly get started and develop Spring-based applications easily.
+
+Spring MVC: Spring MVC is a Web MVC Framework for building web applications. It contains a lot of configuration files for various capabilities. It is an HTTP oriented web application development framework.
+
+Spring Boot	Spring MVC
+Spring Boot is a module of Spring for packaging the Spring-based application with sensible defaults.	--- Spring MVC is a model view controller-based web framework under the Spring framework.
+It provides default configurations to build Spring-powered framework. ---	It provides ready to use features for building a web application.
+There is no need to build configuration manually. ---	It requires build configuration manually.
+There is no requirement for a deployment descriptor.	--- A Deployment descriptor is required.
+It avoids boilerplate code and wraps dependencies together in a single unit. ---	It specifies each dependency separately.
+It reduces development time and increases productivity. ---	It takes more time to achieve the same.
+
+
+Spring
+
+Simply put, the Spring framework provides comprehensive infrastructure support for developing Java applications.
+
+It's packed with some nice features like Dependency Injection and out of the box modules like:
+
+Spring JDBC
+Spring MVC
+Spring Security
+Spring AOP
+Spring ORM
+Spring Test
+These modules can drastically reduce the development time of an application.
+
+For example, in the early days of Java web development, we needed to write a lot of boilerplate code to insert a record into a data source. But by using the JDBCTemplate of the Spring JDBC module we can reduce it to a few lines of code with only a few configurations.
+
+What Is Spring Boot?
+
+Spring Boot is basically an extension of the Spring framework which eliminated the boilerplate configurations required for setting up a Spring application.
+
+It takes an opinionated view of the Spring platform which paved the way for a faster and more efficient development eco-system.
+
+Here are just a few of the features in Spring Boot:
+
+Opinionated ‘starter' dependencies to simplify build and application configuration
+Embedded server to avoid complexity in application deployment
+Metrics, Health check, and externalized configuration
+Automatic config for Spring functionality – whenever possible
+
+
+First of all, let's look at the minimum dependencies required to create a web application using Spring:
+
+<dependency>
+    <groupId>org.springframework</groupId>
+    <artifactId>spring-web</artifactId>
+    <version>5.2.9.RELEASE</version>
+</dependency>
+<dependency>
+    <groupId>org.springframework</groupId>
+    <artifactId>spring-webmvc</artifactId>
+    <version>5.2.9.RELEASE</version>
+</dependency>
+Unlike Spring, Spring Boot requires only one dependency to get a web application up and running:
+
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-web</artifactId>
+    <version>2.3.4.RELEASE</version>
+</dependency>
+All other dependencies are added automatically to the final archive during build time.
+
+Another good example is testing libraries. We usually use the set of Spring Test, JUnit, Hamcrest, and Mockito libraries. In a Spring project, we should add all these libraries as dependencies.
+
+But in Spring Boot, we only need the starter dependency for testing to automatically include these libraries.
+
+Spring Boot provides a number of starter dependencies for different Spring modules. Some of the most commonly used ones are:
+
+spring-boot-starter-data-jpa
+spring-boot-starter-security
+spring-boot-starter-test
+spring-boot-starter-web
+spring-boot-starter-thymeleaf
+
+
+
+
+Spring requires defining the dispatcher servlet, mappings, and other supporting configurations. We can do this using either the web.xml file or an Initializer class:
+
+public class MyWebAppInitializer implements WebApplicationInitializer {
+ 
+    @Override
+    public void onStartup(ServletContext container) {
+        AnnotationConfigWebApplicationContext context
+          = new AnnotationConfigWebApplicationContext();
+        context.setConfigLocation("com.baeldung");
+ 
+        container.addListener(new ContextLoaderListener(context));
+ 
+        ServletRegistration.Dynamic dispatcher = container
+          .addServlet("dispatcher", new DispatcherServlet(context));
+         
+        dispatcher.setLoadOnStartup(1);
+        dispatcher.addMapping("/");
+    }
+}
+We also need to add the @EnableWebMvc annotation to a @Configuration class and define a view-resolver to resolve the views returned from the controllers:
+
+@EnableWebMvc
+@Configuration
+public class ClientWebConfig implements WebMvcConfigurer { 
+   @Bean
+   public ViewResolver viewResolver() {
+      InternalResourceViewResolver bean
+        = new InternalResourceViewResolver();
+      bean.setViewClass(JstlView.class);
+      bean.setPrefix("/WEB-INF/view/");
+      bean.setSuffix(".jsp");
+      return bean;
+   }
+}
+
+By comparison to all this, Spring Boot only needs a couple of properties to make things work, once we've added the web starter:
+
+spring.mvc.view.prefix=/WEB-INF/jsp/
+spring.mvc.view.suffix=.jsp
+All the Spring configuration above is automatically included by adding the Boot web starter, through a process called auto-configuration.
+
+What this means is that Spring Boot will look at the dependencies, properties, and beans that exist in the application and enable configuration based on these.
+
+Of course, if we want to add our own custom configuration, then the Spring Boot auto-configuration will back away.
+
+
+
+
+=================================================================================================================================================================
+5. HIbernite annotations
+=================================================================================================================================================================
+@Entity: is required for every model class.
+@Table: maps the class with the corresponding database table. If omitted, Hibernate will use the class name.
+@Column: maps the field with the corresponding table column. If omitted, Hibernate will infer the column name and type based on signatures of the getter/setter.
+@Id and @GeneratedValue: are used in conjunction for a field that maps to the primary key. The values for this field are auto generated.
+@Temporal: must be used with a java.util.Date field to specify the actual SQL type of the column.
+@OneToOne and @JoinColumn: are used together to specify a one-to-one association and the join column.
+
+
+@ManyToOne
+    @JoinColumn(name ="FK_MainMenuId")
+    private MainMenu mainMenu;
+	
+	@ManyToOne
+@JoinColumn(name="AutID", nullable=false,insertable =  false, updatable = false)
+public Authors getAuthors() {
+    return this.authors;
+}
+
+6. foreign key linking in other entity
+
+@ManyToOne
+    @JoinColumn(name ="FK_MainMenuId")
+    private MainMenu mainMenu;
+	
+	@ManyToOne
+@JoinColumn(name="AutID", nullable=false,insertable =  false, updatable = false)
+public Authors getAuthors() {
+    return this.authors;
+}
+7. how not to save one attrinute of entity class into DB
+
+@Transient
+    public String getName() {
+        return name;
+    }
+	
+	
+===============================================================================================================================================================	
+8. Get all employee details rest ws in springboot app
+================================================================================================================================================================
+
+
+@Path("employees")
+public class EmployeesResource {
+    // use this method when URL is /employees
+    @GET
+    @Produces("application/json")
+    public List<Employee> getEmployees()  {
+        try {     
+            CachedRowSet crs = new OracleCachedRowSet();
+            crs.setUrl("jdbc:oracle:thin:@localhost:1521:XE");
+            crs.setUsername("hr");
+            crs.setPassword("hr");
+            crs.setCommand("select * from employees");
+            crs.execute();
+            ArrayList<Employee> emps = new ArrayList<>();
+            while(crs.next()) {
+                Employee  e  = new Employee();
+                e.setName( crs.getString("first_name"));
+                e.setSalary( crs.getInt("salary"));
+                emps.add(e);
+            }
+            return emps;
+      }
+      catch(Exception ex) {
+          throw new WebApplicationException(Response.Status.INTERNAL_SERVER_ERROR);
+      }
+    } // getEmployees()
+    
+    @Path("{id}")   // use this method when URL contains id also (employees/id) 
+    @GET
+    @Produces("application/json")
+    public Employee getEmployee( @PathParam("id") int id)  {
+      try {     
+            CachedRowSet crs = new OracleCachedRowSet();
+            crs.setUrl("jdbc:oracle:thin:@localhost:1521:XE");
+            crs.setUsername("hr");
+            crs.setPassword("hr");
+            crs.setCommand("select * from employees where employee_id = ?");
+            crs.setInt(1,id);
+            crs.execute();
+            if (crs.next()) {
+                Employee  e  = new Employee();
+                e.setName( crs.getString("first_name"));
+                e.setSalary( crs.getInt("salary"));
+                return e;
+            }
+            else
+                throw new WebApplicationException(Response.Status.NOT_FOUND); //employee not found so send 404 to client 
+      }
+      catch(SQLException ex) {
+         throw new WebApplicationException(Response.Status.INTERNAL_SERVER_ERROR); //Some exception on server, so send 500 to client
+      }
+    } // getEmployee()
+}
+
+=================================================================================================================================================================
+9.Question: How do you override a Spring Boot Project’s Default Properties?
+=================================================================================================================================================================
+Answer: Specify the properties in application.properties.
+
+Spring MVC applications need the suffix and the prefix to be specified. This can be done by:
+
+For suffix – spring.mvc.view.suffix: .jsp
+For prefix – spring.mvc.view.prefix: /WEB-INF/
+
+
+=================================================================================================================================================================
+10. Role Of Actuator In Spring Boot
+=================================================================================================================================================================
+It is one of the most important features, which helps you to access the current state of an application that is running in production environment. There are multiple metrics which can be used to check the current state. They also provide endpoints of restful web services which can be simply used to check the different metrics.
+
+
+
+=================================================================================================================================================================
+11. How Is Spring Security Implemented In A Spring Boot Application?
+=================================================================================================================================================================
+Minimal configuration is needed for implementation. All you need to do is, add spring-boot-starter-security starter in the file pom.xml. You will also need to create a Spring config class that will override the required method while extending the WebSecurityConfigurerAdapter to achieve security in the application. Here is an example code for the same:
+
+package com.gkatzioura.security.securityendpoints.config;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+@Configuration
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http.authorizeRequests()
+            .antMatchers("/welcome").permitAll()
+            .anyRequest().authenticated()
+            .and()
+            .formLogin()
+            .permitAll()
+            .and()
+            .logout()
+            .permitAll();
+    }
+}
+
+=================================================================================================================================================================
+13. How Does PACT Work?
+=================================================================================================================================================================
+
+PACT is an open source tool. It helps in testing the interactions between consumers and service providers. However, it is not included in the contract, increasing the reliability of the application.
+The consumer service developer starts by writing a test which defines a mode of interaction with the service provider. The test includes the provider’s state, the request body and the response that is expected. Based on it, PACT creates a stub against which the test is executed. The output is stored in a JSON file.
+
+
+
+=================================================================================================================================================================
+14. Define Domain Driven Design
+=================================================================================================================================================================
+
+The main focus is on the core domain logic. Complex designs are detected based on the domain’s model. Involves collaboration with domain experts constantly to resolve issues related to the domain and improve the model of the application. While answering this microservices interview question, you will also need to mention the core fundamentals of DDD. They are
+
+DDD focuses mostly on domain logic and the domain itself.
+Complex designs are completely based on the domain’s model.
+To improve the design of the model and fix any emerging issues, DDD constantly works in collaboration with domain experts.
+
+
+
+=================================================================================================================================================================
+15. What is Coupling and Cohesion?
+=================================================================================================================================================================
+The coupling can be considered to be the measurement of strength between the dependencies of a component. A good Microservices application design always consists of low coupling and high cohesion.
+
+Following the previous question, often the interviewer will ask about cohesion. It is also another measurement unit. More like a degree to which the elements inside a module remain bonded together.
+
+If you are appearing for microservices interview questions then it is imperative to keep in mind that an important key to design microservices is a composition of low coupling along with high cohesion. When loosely coupled, a service knows very little about other. This keeps the services intact. In high cohesion, it becomes possible to keep all the related logic in a service. Otherwise, the services will try to communicate with each other, impacting the overall performance.
+
+
+=================================================================================================================================================================
+16. What Is OAuth?
+=================================================================================================================================================================
+Open Authorization Protocol, otherwise known as OAuth, helps to access client applications using third-party protocols like Facebook, GitHub etc via HTTP. You can also share resources between different sites without the requirement of credentials.
+
+OAuth allows the account information of the end user to be used by a third party like Facebook while keeping it secure (without using or exposing the user’s password). It acts more like an intermediary on the user’s behalf while providing a token to the server for accessing the required information.
+
+
+=================================================================================================================================================================
+17. Why Do We Need Containers For Microservices?
+=================================================================================================================================================================
+To manage a microservice based application, containers are the easiest alternative. It helps the user to individually deploy and develop. You can also use Docker to encapsulate the microservice in the image of a container. Without any additional dependencies or effort, microservices can use these elements.
+
+
+
+
+
+
+=================================================================================================================================================================
+restcontroller vs controller
+=================================================================================================================================================================
+
+
+
+
+
+
+=================================================================================================================================================================
+restful annotations, 
+=================================================================================================================================================================
+
+
+
+
+
+=================================================================================================================================================================
+how to create bean in springboot
+=================================================================================================================================================================
+
+
+
+
+
+=================================================================================================================================================================
+get employee details  of each department sql query, employee, department tables
+=================================================================================================================================================================
+
+
+=================================================================================================================================================================
+comparator vs comparable, example, internal working
+=================================================================================================================================================================
+example sorting on employee age
+
+
+
+
+
+
+
+=================================================================================================================================================================
+java 8 streams to sort
+=================================================================================================================================================================
+
+
+
+
+=================================================================================================================================================================
+lambda empressions
+=================================================================================================================================================================
+
+
+
+
+=================================================================================================================================================================
+functional interface, with and without annotations, uses, difference with normal interface
+=================================================================================================================================================================
+
+The major benefit of java 8 functional interfaces is that we can use lambda expressions to instantiate them and avoid using bulky anonymous class implementation.
+
+
+
+
+
+=================================================================================================================================================================
+springboot annotations
+=================================================================================================================================================================
+
+
+
+
+
+=================================================================================================================================================================
+spring vs spring boot
+=================================================================================================================================================================
+
+
+
+
+=================================================================================================================================================================
+unique elements in collections in sorted format--treeset
+=================================================================================================================================================================
+
+
+
+
+
+=================================================================================================================================================================
+lambdaexpression
+=================================================================================================================================================================
+
+
+
+
+
+=================================================================================================================================================================
+stream methods--java 8
+=================================================================================================================================================================
+
+
+
+
+
+=================================================================================================================================================================
+exception handling
+=================================================================================================================================================================
+
+
+
+
+=================================================================================================================================================================
+@requestbody
+@responsebody
+@controller vs @restcontroller, how to make controller to @restcontroller----- add @controller with @responsebody
+
+
+RequestMapping can be used at class level: This annotation can be used both at the class and at the method level. while GetMapping only applies to method: Annotation for mapping HTTP GET requests onto specific handler methods.
+
+Additionally, what is GetMapping? Annotation for mapping HTTP GET requests onto specific handler methods. Specifically, @GetMapping is a composed annotation that acts as a shortcut for @RequestMapping(method = RequestMethod.
+
+Also to know, what is @GetMapping in spring boot?
+
+@GetMapping annotation maps HTTP GET requests onto specific handler methods. It is a composed annotation that acts as a shortcut for @RequestMapping(method = RequestMethod. GET) .
+
+Why we use @PostMapping?
+
+@PostMapping to handle HTTP POST Requests Notice that the method responsible for handling HTTP POST requests needs to be annotated with @PostMapping annotation. Notice how the @RequestBody annotation is used to mark the method argument object into which the JSON document will be converted by Spring Framework.
+
+@RequestBody and @ResponseBody annotations are used to convert the body of the HTTP request and response with java class objects. Both these annotations will use registered HTTP message converters in the process of converting/mapping HTTP request/response body with java objects.
+
+The client (web browser or REST client) cannot send the java objects (as it is) in the body of the HTTP request. On the other hand, the server application cannot compose the body of the HTTP response with java objects (as it is). Simply the HTTP Request and Response body cannot contains the in the form of java objects.
+
+HTTP request and response body should contain either JSON , XML or some other type of formatted data (RSS etc).  Therefore the HTTP message converters are used to convert the HTTP request body (either in JSON or XML) to the Java objects and Java objects back to XML or JSON for embedding into the HTTP response body.
+
+
+
+This is used to convert the body of the HTTP request to the java class object with the aid of selected HTTP message converter. This annotation will be used in the method parameter and the body of the http request will be mapped to that method parameter. As described above, the message converter is selected based on the value of Content-Type  Header of the HTTP request.
+
+ 
+
+@ResponseBody
+This annotation is used to add the return value to the body of the HTTP response with the aid of selected HTTP message converter. As described above, the message converter is selected based on the value of Accept Header of the HTTP request. @RestController is the preferred way to achieve the same functionality earlier provided by @ResponseBody. Under the hood, @RestController is @Controller + @ResponseBody, and it avoids the need of prefixing every method with @ResponseBody.
+
+
+@RestController
+@RequestMapping("/api")
+public class UserController 
+{
+    @Autowired
+    private UserRepository userRepository;
+
+    @PostMapping(
+            value = "/users",
+            consumes = {APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE},
+            produces = {APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE}
+    )
+    public User create(@RequestBody User user)
+    {
+        return userRepository.save(user);
+    }
+}
+
+
+
+
+@bean vs @autowired
+
+Annotating @Bean only registers the service as a bean(kind of an Object) in spring application context. ... Annotating a variable with @Autowired injects a BookingService bean(i.e Object) from Spring Application Context.
+
+
+
+@enableAutoConfiguration
+
+
+The main difference between these annotations is that @ComponentScan scans for Spring components while @EnableAutoConfiguration is used for auto-configuring beans present in the classpath in Spring Boot applications.
+
+While developing an application, we need to tell the Spring framework to look for Spring-managed components. @ComponentScan enables Spring to scan for things like configurations, controllers, services, and other components we define.
+
+In particular, the @ComponentScan annotation is used with @Configuration annotation to specify the package for Spring to scan for components:
+Alternatively, Spring can also start scanning from the specified package, which we can define using basePackageClasses() or basePackages(). If no package is specified, then it considers the package of the class declaring the @ComponentScan annotation as the starting package:
+
+The @EnableAutoConfiguration annotation enables Spring Boot to auto-configure the application context. Therefore, it automatically creates and registers beans based on both the included jar files in the classpath and the beans defined by us.
+
+For example, when we define the spring-boot-starter-web dependency in our classpath, Spring boot auto-configures Tomcat and Spring MVC. However, this auto-configuration has less precedence in case we define our own configurations.
+
+The package of the class declaring the @EnableAutoConfiguration annotation is considered as the default. Therefore, we should always apply the @EnableAutoConfiguration annotation in the root package so that every sub-packages and class can be examined:
+
+
+
+
+
+
+how to use other microservice url in our microservice
+
+
+ResponseEntity<CurrencyConversionBean> responseEntity = 
+   new RestTemplate().getForEntity(
+        "http://localhost:8091/currency-exchange/from/{from}/to/{to}", CurrencyConversionBean.class,  uriVariables);
+		
+		ResponseType obj=  new RestTemplate().getForObject(URL, ResponseType.class, params);
+		
+		
+		
+		2. <dependency>
+            <!-- Eureka for service registration -->
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-eureka-server</artifactId>
+        </dependency>
+    </dependencies>
+	@SpringBootApplication
+@EnableEurekaServer
+public class ServiceRegistrationServer {
+
+  public static void main(String[] args) {
+    // Tell Boot to look for registration-server.yml
+    System.setProperty("spring.config.name", "registration-server");
+    SpringApplication.run(ServiceRegistrationServer.class, args);
+  }
+}
+
+
+
+
+
+
+=================================================================================================================================================================
+synchronzed block vs method
+=================================================================================================================================================================
+
+Synchronization in java is the capability to control the access of multiple threads to any shared resource.
+
+Java Synchronization is better option where we want to allow only one thread to access the shared resource.
+
+There are two types of thread synchronization mutual exclusive and inter-thread communication.
+
+1.Mutual Exclusive
+		Synchronized method.
+		Synchronized block.
+		static synchronization.
+2. Cooperation (Inter-thread communication in java)
+
+
+Mutual Exclusive helps keep threads from interfering with one another while sharing data. This can be done by three ways in java:
+
+by synchronized method
+by synchronized block
+by static synchronization
+
+
+Java synchronized method
+If you declare any method as synchronized, it is known as synchronized method.
+
+Synchronized method is used to lock an object for any shared resource.
+
+When a thread invokes a synchronized method, it automatically acquires the lock for that object and releases it when the thread completes its task.
+
+
+class Table{  
+ synchronized void printTable(int n){//synchronized method  
+   for(int i=1;i<=5;i++){  
+     System.out.println(n*i);  
+     try{  
+      Thread.sleep(400);  
+     }catch(Exception e){System.out.println(e);}  
+   }  
+  
+ }  
+}  
+  
+class MyThread1 extends Thread{  
+Table t;  
+MyThread1(Table t){  
+this.t=t;  
+}  
+public void run(){  
+t.printTable(5);  
+}  
+  
+}  
+class MyThread2 extends Thread{  
+Table t;  
+MyThread2(Table t){  
+this.t=t;  
+}  
+public void run(){  
+t.printTable(100);  
+}  
+}  
+  
+public class TestSynchronization2{  
+public static void main(String args[]){  
+Table obj = new Table();//only one object  
+MyThread1 t1=new MyThread1(obj);  
+MyThread2 t2=new MyThread2(obj);  
+t1.start();  
+t2.start();  
+}  
+}  
+Output: 5
+       10
+       15
+       20
+       25
+       100
+       200
+       300
+       400
+       500
+	   
+	   
+	   without syncronization, ooutput is random (i,e--- 5,100,10,200,15,300...)
+
+Synchronized block
+can be used to perform synchronization on any specific resource of the method.
+
+Suppose you have 50 lines of code in your method, but you want to synchronize only 5 lines, you can use synchronized block.
+
+If you put all the codes of the method in the synchronized block, it will work same as the synchronized method.
+
+Points to remember for Synchronized block
+Synchronized block is used to lock an object for any shared resource.
+Scope of synchronized block is smaller than the method.
+
+synchronized (object reference expression) {   
+  //code block   
+}  
+
+The difference is in which lock is being acquired:
+
+synchronized method acquires a lock on the whole object. This means no other thread can use any synchronized method in the whole object while the method is being run by one thread.
+
+synchronized blocks acquires a lock in the object between parentheses after the synchronized keyword. Meaning no other thread can acquire a lock on the locked object until the synchronized block exits.
+
+So if you want to lock the whole object, use a synchronized method. If you want to keep other parts of the object accessible to other threads, use synchronized block.
+
+If you choose the locked object carefully, synchronized blocks will lead to less contention, because the whole object/class is not blocked.
+
+This applies similarly to static methods: a synchronized static method will acquire a lock in the whole class object, while a synchronized block inside a static method will acquire a lock in the object between parentheses.
+
+
+Synchronized methods enables a simple strategy for preventing the thread interference and memory consistency errors. If a Object is visible to more than one threads, all reads or writes to that Object’s fields are done through the synchronized method.
+
+It is not possible for two invocations for synchronized methods to interleave. If one thread is executing the synchronized method, all others thread that invoke synchronized method on the same Object will have to wait until first thread is done with the Object.
+
+Example: This shows if more than one threads accessing getLine() method without synchronization.
+// Example illustrates multiple threads are executing 
+// on the same Object at same time without synchronization. 
+import java.io.*; 
+class Line 
+{ 
+    // if multiple threads(trains) will try to 
+    // access this unsynchronized method, 
+    // they all will get it. So there is chance 
+    // that Object's  state will be corrupted. 
+    public void getLine() 
+    { 
+        for (int i = 0; i < 3; i++) 
+        { 
+            System.out.println(i); 
+            try
+            { 
+                Thread.sleep(400); 
+            } 
+            catch (Exception e) 
+            { 
+                System.out.println(e); 
+            } 
+        } 
+    } 
+} 
+class Train extends Thread 
+{ 
+    // reference to Line's Object. 
+    Line line; 
+  
+    Train(Line line) 
+    { 
+        this.line = line; 
+    } 
+  
+    @Override
+    public void run() 
+    { 
+        line.getLine(); 
+    } 
+} 
+class GFG 
+{ 
+    public static void main(String[] args) 
+    { 
+        // Object of Line class that is shared 
+        // among the threads. 
+        Line obj = new Line(); 
+  
+        // creating the threads that are 
+        // sharing the same Object. 
+        Train train1 = new Train(obj); 
+        Train train2 = new Train(obj); 
+  
+        // threads start their execution. 
+        train1.start(); 
+        train2.start(); 
+    } 
+} 
+Output
+
+0
+0
+1
+1
+2
+2
+There can be two trains (more than two) which need to use same at same time so there is chance of collision. Therefore to avoid collision we need to synchronize the line in which multiple want to run.
+
+Example: Synchronized access to getLine() method on the same Object
+// Example that shows multiple threads 
+// can execute the same method but in 
+// synchronized way. 
+class Line 
+{ 
+  
+    // if multiple threads(trains) trying to access 
+    // this synchronized method on the same Object 
+    // but only one thread will be able 
+    // to execute it at a time. 
+    synchronized public void getLine() 
+    { 
+        for (int i = 0; i < 3; i++) 
+        { 
+            System.out.println(i); 
+            try
+            { 
+                Thread.sleep(400); 
+            } 
+            catch (Exception e) 
+            { 
+                System.out.println(e); 
+            } 
+        } 
+    } 
+} 
+  
+class Train extends Thread 
+{ 
+    // Reference variable of type Line. 
+    Line line; 
+  
+    Train(Line line) 
+    { 
+        this.line = line; 
+    } 
+  
+    @Override
+    public void run() 
+    { 
+        line.getLine(); 
+    } 
+} 
+  
+class GFG 
+{ 
+    public static void main(String[] args) 
+    { 
+        Line obj = new Line(); 
+  
+        // we are creating two threads which share 
+        // same Object. 
+        Train train1 = new Train(obj); 
+        Train train2 = new Train(obj); 
+  
+        // both threads start executing . 
+        train1.start(); 
+        train2.start(); 
+    } 
+} 
+
+
+
+Block Synchronization
+
+If we only need to execute some subsequent lines of code not all lines (instructions) of code within a method, then we should synchronize only block of the code within which required instructions are exists.
+For example, lets suppose there is a method that contains 100 lines of code but there are only 10 lines (one after one) of code which contain critical section of code i.e. these lines can modify (change) the Object’s state. So we only need to synchronize these 10 lines of code method to avoid any modification in state of the Object and to ensure that other threads can execute rest of the lines within the same method without any interruption.
+
+Important points:
+
+When a thread enters into synchronized method or block, it acquires lock and once it completes its task and exits from the synchronized method, it releases the lock.
+When thread enters into synchronized instance method or block, it acquires Object level lock and when it enters into synchronized static method or block it acquires class level lock.
+Java synchronization will throw null pointer exception if Object used in synchronized block is null. For example, If in synchronized(instance) , instance is null then it will throw null pointer exception.
+In Java, wait(), notify() and notifyAll() are the important methods that are used in synchronization.
+You can not apply java synchronized keyword with the variables.
+Don’t synchronize on the non-final field on synchronized block because the reference to the non-final field may change anytime and then different threads might synchronize on different objects i.e. no synchronization at all.
+Advantages
+
+Multithreading: Since java is multithreaded language, synchronization is a good way to achieve mutual exclusion on shared resource(s).
+Instance and Static Methods: Both synchronized instance methods and synchronized static methods can be executed concurrently because they are used to lock different Objects.
+Limitations
+
+Concurrency Limitations: Java synchronization does not allow concurrent reads.
+Decreases Efficiency: Java synchronized method run very slowly and can degrade the performance, so you should synchronize the method when it is absolutely necessary otherwise not and to synchronize block only for critical section of the code.
+
+
+
+
+
+
+
+
+
+
+===============================================================================================================================================================
+mutuable and immutable class in java
+===============================================================================================================================================================
+
+In Java, state of the immutable object can’t be modified after it is created b ut definitely reference other objects. They are very useful in multithreading environment because multiple threads can’t change the state of the object so immutable objects are thread safe. Immutable objects are very helpful to avoid temporal coupling and always have failure atomicity.
+
+On the other hand, Mutable objects have fields that can be changed, immutable objects have no fields that can be changed after the object is created.
+Immutable class creation
+
+The class must be declared as final (So that child classes can’t be created)
+Data members in the class must be declared as private (So that direct access is not allowed)
+Data members in the class must be declared as final (So that we can’t change the value of it after object creation)
+A parametrized constructor should initialize all the fields performing a deep copy (So that data members can’t be modified with object reference)
+Deep Copy of objects should be performed in the getter methods (To return a copy rather than returning the actual object reference)
+No setters (To not have the option to change the value of the instance variable)
+
+Ex:
+Example of Immutable Class
+public final class ImmutableClass {
+   private String laptop;
+   public String getLaptop() {
+      return laptop;
+   }
+   public ImmutableClass(String laptop) {
+      super();
+      this.laptop = laptop;
+   }
+}
+public class Main {
+   public static void main(String args[]) {
+      ImmutableClass immutableClass = new ImmutableClass("Dell");
+      System.out.println(immutableClass.getLaptop());
+   }
+}
+
+
+ex of mutuable class; Normal class with setters, getters, constructors
+
+
+
+
+
+
+
+
+==============================================================================================================================================================
+Synchronized map vs concurrent hashmap
+==============================================================================================================================================================
+
+
+
+
+==============================================================================================================================================================
+2nd level caching in Hibernate
+==============================================================================================================================================================
+
+
+
+
+
+==============================================================================================================================================================
+how to handle exceptions in Spring/spring boot
+==============================================================================================================================================================
+
+
+
+
+==============================================================================================================================================================
+uses of functional interface
+==============================================================================================================================================================
+The major benefit of java 8 functional interfaces is that we can use lambda expressions to instantiate them and avoid using bulky anonymous class implementation.
+
+This can be used in lambda expression:
+public interface Foo {
+  public void doSomething();
+}
+
+
+
+
+This cannot be used in lambda expression:
+
+public interface Foo {
+  public void doSomething();
+  public void doSomethingElse();
+}
+
+
+
+
+
+
+
+But this will give compilation error:
+
+@FunctionalInterface
+public interface Foo {
+  public void doSomething();
+  public void doSomethingElse();
+}
+Invalid '@FunctionalInterface' annotation; Foo is not a functional interface
+
+
+
+To be more precise, you have to have exactly one abstract method that doesn’t override a method in java.lang.Object in a functional interface
+ex:
+package com.akhi;
+    @FunctionalInterface
+    public interface FucnctionalDemo {
+
+      void letsDoSomething();
+      //void letsGo();      //invalid because another abstract method does not allow
+      public String toString();    // valid because toString from Object 
+      public boolean equals(Object o); //valid
+	  Object clone();// Not functional because method Object.clone is not public
+      public static int sum(int a,int b)   // valid because method static
+        {   
+            return a+b;
+        }
+        public default int sub(int a,int b)   //valid because method default
+        {
+            return a-b;
+        }
+    }
+	
+	interface Foo { boolean equals(Object obj); }
+// Not functional because equals is already an implicit member (Object class)
+
+
+==============================================================================================================================================================
+functional interface vs tagger/marked interface
+use of marked interface ?
+==============================================================================================================================================================
+A functional interface is an interface that contains only one abstract method. They can have only one functionality to exhibit. From Java 8 onwards, lambda expressions can be used to represent the instance of a functional interface. A functional interface can have any number of default methods. Runnable, ActionListener, Comparable are some of the examples of functional interfaces.
+
+@FunctionalInterface annotation is used to ensure that the functional interface can’t have more than one abstract method. In case more than one abstract methods are present, the compiler flags an ‘Unexpected @FunctionalInterface annotation’ message. However, it is not mandatory to use this annotation.
+
+he java.util.function package in Java 8 contains many builtin functional interfaces like-
+
+Predicate: The Predicate interface has an abstract method test which gives a Boolean value as a result for the specified argument. Its prototype is
+public interface Predicate
+{
+   public boolean test(T  t);
+ }
+BinaryOperator: The BinaryOperator interface has an abstract method apply which takes two argument and returns a result of same type. Its prototype is
+public interface BinaryOperator 
+{
+     public T apply(T x, T y);
+}       
+Function: The Function interface has an abstract method apply which takes argument of type T and returns a result of type R. Its prototype is
+public interface Function 
+{
+   public R apply(T t);
+}
+
+import java.util.*; 
+import java.util.function.Predicate; 
+  
+class Test 
+{ 
+    public static void main(String args[]) 
+    { 
+  
+        // create a list of strings 
+        List<String> names = 
+            Arrays.asList("Geek","GeeksQuiz","g1","QA","Geek2"); 
+  
+        // declare the predicate type as string and use 
+        // lambda expression to create object 
+        Predicate<String> p = (s)->s.startsWith("G"); 
+  
+        // Iterate through the list 
+        for (String st:names) 
+        { 
+            // call the test method 
+            if (p.test(st)) 
+                System.out.println(st); 
+        } 
+    } 
+}
+
+A functional interface has only one abstract method but it can have multiple default methods.
+@FunctionalInterface annotation is used to ensure an interface can’t have more than one abstract method. The use of this annotation is optional.
+The java.util.function package contains many builtin functional interfaces in Java 8.
+
+
+In Java, a Marker interface is an interface without any methods or fields declaration, means it is an empty interface. Similarly, a Functional Interface is an interface with just one abstract method declared in it. Runnable interface is an example of a Functional Interface. It has only run() method declared in it.
+
+Lambda expression works on functional interfaces to replace anonymous classes.
+
+
+
+
+
+
+
+===============================================================================================================================================================
+serialization?
+===============================================================================================================================================================
+
+
+Serialization in Java is a mechanism of writing the state of an object into a byte-stream. It is mainly used in Hibernate, RMI, JPA, EJB and JMS technologies.
+
+The reverse operation of serialization is called deserialization where byte-stream is converted into an object. The serialization and deserialization process is platform-independent, it means you can serialize an object in a platform and deserialize in different platform.
+
+For serializing the object, we call the writeObject() method ObjectOutputStream, and for deserialization we call the readObject() method of ObjectInputStream class.
+We must have to implement the Serializable interface for serializing the object.
+
+Advantages of Java Serialization
+It is mainly used to travel object's state on the network (which is known as marshaling).
+
+
+Serializable is a marker interface (has no data member and method). It is used to "mark" Java classes so that the objects of these classes may get a certain capability. The Cloneable and Remote are also marker interfaces.
+
+It must be implemented by the class whose object you want to persist.
+
+The String class and all the wrapper classes implement the java.io.Serializable interface by default.
+import java.io.Serializable;  
+public class Student implements Serializable{  
+ int id;  
+ String name;  
+ public Student(int id, String name) {  
+  this.id = id;  
+  this.name = name;  
+ }  
+}  
+
+import java.io.*;  
+class Persist{  
+ public static void main(String args[]){  
+  try{  
+  //Creating the object  
+  Student s1 =new Student(211,"ravi");  
+  //Creating stream and writing the object  
+  FileOutputStream fout=new FileOutputStream("f.txt");  
+  ObjectOutputStream out=new ObjectOutputStream(fout);  
+  out.writeObject(s1);  
+  out.flush();  
+  //closing the stream  
+  out.close();  
+  System.out.println("success");  
+  
+  ObjectInputStream in=new ObjectInputStream(new FileInputStream("f.txt"));  
+  Student s=(Student)in.readObject();  
+  //printing the data of the serialized object  
+  System.out.println(s.id+" "+s.name);  
+  //closing the stream  
+  in.close();  
+  
+  
+  }catch(Exception e){System.out.println(e);}  
+ }  
+}  
+
+
+If a class implements serializable then all its sub classes will also be serializable
+
+If a class has a reference to another class, all the references must be Serializable otherwise serialization process will not be performed. In such case, NotSerializableException is thrown at runtime.
+
+If there is any static data member in a class, it will not be serialized because static is the part of class not object
+
+Rule: In case of array or collection, all the objects of array or collection must be serializable. If any object is not serialiizable, serialization will be failed.
+
+If you don't want to serialize any data member of a class, you can mark it as transient.
+Now, id will not be serialized, so when you deserialize the object after serialization, you will not get the value of id. It will return default value always. In such case, it will return 0 because the data type of id is an integer.
+
+
+The Externalizable interface provides the facility of writing the state of an object into a byte stream in compress format. It is not a marker interface.
+
+
+The serialization process at runtime associates an id with each Serializable class which is known as SerialVersionUID. It is used to verify the sender and receiver of the serialized object. The sender and receiver must be the same. To verify it, SerialVersionUID is used. The sender and receiver must have the same SerialVersionUID, otherwise, InvalidClassException will be thrown when you deserialize the object. We can also declare our own SerialVersionUID in the Serializable class. To do so, you need to create a field SerialVersionUID and assign a value to it. It must be of the long type with static and final. It is suggested to explicitly declare the serialVersionUID field in the class and have it private also. For example:
+
+private static final long serialVersionUID=1L;  
+
+
+when we have 3 variables in serializable class and on de-serialization of we have 2, then make use of serialVersionUID for mapping
+
+
+Advantages of Serialization
+1. To save/persist state of an object.
+2. To travel an object across a network.
+
+
+Points to remember
+1. If a parent class has implemented Serializable interface then child class doesn’t need to implement it but vice-versa is not true.
+2. Only non-static data members are saved via Serialization process.
+3. Static data members and transient data members are not saved via Serialization process.So, if you don’t want to save value of a non-static data member then make it transient.
+4. Constructor of object is never called when an object is deserialized.
+5. Associated objects must be implementing Serializable interface.
+
+
+SerialVersionUID
+The Serialization runtime associates a version number with each Serializable class called a SerialVersionUID, which is used during Deserialization to verify that sender and reciever of a serialized object have loaded classes for that object which are compatible with respect to serialization. If the reciever has loaded a class for the object that has different UID than that of corresponding sender’s class, the Deserialization will result in an InvalidClassException. A Serializable class can declare its own UID explicitly by declaring a field name.
+It must be static, final and of type long.
+i.e- ANY-ACCESS-MODIFIER static final long serialVersionUID=42L;
+
+If a serializable class doesn’t explicitly declare a serialVersionUID, then the serialization runtime will calculate a default one for that class based on various aspects of class, as described in Java Object Serialization Specification. However it is strongly recommended that all serializable classes explicitly declare serialVersionUID value, since its computation is highly sensitive to class details that may vary depending on compiler implementations, any change in class or using different id may affect the serialized data.
+
+It is also recommended to use private modifier for UID since it is not useful as inherited member.
+
+serialver
+The serialver is a tool that comes with JDK. It is used to get serialVersionUID number for Java classes.
+
+In case of static Variables:- A variable defined with static keyword is not serialized during serialization process.This variable will be loaded with current value defined in the class during deserialization.
+
+
+
+
+
+==============================================================================================================================================================
+Java- garbage collection
+==============================================================================================================================================================
+
+
+
+
+==============================================================================================================================================================
+Hashmap synchronized hashmap vs concurrenthashmap
+==============================================================================================================================================================
+
+
+The Map object is an associative containers that store elements, formed by a combination of a uniquely identify key and a mapped value. If you have very highly concurrent application in which you may want to modify or read key value in different threads then it’s ideal to use Concurrent Hashmap. Best example is Producer Consumer which handles concurrent read/write.
+
+So what does the thread-safe Map means? If multiple threads access a hash map concurrently, and at least one of the threads modifies the map structurally, it must be synchronized externally to avoid an inconsistent view of the contents.
+
+collections.synchronizedMap()
+
+How?
+
+There are two ways we could synchronized HashMap
+
+1.Java Collections synchronizedMap() method
+Map<String, Integer> y =Collections.synchronizedMap(new HashMap<String, Integer>());
+2. Use ConcurrentHashMap
+Map<String, Integer> t = new ConcurrentHashMap<String, Integer>();
+
+ConcurrentHashMap
+You should use ConcurrentHashMap when you need very high concurrency in your project.
+It is thread safe without synchronizing the whole map.
+Reads can happen very fast while write is done with a lock.
+There is no locking at the object level.
+The locking is at a much finer granularity at a hashmap bucket level.
+ConcurrentHashMap doesn’t throw a ConcurrentModificationException if one thread tries to modify it while another is iterating over it.
+ConcurrentHashMap uses multitude of locks.
+
+
+synchronizedMap
+Synchronization at Object level.
+Every read/write operation needs to acquire lock.
+Locking the entire collection is a performance overhead.
+This essentially gives access to only one thread to the entire map & blocks all the other threads.
+It may cause contention.
+SynchronizedHashMap returns Iterator, which fails-fast on concurrent modification.
+
+
+
+For objects like HashMap, performing concurrent operations is not allowed. Therefore, if we try to update a HashMap while iterating over it, we will receive a ConcurrentModificationException. This will also occur when using synchronizedMap():
+
+However, this is not the case with ConcurrentHashMap
+
+Collections.synchronizedMap() and ConcurrentHashMap handle null keys and values differently.
+
+ConcurrentHashMap doesn't allow null in keys or values:
+
+However, when using Collections.synchronizedMap(), null support depends on the input Map. We can have one null as a key and any number of null values when Collections.synchronizedMap() is backed by HashMap or LinkedHashMap, whereas if we're using TreeMap, we can have null values but not null keys.
+
+The ConcurrentModificationException occurs when an object is tried to be modified concurrently when it is not permissible. This exception usually comes when one is working with Java Collection classes.
+
+
+To avoid the ConcurrentModificationException in a multi-threaded environment, we can follow the following ways-
+
+Instead of iterating over the collection class, we can iterate over the array. In this way, we can work very well with small-sized lists, but this will deplete the performance if the array size is very large.
+Another way can be locking the list by putting it in the synchronized block. This is not an effective approach as the sole purpose of using multi-threading is relinquished by this.
+JDK 1.5 or higher provides with ConcurrentHashMap and CopyOnWriteArrayList classes. These classes help us in avoiding concurrent modification exception.
+
+
+
+
+
+===============================================================================================================================================================
+internal algo used in Merge sorting
+==============================================================================================================================================================
+Merge sort uses divide and conquer in order to sort a given array. This is because it divides the array into two halves and applies merge sort algorithm to each half individually after which the two sorted halves are merged togethe
+The recurrence relation for merge sort is given by T(n) = 2T(n/2) + n. It is found to be equal to O(n log n) using the master theorem.
+
+
+An additional space of O(n) is required in order to merge two sorted arrays. Thus merge sort is not an in place sorting algorithm.
+
+ The time complexity of merge sort is not affected by worst case as its algorithm has to implement the same number of steps in any case. So its time complexity remains to be O(n log n).
+ 
+
+
+==============================================================================================================================================================
+hashmap/hashtree internal algo
+==============================================================================================================================================================
+
+
+
+
+==============================================================================================================================================================
+streams vs parallelstreams
+==============================================================================================================================================================
+
+A stream in Java is a sequence of objects which operates on a data source such as an array or a collection and supports various methods.  It was introduced in Java 8’s java.util.stream package. Stream supports many aggregate operations like filter, map, limit, reduce, find, and match to customize the original data into a different form according to the need of the programmer. The operations performed on a stream do not modify its source hence a new stream is created according to the operation applied to it. The new data is a transformed copy of the original form. 
+
+Sequential Streams are non-parallel streams that use a single thread to process the pipelining. Any stream operation without explicitly specified as parallel is treated as a sequential stream. Sequential stream’s objects are pipelined in a single stream on the same processing system hence it never takes the advantage of the multi-core system even though the underlying system supports parallel execution. Sequential stream performs operation one by one.
+
+stream() method returns a sequential stream in Java.
+list.stream().forEach(System.out::print); 
+
+It is a very useful feature of Java to use parallel processing, even if the whole program may not be parallelized. Parallel stream leverage multi-core processors, which increases its performance. Using parallel streams, our code gets divide into multiple streams which can be executed parallelly on separate cores of the system and the final result is shown as the combination of all the individual core’s outcomes. It is always not necessary that the whole program be parallelized, but at least some parts should be parallelized which handles the stream. The order of execution is not under our control and can give us unpredictably unordered results and like any other parallel programming, they are complex and error-prone. 
+
+The Java stream library provides a couple of ways to do it. easily, and in a reliable manner. 
+
+One of the simple ways to obtain a parallel stream is by invoking the parallelStream() method of Collection interface.
+Another way is to invoke the parallel() method of BaseStream interface on a sequential stream.
+It is important to ensure that the result of the parallel stream is the same as is obtained through the sequential stream, so the parallel streams must be stateless, non-interfering, and associative.
+
+
+list.parallelStream().forEach(System.out::print); 
+
+Here we can see the order is not maintained as the list.parallelStream() works parallelly on multiple threads. If we run this code multiple times then we can also see that each time we are getting a different order as output but this parallel stream boosts the performance so the situation where the order is not important is the best technique to use.
+
+Note: If we want to make each element in the parallel stream to be ordered, we can use the forEachOrdered() method, instead of the forEach() method.
+
+Sequential Stream vs  Parallel Stream
+
+Runs on a single-core of the computer	--	Utilize the multiple cores of the computer. 
+Performance is poor	--	The performance is high.
+Order is maintained	--	Doesn’t care about the order,
+Only a single iteration at a time just like the for-loop. 	--	Operates multiple iterations simultaneously in different available cores.
+Each iteration waits for currently running one to finish, 	--	Waits only if no cores are free or available at a given time,
+More reliable and less error,	--	 Less reliable and error-prone. 
+Platform independent,	--	 Platform dependent
+
+
+
+
+
+
+
+==============================================================================================================================================================
+Garbage collector reclaims objects that are no longer being used, clears their memory, and keeps the memory available for future allocations. This is done via bookkeeping the references to the objects. Any unreferenced object is a garbage and will be collected.
+
+Give the list of Java Object class methods.
+
+Answer:
+	clone() - Creates and returns a copy of this object.
+	equals() - Indicates whether some other object is "equal to" this one.
+	finalize() - Called by the garbage collector on an object when garbage collection
+			determines that there are no more references to the object.
+	getClass() - Returns the runtime class of an object.
+	hashCode() - Returns a hash code value for the object.
+	notify() - Wakes up a single thread that is waiting on this object's monitor.
+	notifyAll() - Wakes up all threads that are waiting on this object's monitor.
+	toString() - Returns a string representation of the object.
+	wait() - Causes current thread to wait until another thread invokes the notify() method
+			or the notifyAll() method for this object.
+			
+			
+			
+			
+Serialization interface does not have any methods. It is a marker interface.
+It just tells that your class can be serializable.
+
+
+Daemon thread is a low priority thread. It runs intermittently
+in the back ground, and takes care of the garbage collection
+operation for the java runtime system. By calling setDaemon()
+method is used to create a daemon thread.
+
+
+Can we call servlet destory() from service()?
+
+Answer:
+As you know, destory() is part of servlet life cycle methods, it is used to kill the
+servlet instance. Servlet Engine is used to call destory(). In case, if you call destory
+method from service(), it just execute the code written in the destory(), but it wont
+kill the servlet instance. destroy() will be called before killing the servlet instance
+by servlet engine.
+
+
+
+What is fail-fast in java?
+
+Answer:
+A fail-fast system is nothing but immediately report any failure that
+is likely to lead to failure. When a problem occurs, a fail-fast system
+fails immediately. In Java, we can find this behavior with iterators.
+Incase, you have called iterator on a collection object, and another
+thread tries to modify the collection object, then concurrent modification
+exception will be thrown. This is called fail-fast.
+
+
+
+Marker interface is an interface which is empty, i.e. it does not contain any methods or fields. It is also known as a tagging interface and is used to indicate or inform the JVM that a class implementing this interface will have some special behaviour. An efficient way to classify code can be achieved using the marker interface. Examples of such an interface are: Serializable, Cloneable and Remote Interface.
+
+Can we have static methods in interface?
+
+Answer:
+By default, all methods in an interface are decleared as public, abstract. It will never be static. But this concept is changed with java 8. Java 8 came with new feature called "default methods" with in interfaces click here for more details.
+
+
+
+
+
+==========================================================================================================================================
+==========================================================================================================================================
+==========================================================================================================================================
+
+prokarma
+
+
+
+==========================================================================================================================================
+==========================================================================================================================================
+==========================================================================================================================================
+
+
+Rest code to get all employee details
+
+E1, E2 HAS same hash code and added both to set--whats the size
+
+
+E1,E2 added to hashmap and not get data by using hashmap, what data(E1/E2 ?) will be returned
+
+security of restend point
+
+
+
+    
+Find name of employee who earns more than his manager
+
+    select name form employee e1 where salary > (select salary from employee e2 where  e2.id = e1.manager_id );
+	
+    
+Write a program to print range or a list of Integers within a interval.
+Ex: intList is a List object containing 1 to 10000 integers.
+If interval is 500, your program should print output as below:
+Range is 1 to 500.
+Range is 500 to 1000.
+Range is 1000 to 1500.
+.
+.
+.
+.
+Range is 9500 to 10000.
+If interval is 600, your program should print output as below:
+Range is 1 to 600.
+Range is 600 to 1200.
+Range is 1200 to 1800
+​[4:47 PM] Varun kumar Kancharla (Guest)
+    
+from a list of 1000 integers collect all integers which are divisible by 13.
+​[4:51 PM] Varun kumar Kancharla (Guest)
+    
+emp1 -> 1
+emp2 -> 2
+​[4:57 PM] Varun kumar Kancharla (Guest)
+    
+public void removeEvenNumbers(List<Integer> numbers){​​​​​
+for(Integer num : numbers){​​​​​
+if(num%2 == 0){​​​​​
+numbers.remove(num);
+}​​​​​
+}​​​​​
+}​​​​​
+
+
+
+
+Write a program to print range or a list of Integers within a interval.
+Ex: intList is a List object containing 1 to 10000 integers.
+
+If interval is 500, your program should print output as below:
+Range is 1 to 500.
+Range is 500 to 1000.
+Range is 1000 to 1500.
+.
+.
+.
+.
+Range is 9500 to 10000.
+
+If interval is 600, your program should print output as below:
+Range is 1 to 600.
+Range is 600 to 1200.
+Range is 1200 to 1800

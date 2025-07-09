@@ -1,0 +1,113 @@
+Microservices
+
+	Microservice:is a small service. Group of these services together called as Microservices and all these work together to form a big application.
+	All these small services are independent of each other and each service can be developed/deploy independently.
+	Microservice helps in breaking the application and build a logically independent smaller applications
+	
+	Monolithic application: 
+		is an application where the complete code or all components of an application are buldled together or at at single place
+		When we make change to one module, the complete application need to deployed
+		when one module fails, whole application fails
+		Same tech stack should be used to develop all moduled in monolithic as the complete code is at a single place
+		With a monolithic architecture, all the code for your application is in one place. This makes it easier to understand how the different parts of your application work together.
+		It also simplifies the development process since developers don’t need to worry about how different services communicate with each other.
+		debugging is easy as the whole code is present at single point
+	
+	Microserviecs:
+		Independent modules, so deployment of only the changed module alone
+		tech stack can be different for different modules
+		when one module fails, whole application will not fail
+		Development on module is bit difficult as this modules talks to other module we need to know about the other module before developing
+		Deployment is easy
+		Each service is responsible for only one functionality
+		Intercommunication b/w Services is bit hard
+		
+	
+	Components of MS Architecture(https://blog.bytebytego.com/p/ep121-9-essential-components-of-a)
+		1. API Gateway
+			This acts are the start point for Client/user to interact with the application. This help in Routing the requests/ Authentication/Authorization, Loadbalancing, aggregiating the results from all services and then responding to User
+		2. Service Registery
+			When a new service is created, it should get registered in service registery so that it can be accessed when required.
+			It is a database which stored the details of the service. Like service location, address etc,
+			When a microservice instance starts up or becomes available, it registers itself with the Service Registry. This registration process includes providing metadata such as the service name, network location (IP address and port), health status, and possibly other attributes.
+		3. Service Discovery
+			This is used to know where exactly the requested service is located.
+			The Load Balancer job is to do load balancing while the Service Discovery job is to do discovering service info. When we build Microservices and call other microservices, we need service discovery to find the hosts and IP info and if multiple hosts are available then the load balancer helps to pick one and make a call in a load-balanced way.
+		4. Load balancer
+			It a technique where the load or incoming requests in a service is distributed accross the available hosts of a service or avaialbe pods of a service.
+			Scalability — Vertical or Horizontal Scaling when Designing Architectures
+				Vertical: Increase of memory or cpu
+				Horizontal: Increas the instances
+		5. Circuit breaker:
+			A circuit breaker in microservices is a design pattern that prevents cascading failures and helps maintain system health when some parts are experiencing 
+			The Circuit Breaker pattern is like a safety switch for your microservices.
+			issues: 
+			How it works
+			A circuit breaker monitors calls to a remote service and stops requests to that service if it experiences a failure or becomes unresponsive. This gives the service time to recover without being overwhelmed by additional traffic. 
+			Benefits
+			Circuit breakers help prevent cascading failures, conserve resources, and improve overall resilience and stability. They also allow services to handle the failure of the services that they invoke. 
+			States
+			A circuit breaker has three states: Closed, Open, and Half_Open.
+			Closed state(Circuit breaker si OFF), the circuit breaker operates normally, allowing requests to flow through between services.
+			During this phase, the circuit breaker monitors the health of the downstream service by collecting and analyzing metrics such as response times, error rates, or timeouts..
+			OPEN: When the monitored metrics breach predetermined thresholds, signaling potential issues with the downstream service, the circuit breaker transitions to the Open state.
+			In the Open state, the circuit breaker immediately stops forwarding requests to the failing service, effectively isolating it
+			Half-Open State
+			After a specified timeout period in the Open state, transitions to Half-Open state.
+			Allows a limited number of trial requests to pass through to the downstream service.
+			Monitors responses to determine service recovery.
+			If trial requests succeed, indicating service recovery, transitions back to Closed state.
+			If trial requests fail, service issues persist.
+			How it's implemented
+			The circuit breaker pattern is implemented on the caller side. Each upstream system or service should have its own circuit breaker.
+			
+			What is Resilience4j?
+				Resilience4j is a lightweight, easy-to-use fault tolerance library
+
+		6. Service Monitoring
+			Microservices monitoring is the process of tracking and analyzing the performance and health of microservices in a distributed application:
+			It is place where the all services are monitored. Say like Grafana, Prometheus
+			It used to fetch and have all metrics of all services at a common point
+		7. Service Orchestration:	
+			Service orchestration in microservices is the process of managing and coordinating multiple microservices to work together to deliver a larger application or service. It involves automating the deployment, scaling, and operational management of these services.
+			It is central part of Microservice which routes the requests, performs load balancing, fault tolerance, communicating b/w services
+		8. Configuration Server:
+			It is a centralized server whete the applications/ all services configuration properties are present and manages all configurations
+			@EnableConfigServer: This annotation can be used in Spring applications to designate them as the Config Server
+			
+		Containerization:
+			Containerization is a virtualization technique that packages microservices into containers to create deployable programs
+		Essential components:
+			API Gateway
+			Service registery
+			Service layer
+			Authorization Server
+			Data storage
+			Distributed Caching
+			Inter sevices communications (async)
+			Metrics visualization
+			Log aggregation
+			
+		
+	Flow:
+		When a user sends a request to application
+		1st it reaches to API Gateway where Authentication/Authorization is performed by calling AUTH server and once the auth is success then API gateway checks for the service address by Service discovery using service registry and then routes the request to the actual service.
+		Internal Service communications can be done by Kafka/ RabbitMQ for Async and for Sync we use REST
+		Netflix Eureka is an open-source service discovery tool that helps manage communication between microservices in a dynamic environment
+		Enable the Eureka client in your Spring Boot application by adding the @EnableDiscoveryClient annotation to your main class
+		Now when there are multiple requests, Loadbalancing is used to distribute the traffic to multiple instances for service.
+		At service layer, the services are present and the business logic. and DB layer
+		Fron these services we can have the metrics of all services and Aggregate all logs of application to Logstash, Kibana, ELK.
+		A service mesh provides a transparent and dynamic way to manage service-to-service communication and is responsible for routing traffic, handling failures, service discovery, and security.
+		What is containerization?
+		Containerization is a lightweight alternative to full machine virtualization. It involves encapsulating an application and its dependencies into a container that can be executed on any supported operating system. This ensures the portability, efficiency, and scalability of services.
+
+Candidates might mention Docker as a popular platform they use to develop, ship, and run containers.
+		
+	Keys while developing MS
+		Each service should perform only single task
+		Loose coupling and no dependency on others, High cohesion
+		
+		
+		
+	Design patterns in MS

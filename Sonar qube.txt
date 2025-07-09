@@ -1,0 +1,6 @@
+Download Sonar qube
+https://dzone.com/articles/code-analysis-with-sonarqube-part-1-setup
+In the project root folder, add sonar-project.properties files (from above url)
+CMD--navigate to the root folder where properties file is located
+run the command sonar-scanner
+after success execution, we are given with one URL in CMD, open that url in Browser to check the code quality.

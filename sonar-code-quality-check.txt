@@ -1,0 +1,8 @@
+Step-1: Download Sonar qube from infy downloads
+Step-2: Download sonar scanner from google 
+Step-3: Append bin folder of sonar qube and sonar scanner to path variable in env properties
+Step-4: Open command prompt and navigate to the bin folder of sonar qube and run startSonar.bat
+Step-5: Once the server up, 
+Step-6: Open command prompt, navigate to the root folder of Project and add sonar-project.properties file (check in https://dzone.com/articles/code-analysis-with-sonarqube-part-1-setup)
+Step-7: Then run the command sonar-scaner in command prompt
+Step-8: After successful execution, you will get unique url, copy url and open in browser to see the code quality.

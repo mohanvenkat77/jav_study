@@ -1,0 +1,30 @@
+1. Clone your project using below command :
+git clone giturl
+
+if clone from one branch:
+
+git clone -b branchname url
+
+
+2. create new branch from master
+git checkout -b <<your branch name>> master
+
+3. set origin to your branch
+git push --set-upstream origin <<your branch name>>
+
+
+
+
+Make changes in your branch and then commit changes using below commands:
+git add .
+git commit -m 'comments'
+git push
+
+
+Merging:
+
+Merge-- then if any conflicts then resolve the conflicts and commit in git UI
+
+
+
+

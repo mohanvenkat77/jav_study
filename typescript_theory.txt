@@ -1,0 +1,545 @@
+https://rishabh.io/misc/angular-4-components.html
+
+
+
+JavaScript is the language used for client side scripting. We can do client side validations, DOM manipulation, Ajax calls etc using  JavaScript. We can also use JavaScript frameworks for writing complex business logic which runs at the client side.
+As the complexity of the JavaScript code increases, it gradually becomes difficult in coding and maintaining.This is because of the limitations of JavaScript language. We do not have an option to change the language for the client side scripting as the browser understands only JavaScript.
+The solution is to choose a language which is rich in features and the code can be converted to JavaScript. This process of converting code written in one language into another language is called Transpilation.
+TypeScript is one such language whose code can get transpiled to JavaScript
+
+
+
+Dynamic Typing
+Interpreted language
+Minimal Object Oriented support
+Minimal IDE Support
+JavaScript application development is becoming more finer with the help of the following tools:
+
+npm to download packages
+webpack to manage the complexity of our applications.
+Babel to get the latest language features.
+Tools like uglifyjs and rollup to optimize the size of our payloads.
+eslint and prettier to uphold code quality and a consistent coding style.
+Node.js and Electron to run our JavaScript code everywhere.
+
+TypeScript can be another preferred option which is a superset of JavaScript and transpiles to preferred version of JavaScript.
+TypeScript is a typed superset of JavaScript that transpiles to JavaScript.
+Transplier converts the source code of one programming language to the source code of another programming language.
+TypeScript makes the development of JavaScript nearer to a more traditional object oriented experience.
+Any valid JavaScript is TypeScript.
+
+
+Features:
+Static Typing
+Modules suport
+Object Oriented Programming
+Open source
+Cross Platform
+Tooling support
+
+
+Declaring variables in TS
+
+we can declare variable using VAR or LET and CONST
+var productName: String="sample";
+let productId:Number=1224;
+
+var productname="";
+let productId=1234
+
+
+Scope of variables:(var/let)
+
+scope of the LET variable is with in the block {}
+ex:
+function diaplay(condition:boolean){
+if(condition){
+	let name:String="test";
+	}
+return name;//throws error as the let variable scope is with in the  block
+}
+
+same with VAR
+
+scope of the var variable outside the block with in the function or class in which the block is defined{}
+ex:
+function diaplay(condition:boolean){
+if(condition){
+	var name:String="test";
+	}
+return name;//if condition is false, it returns undefined,if true it returns Test.
+}
+
+
+
+var and let has different scopes in loops(check examples)
+
+
+var variables can be re-declared but LET cannot be re-declared in same block
+
+if re-declared using Var, then the subsequent re-declaration should have the same data type of the previous one
+
+
+ex:
+var name="test";
+var name:String="sample";// error as pre-defined one is of type string and here you are re-declaring of type Sting.
+
+
+valid;
+var name="test";
+var name:string="sample";
+
+
+const:
+same as let, but only thing is that it cannot be changed further
+
+const productName="test";
+productName="sample";// error as we are changing the const value.
+
+const check:String[]=["one","two","three"];
+
+if trying to change as below:
+
+check.pop()// error
+check.push("four");// inserts into array
+check[4]="five";// inserts five
+check[]=["six","seven"];//error
+
+
+
+Datatypes:
+
+number
+boolean
+string
+any
+void
+in strings, we have templated string for multi lined strings, we have to use back quote(`) for this and this is mainly used for large expressions
+
+`this is an templated statememnt ${expression}` // ${expression} used to print values example ${productName}
+
+
+any: any is used to determine the data type dynamically. any can can have any values
+
+let testname:any="Testany";
+any=1234;
+any=true;
+...
+
+console.log(any);// will have the last value.
+
+
+
+void: void represents the undefined value
+declaration is as
+
+let check:void=undefined;
+
+void is mainly used for functions as return typed, default return type of function is void.
+
+
+let check:void;
+console.log(check);//prints undefined
+
+
+type annotation is a way to enforces the type restriction of variable or function
+
+
+let name:String="test";
+name=123;// error as the name is of type string and we are modifying to number
+
+
+same in functions
+
+function display(name:string):string{
+...
+}
+display(123)// error, as the function is expecting the string as arg.
+
+
+enum is used to store the set of values.
+
+enum months{jan,feb,mar,apr};
+
+//by default the values are 0,1,2,..
+suppose if we change the value as
+(jan=15,feb,mar,apr,may,jun); now feb will be 16 and so on..
+(jan=15,feb=20,mar=22,apr=25,may=29,jun=30); valid
+
+what happens if we use as below
+(jan,feb,mar=25,apr=15,may,jun);//0,1,25,15,16,17....
+
+
+instead of numeric if we use any string, it throws error.
+
+
+
+arrays :
+
+used to store multiple values in single variable 
+creation
+
+let values:String[]=[]; or
+let values:Array<String>=[];
+
+
+
+let values:any[]=["name",18,true]// data type is any, so can store any type of values.
+
+push()--to push elements into array
+
+let sampletest:String[]=["one","two","three"];
+
+sampletest.push("four");
+sampletest.push("five");//here the data type should be same
+sampletest.push(2);//error as there is the type mismatch
+
+pop:
+
+pop is used to remove the value form array. removes the last inserted element.
+
+
+
+splice:: removes the elements from the specified index.
+splice(x,y): from index x, removes y elements.
+
+
+let array:any[]=[{"id":"test1","checked":false},{"id":"test2","checked":false},{"id":"test3","checked":false}];
+
+
+tuple:
+
+Tuple type is a kind of array which accepts more than one predefined type of data. Arrays are used to represent collection of similar objects, whereas tuples are used to represent collection of different objects.
+
+example:
+
+let customerInfo:[String, CustomerData, Number]=["nani",new CustomerData(),123]; // data should be in same order as of the declaration.
+
+et productId: [string, number];
+productId= ["Mob342", 675, 7845,"Tab673"]; works fine, because it will match only the 1st 2 arguments as declared or not.
+if it is [123,"","",4455]// error as the 1st 2 are not as defined.
+
+
+and it we try to add boolean value to the array it will throw error.
+
+
+functions:
+
+function is keyword:
+
+function display(params):returntype{
+
+}
+
+function add(a:number, b:number): number{
+return a+b;
+}
+
+arrow function:
+Arrow function is a concise way of writing a function. Whenever we need a function to be written with in a loop, arrow function will be the opt choice.
+We do not use the function keyword to define an arrow function.
+parameter=> function bdy
+
+(a:number, b:number):number =>{
+return a+b;
+}
+
+
+optional and default values in function:
+
+TypeScript treats every function parameter as mandatory. So when a function is compiled, the compiler will check whether there is value supplied to all the parameters of the function, or else it will throw compilation error.
+
+function display(a:number,b:number):number{
+return a+b;
+}
+
+display(1);//compilation error
+
+to overcome this we use optional parameters.
+
+Optional parameter is used to make a parameter, optional in a function while invoking the function.
+we will use '?' as optional
+
+function display(a:number,b?:number):number{
+return a+b;
+}
+
+display(1);//displays NaN as b is not defined.
+
+in a function, the 1st parameter cannot be optional unless, all parameters in function are optional
+
+function add(a?:number, b:number) // error
+function add(a?:number, b?:number)//valid
+
+mostly, the last parameteris declared as optional.
+
+
+default:
+
+Default parameter is used to assign default value to a function parameter.
+If the user does not provide value for a function parameter, or provide the value as undefined for it while invoking the function, the default value assigned will be considered.
+
+if the 1st parameter is default, then in calling method, we need to call with undefined or with any value of that data type, else error will be thrown.
+
+function displayProduct(productnamet:String="test", producti:number):String{
+return ""+productnamet+""+producti;
+}
+
+displayProduct(123);// error
+
+displayProduct(undefined,123);// test123
+
+
+in new value is provided in calling function, other than default value,, then the new value is picked.
+
+
+displayProduct("sample",123);// sample123
+
+
+if default is used as other parameter than 1st, then we can call the function without undefined also.
+
+ function displayProduct(productnamet:String, producti:number=123):String{
+return ""+productnamet+""+producti;
+}
+
+displayProduct("test");// test123
+works fine
+
+
+Rest Parameter is used to pass multiple values to a single parameter of a function. It accepts zero or more values for a single parameter.
+
+Rest Parameter should be declared as an array.
+Precede the parameter to be made as rest parameter with triple dots.
+Rest parameter should be the last parameter in the function parameter list.
+
+function display(id:number, ...values:String[]):String{
+return ""+id+""+values;
+}
+
+display(1,"one","two")//1one,two
+
+
+rest cannot be used with optional parameter
+
+
+
+
+day-2:
+--------------------------
+
+Interface:
+
+
+Interfaces are used to enforce consistency across multiple TypeScript classes.
+Classes that implement an interface must implement all of the required members. 
+Interfaces can be used to ensure that proper values are being passed into properties, constructors, or functions.
+Interfaces also provides additional flexibility in an application and make it more loosely coupled.
+Any object which implements an interface can be passed as a parameter to a function whose parameter type is declared same as the interface.
+
+properties cannot be initialized in interface
+
+interface profile{
+
+name:string;
+id:number
+//displayDetails():String;// method declaration in interface
+}
+
+
+the variables and the methods declared in interface will not have any access modifiers
+the functions declared in interface must be implemented in class by implementing the interface
+
+let v:profile={name="",id=1234}; -- correct, and even if we change the order its corrrct
+let v:profile={name="",id=1234,category=""};// error as the category is not present in the interface, to avoid this
+let v ={name="",id=1234,categoty=""};// this will work, because we are not type casting to type Profile
+
+the above one is called as duck-typing
+Duck-Typing is a rule for checking the type compatibility for more complex variable types.
+TypeScript compiler uses the duck-typing method to compare one object with the other by comparing that both the objects have the same properties with the same data types.
+TypeScript interface uses the same duck typing method to enforce type restriction. If an object that has to be assigned as an interface contains more properties than the interface mentioned properties, it will be accepted as an interface type and additional properties will be ignored for type checking.
+
+let v ={name="",id=1234,categoty=""};// this will work, because we are not type casting to type Profile
+let v ={name="",categoty=""};//this will not work as the provided elements are not declared in this.
+
+
+
+optional properties in interface:
+
+in interface we can have optional properties, same as how we do in functions, using '?'
+
+interface display{
+productName:String;
+productId?:Number;// this makes the property as optional
+}
+
+let x = {productName="",category=""};// works fine as the id is optional adn also this is duck-typing
+let x= {productName="",productId=123}// works
+
+if we are passing the optional value also in calling function, then the type check will be done, if diff type is passed then error is thrown
+
+let x={productName="", productId="1234"}// throws error as the productId is of type Number.
+
+
+
+we can declare function and then we can assign the function to an interface variable, but the variables in interface and parameters in function should match
+Once the interface for a function type is declared, we can declare variables of that type and assign functions to the variable as long as the function matches the signature defined in the interface.
+
+function CreateCustomerID(name: string, id: number): string{
+return "The customer id is "+name + id;
+}
+
+interface StringGenerator{
+(chars: string, nums: number): string;
+}
+
+
+let IdGenerator: StringGenerator;
+IdGenerator= CreateCustomerID;
+let id: string = IdGenerator("Infy", 101);
+console.log(id);//The customer id is Infy101
+
+an interface can be extended form other interface.
+
+interface Category{
+categoryName:string;
+}
+interface Product{
+	productName:string;
+	productId:number;	
+}
+interface productList extends Category,Product{
+	list:Array<string>;	
+}
+let productDetails:productList={
+	categoryName:'Gadget',
+	productName:'Mobile',
+	productId:1234,
+	list:['Samsung','Motorola','LG']
+}
+let listProduct = productDetails.list;
+let pname: string = productDetails.productName;
+console.log("ProductName is " + pname);
+console.log("Product List is " + listProduct);
+
+** if the same variable is used in both interface it will accept, but the type should be same, if the type is different then it will throw an error.
+
+interface Category{
+categoryName:string;
+productName:string;
+}
+interface Product{
+	productName:string;
+	productId:number;	
+}
+
+works fine, in extended class
+
+in assigining the values, we cannot duplicate the values(we cannotuse the producutName twice in declaring the values
+let productDetails:productList={
+	categoryName:'Gadget',
+	productName:'Mobileone',
+	productName:'Mobile',
+	productId:1234,
+	list:['Samsung','Motorola','LG']
+}... throws error as we are duplicating the name
+
+)
+
+** if the re-declared one is optional in one interface, then it will aslo throw error(it should be optional in both interfaces or cannot be optional in both
+
+interface Category{
+categoryName:string;
+productName:number;
+}
+interface Product{
+	productName:string;
+	productId:number;	
+}
+
+--throws error as the tyoes are different
+
+var x:profile={name:"nani",id:123};//valid
+var x:profile={name:"nani",emailid:"nani@in.com"};//invalid
+var x:profile={name:"nani"};//invalid
+var x:profile={name:"nani",emailid:"nani@in.com",id:123};//valid
+
+
+we cannot initialize the values of variables in interface, so there is no  concept of default paramenters ininterface.
+
+** duplicate functions of interface are not implemented in class
+
+interface calcy {
+       mul(n:number);
+    }
+class display implements calcy {
+    x: number; 
+         mul(n:number) {
+            this.x =n * n;            
+        }
+        mul(n:string) {
+            this.x =n + n;            
+        }
+    }   
+let arr = new display();
+arr.x = 0;      
+arr.mul(2);
+console.log(arr.x);
+
+compilation error.
+
+
+
+
+classes:
+----------------------------
+
+class is used to create re-usable components.
+class className{
+variables;
+functions;
+}
+
+Constructor is the function that gets executed automatically whenever instance of a class is created using new keyword.
+To create a constructor, a function with the name as constructor is used.
+Constructor can be created maximum one per class.
+We can use optional parameters with a constructor function as well.
+
+class product{
+prooductId:number;
+constructor(productid:number){
+this.productId=productid;
+}
+}
+var x=new product(1234);
+
+the constructor can have optional values.
+
+***interface product{
+productId:number;
+}
+
+class display{
+productname:string="test";
+productId:number=1234;
+}
+var x:product=new display();
+
+x.productId// displays number
+n.productname// throws error.
+
+
+static variables
+
+
+parameter properties:
+
+instead of declaring the instance variables and then initializing then th constructor, we can directly declare and initialize in constructor
+
+
+class A{
+
+constructor(private value:number){
+}
+}
+
+here the scope is for class alone, because the access modifier is private.

@@ -1,0 +1,23 @@
+General questions:
+
+1. What advice would you give to a new team member to make sure they onboard well?
+	Take time to understand the company’s culture and workflows. Observe how things are done and ask questions if you’re unsure.
+	Be Proactive: Don’t wait to be assigned tasks. Look for ways you can contribute and offer help.
+	understand the team’s current projects, familiarize themselves with our coding standards, and actively seek feedback. Regular check-ins with senior members and open communication are also key to a smooth onboarding process.
+
+
+2. If you felt one developer on your team would be a better fit on another team, who would you discuss a potential transfer with first?
+	I would first discuss it with the developer in question to understand their perspective and feelings about a potential move. If they are open to the idea, I would then approach the other team’s lead and HR to discuss the possibility.
+
+3. The deadline on a big project was just moved up. How would you motivate your team to be more productive under the earlier deadline?
+	I would first assess the scope of work remaining and prioritize tasks. I’d then communicate the importance of the new deadline to the team, ensuring they have all the resources they need. Recognizing their efforts and providing regular feedback can also boost motivation.
+
+4. What research methods do you use to design a new software system?   What steps do you follow before deployment?
+	I start with requirement gathering, followed by system architecture design. I then prototype, conduct user testing, and iterate based on feedback. Before deployment, I ensure thorough testing, code reviews, and documentation are completed.
+
+5. How do you manage conflicts on a team
+	Open communication, Listen to conflicts actively, neutral behaviour, Encourage team members to express their interests and needs rather than sticking rigidly to their positions, Understand the root cause. Always learn and improve
+
+6. In the past, what did you do to ensure you meet deadlines for challenging projects?
+	Set goals, avoid distractions, task prioritize, create a schedule, ask support if needed, Stay flexible, Monitor
+7. 

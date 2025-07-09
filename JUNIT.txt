@@ -1,0 +1,113 @@
+Junit:
+
+Tetsing framework for java and palys imp role in test driven development project
+JUnit promotes the idea of "first testing then coding", which emphasizes on setting up the test data for a piece of code that can be tested first and then implemented. This approach is like "test a little, code a little, test a little, code a little." It increases the productivity of the programmer and the stability of program code, which in turn reduces the stress on the programmer and the time spent on debugging.
+
+JUnit is an open source framework, which is used for writing and running tests.
+Provides annotations to identify test methods.
+Provides assertions for testing expected results.
+Provides test runners for running tests.
+JUnit tests can be organized into test suites containing test cases and even other test suites.
+
+A Unit Test Case is a part of code, which ensures that another part of code (method) works as expected
+
+JUnit classes are important classes, used in writing and testing JUnits. Some of the important classes are -
+Assert - Contains a set of assert methods.
+TestCase - Contains a test case that defines the fixture to run multiple tests.
+TestResult - Contains methods to collect the results of executing a test case.
+
+
+private methods cannot be tested using junit
+
+Assertions allows the developers to test the expected result from the code. Assertion avoids using of if else statements which makes the code more simpler and easy to maintain.
+
+assertequals vs assertSame:
+
+equals checks if two objects are equal or not
+same checks if the references of objects are same or not
+
+
+if for valid and invalid we are using same data (redundancy), then we can overcome with the test fixtures ex (customerValid(), customerInvalid())
+Test fixture is a fixed state of a set of objects used as a baseline for running tests. The purpose of a test fixture is to ensure that there is a well-known and fixed environment in which tests are run so that results are repeatable.
+
+
+@BeforeClass
+The method which is annotated with @BeforeClass annotation is run only once. It is exected before any test method of the test class is run. This is helpful in the initialization of expensive resources like database connection, connection to a server. The method in the test class which is annotated with @BeforeClass must be declared as a static method.
+
+@AfterClass
+The method which is annotated with @AfterClass annotation is run only once. The method which is annotated with this annotation will be called after all test methods of the test class has been executed. This can be used to perform clean-up activities like disconnecting from a database. The method in the test class which is annotated with @AfterClass must be declared as a static method.
+
+@Before
+The method which is annotated with @Before annotation is run before each test. This is helpful in initialization of variables, resources.
+
+@After
+The method which is annotated with @After annotation is run after each test. This is helpful in releasing resources initialized with @Before.
+
+
+** if we change the data each and every time, it will be difficult as we have to compile and run the cases, so its better to have the data in xml file and then the xml can be converted to normal class using the unmarshler jaxb, here now no need of compiling again.
+
+
+The @Test annotation support two optional parameters expected and timeout. Using expected parameter we solve the problem of testing the method where expected output is an exception.
+
+@Test(expected= <Exception>.class)
+
+
+@Test(timeout=3000)
+
+If the annotated method takes more than the timeout time mentioned in millisecond in the parameter then the test fails
+
+
+
+Test Suite
+
+A test suite is used to combine test cases written in different classes so that they can be run together. This can be achieved using @RunWith and @Suite annotations. 
+@RunWith
+When we run a test class using JUnit by default BlockJUnit4ClassRunner class of JUnit framework is used to run the @Test methods in the class. We can change this default runner, by using @RunWith annotation. For example for running the tests as suite we can annotate the test class with @RunWith(Suite.class). Suite class is provided by JUnit and is part of org.junit.runners package. Now JUnit will invoke Suite class to run the tests, instead of using the default runner.
+
+To combine test cases we use @Suite annotation. We can use either @SuiteClasses({test1.class,test2.class….) or @Suite.SuiteClasses({test1.class,test2.class……}) annotation.
+
+How to create a Test Suite?
+Create a Java class (eg. SuiteTest.java)
+Attach @RunWith(Suite.class)
+Add references to JUnit test classes that need to be run as a suite by using @Suite.SuiteClasses ({Testclass1.class, Testclass2.class})
+Run the test case
+
+
+Instead of writing same method multiple times for different input value is there any other solution? JUnit provides Parameterized tests feature, which allows developers to run the same test over and over again using different input values.
+
+@RunWith(Parameterized.class) and @Parameters are the two annotations which is used in Parameterized tests.
+
+Below are the steps to create Parameterized test
+
+Step 1 : Annotate test class with @RunWith(Parameterized.class).
+
+Step 2 : Create an instance variable for each "column" of test data.
+
+Step 3 : Create a public parameterized constructor of the test class that accepts one "row" of the test data as parameters.
+
+Step 4 : Create a public static method annotated with @Parameters that returns a Collection of Objects (as Array) as the test data set.
+
+Step 5 : Create your tests case(s) using the instance variables as the source of the test data.
+
+
+In JUnit we have Categories that allows you to group certain kinds of tests together and even include or exclude groups. @Category annotation is used for the same.
+
+Steps to create Category
+
+Define Categories by creating either a class or an interface for example GoodTest, BadTest.
+Annotate the test methods of test class with @Category(Category.class)
+Create a Java Class
+Annotate the class with @RunWith(Categories.class)
+Include the categories in the execution by using @IncludeCategory(Categories.class)
+Add references to JUnit test classes that need to be run as a suite by using @SuiteClasses 
+You can also exclude categories by using the @ExcludeCategory annotation
+
+unit test in spring boot
+------------------------------------------
+
+
+
+
+
+
+

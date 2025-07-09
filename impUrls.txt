@@ -1,0 +1,85 @@
+proxy for eclipse plugins: 10.68.248.102
+
+
+https://angularbooks.com/users/register2
+
+Good explanation of cache concept and Guava implementation - https://www.youtube.com/watch?v=g4h268Hx0AU 
+ 
+Ehcache -  https://www.youtube.com/watch?v=qu_wQNFxJxw 
+
+Ehcache - https://www.youtube.com/watch?v=cWqNeANzEz0 
+
+https://angularbooks.com/books/angular4book/chapter-1-diving-into-angular-world
+https://rishabh.io/misc/angular-4-project-structure.html
+ 
+Writing data to excel sheet: https://www.w3schools.com/code/tryit.asp?filename=FKTL36XTBT7A
+
+
+Share point: http://icp.ad.infosys.com/project/ADBDSMMN/Shared%20Documents/Forms/AllItems.aspx?RootFolder=%2Fproject%2FADBDSMMN%2FShared%20Documents%2FDSM%20Application%20Development%2F09%20Application%20Development&InitialTabId=Ribbon%2EDocument&VisibilityContext=WSSTabPersistence
+
+
+ info on git : https://stackoverflow.com/questions/2007662/rollback-to-an-old-git-commit-in-a-public-repo
+ 
+ Sonar qube: https://dzone.com/articles/code-analysis-with-sonarqube-part-1-setup 
+ 
+ java doc : http://www.baeldung.com/cobertura
+
+https://stackblitz.com/edit/angular-jadt2y?embed=1&file=app/signup/signup.component.html -- for angular poc developement
+https://angularbooks.com/books/angular4book/chapter-1-diving-into-angular-world  -- angular materials
+https://rishabh.io/misc/angular-4-project-structure.html -- angular materials
+https://medium.com/front-end-hacking/tagged/angularjs ---book
+https://www.udemy.com/the-complete-guide-to-angular-2 --- angular-2 course
+https://www.youtube.com/watch?v=k5E2AVpwsko  angular-2
+http://www.mybatis.org/spring-boot-starter/mybatis-spring-boot-autoconfigure/ -- spring boot mybatis
+https://docs.spring.io/docs/Spring-MVC-step-by-step/part3.html -- spring
+
+
+https://stackblitz.com/edit/angular-jadt2y?embed=1&file=app/signup/signup.component.html -- sample poc for login/signup, very basic
+https://stackblitz.com/edit/angular-3dx3tw?embed=1&file=app/my-validator.directive.ts --- templatedriven form example and also custom validation for template driven form
+
+http://spring.io/guides/gs/rest-service/ --rest spring
+https://johnpapa.net/typescriptpost3/  --- angular
+http://blog.ng-book.com/basic-routing-in-angular-2/  -- angular
+
+https://primefaces.org/primeng/#/inputgroup
+ 
+
+Please go through below link for git proxy setup -- https://backlog.com/git-tutorial/en/reference/config.html 
+@Ishwarya – Could you please let us know what has to be set as proxy for git, which works.
+
+Below is the proxy server details for GIT:
+
+address: 10.68.248.102  port:80
+Below are the working proxies for GIT:
+     10.68.248.102
+     10.68.248.98
+     10.68.248.39
+
+I have tried with all the three proxies and it is working fine,I was able to clone a sample git project.below are the commands to configure:
+
+      git config --global http.proxy https://:@10.68.248.39:80
+     git config --global http.proxy https://:@10.68.248.98:80
+      git config --global http.proxy https://:@10.68.248.102:80
+	  
+	  
+	  
+https://www.adb.org/sites/default/files/institutional-document/33606/adb-loan-disbursement-handbook-2017.pdf 
+
+
+
+https://angularbooks.com/users/register2
+
+Good explanation of cache concept and Guava implementation - https://www.youtube.com/watch?v=g4h268Hx0AU 
+ 
+Ehcache -  https://www.youtube.com/watch?v=qu_wQNFxJxw 
+
+Ehcache - https://www.youtube.com/watch?v=cWqNeANzEz0 
+
+https://angularbooks.com/books/angular4book/chapter-1-diving-into-angular-world
+https://rishabh.io/misc/angular-4-project-structure.html
+
+please go through below links for scheduling and batch processing.
+https://spring.io/guides/gs/batch-processing/
+https://www.youtube.com/watch?v=TEMsEcdAsbY
+https://spring.io/guides/gs/batch-processing/
+  

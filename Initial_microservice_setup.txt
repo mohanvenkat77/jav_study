@@ -1,0 +1,154 @@
+1. Create new repository for FIN 
+2. Create 2 initial branches -- cn-development, cn-build
+3. set-up remo for this newly created repo
+
+Project set-up
+
+1. Create new folder with project/application name
+2. Under root folder, create below sub folders
+	a. eclipse -- folder which contains the actual project files
+	b. xfd -- folder that contains all table/Index/synonys/grants/sequences xdf files
+	c. auto-sql-sqlplus -- folder with initial scripts to load some DB data/ config properties etc
+	d. .gitignore file with Files and directories to ignore
+	e. build.pipeline
+	f. install.pipeline
+	g. README.md 
+
+3. now under eclipse folder, have the application specific code base.
+4. Basic application setup
+	use start.spring.io for initial setup with project groupId and artifactId, Then downlaod the project and load into IDE
+	then Create 3 folders (application, domain, infrastructure) under root package
+	
+	i. Add dependencies in POM
+		a. Spring-boot starter parent
+		b. Properties in pom
+		c. Profiles
+		d. Dependency Management
+		e. Dependencies
+			1. spring-boot-starter-web
+			2. spring-boot-starter-logging
+			3. spring-cloud-starter-config
+			4. spring-boot-starter-data-jpa
+			5. lombok
+			6. spring-boot-starter-log4j2
+			7. log4j-web
+			8. org.eclipse.persistence.jpa
+			9. org.eclipse.persistence.extension
+			10. Jackson dependencies
+			11. org.springframework.kafka
+			12. spring-boot-starter-test
+			13. h2 -- for local 
+			14. spring-boot-starter-actuator
+			15. micrometer-registry-prometheus
+			16. oci-java-sdk-vault
+			17. oci-java-sdk-secrets
+			18. oauth-security -- for Oauth
+		f. Build plugins
+			1. git-commit-id-plugin -- for git versioning information
+			2. maven-jar-plugin
+			3. spring-boot-maven-plugin
+			4. maven-checkstyle-plugin
+			5. dockerfile-maven-plugin
+			6. maven-surefire-plugin
+			7. jacoco-maven-plugin
+			8. maven-javadoc-plugin
+			9. dependency-check-maven
+		g. Repositories
+		h. Plugin Repositories
+		i. Reporting
+	ii. Add Docker file
+	iii. Rename the project main application file to Application.java (main class with @SpringBootApplication)
+	iv. Add Deployment.yaml, Service.yaml, service-monitor.yaml files  under resources 
+	v. Application properties (include actuator properties as well)
+	vi. Test class for Application.java
+	
+	
+Try running the application locally for correctless.
+
+
+	
+5. Basic infrastructure set-up
+	a. under infrastructure package create below folders
+		1. messaging --- package for all kafka related configurations
+		2. persistence -- package for all DB related configurations
+		3. security -- package for all DB security/ authentication configurations
+		4. shared -- package with all required files that are shared across the application
+		5. web -- package for rest api filters and configurations
+		6. concurrent -- package with thread related files
+		7. monitor -- package for grafana related configurations
+		
+	i. Kafka configuration messaging set-up
+		under messaging package, add below files
+			a. KafkaConfig.java -- Configuration details for Kafka Integration. add ConcurrentKafkaListenerContainerFactory, kafkaTemplate to this class
+			b. InstantDeSerializer.java, InstantSerializer.java -- used for serialization and deSerialization of Instant
+		
+	ii. Data source configuration (persistence set-up)
+		under persistence package add below files
+			a. DataSourceConfig.java -- Custom DataSource Configuration, create method dataSource for DB 
+			b. JpaConfig.java -- JPA Configuration
+			c. BooleanToStringConverter.java -- Converter to be used for converting Char to Boolean and vice-versa. Used for DB columns
+			d. AuditorAwareImpl.java -- This is used by Spring JPA to inject the user info into all @CreatedBy and @LastModifiedBy annotated fields in @Entity. 
+			e. TestDataLoader.java -- to load data into local db when debugging/ testing the application locally.
+
+
+	iii. Security set-up
+		under security package add below files which are used for Oauth, also getting credentials from OIC-Vault
+			a. JWToken.java
+			b. JWTokenConfig.java
+			c. JWTokenException.java
+			d. JWTokenValidator.java
+			f. AuthenticationHandler.java
+			g. Credentials.java
+			h. CredentialsProvider.java
+			i. OAuth2AuthenticationHandler.java
+			j. OCIVaultCredentialsProvider.java
+	
+	iv. Web set-up for Rest
+		under web package, add below files
+			a. WebApplicationConfig.java -- Configuration class for initializing Web Application Context Beans.
+			b. ErrorResponse.java -- Object representing an Error to be sent to the API caller incase of an Error.
+			c. LogRequestInterceptor.java -- used to log the requests that are coming into the Service.
+			d. RequestContextInterceptor.java -- Interceptor to initialize the RequestContext for every Http Request and clear it after processing.
+			e. RestResponseEntityExceptionHandler.java -- Global Exception Handler for Rest APIs
+			f. ValidateRequestHeaderInterceptor.java -- Interceptor to validate the Header Attributes of the request.
+	v. Shared set-up
+		under shared package, add below files
+			a. CachingConfig.java
+			b. ProfileAndCondition.java
+			d. RequestContext.java -- ThreadLocal based Context holder for every Request
+			
+	vi. Concurrent set-up
+		under this package, add below file
+			a.MDCThreadPoolTaskExecutor.java -- ThreadPoolTaskExecutor that propagates MDC context from calling thread to executor thread
+	vii. Monitoe set-up
+		under thos package, add below files for grafana
+			a. MetricService.java -- initial metric service with MeterRegistry for capturing grafana metrics
+			
+6. Basic Domain package set-up
+	a. under Domain package, create below folders
+		1. model -- package that contains entities and repository
+		2. shared -- package that contains the shared files across entities
+		
+		i. Model set-up
+			under this package, we will place all entities/ repositories needed for application
+	
+		ii. Shared set-up
+			under shared package, add below files that are shared across entities
+				a. AbstractBaseEntity.java -- this contains the colums like createdBy, lastUpdatedBy, lastUpdatedDate, creationDate which are commom across all entities
+				b. AbstractEntity.java -- this contains above columns along with version
+				c. interface - Entity.java -- An Entity is a unique thing and is capable of being changed continuously over a long period of time. It has a unique identity and is mutable.
+				d. interface - ValueObject.java -- Value objects compare by the values of their attributes, they don't have an identity
+				e. interface - DomainEvent.java -- Domain Event to capture an occurrence of something that happened in the domain
+				f. DomainEventPublisher.java -- publisher for domain event
+
+7. Basic Application package set-up
+	a. This package contains all application related files.
+	create ApplicationConfiguration.java file under application package and this is used as Central Application Configuration
+
+8. All environment properties files, log4j xml under resources folder
+
+
+
+
+now create new folder with project name and the create eclipse folder under project folder
+

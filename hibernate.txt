@@ -1,0 +1,81 @@
+Hibernate:
+
+Hibernate is an ORM framework used to transfer the data between Java application to database in form of objects, where as in JDBC it is in form of Text
+In JDBC we need to write Sql commands in various places, after the program has created if the table structure is modified then the JDBC program doesn’t work, again we need to modify and compile and re-deploy required, which is tedious.
+In JDBC, if we open a database connection we need to write in try, and if any exceptions occurred catch block will takers about it, and finally used to close the connections.
+here as a programmer we must close the connection, or we may get a chance to get our of connections message…!
+Actually if we didn’t close the connection in the finally block, then jdbc doesn’t responsible to close that connection.
+
+hibernate is lightweight as it contains only POJO classes and it is mainly for persistence
+
+Main files in Hibernate:
+1. Mapping xml
+2. Configuration xml
+3. Pojo class
+4. Main class for our business logic.
+
+Mapping xml file
+This fie contains the statements which are used for mapping of class to a database table and the variables of the class to the Database columns.
+this mapping can be done in xml or annotation based.
+we can have one or more mapping files for an hibernate application. If we have 2 pojo, then we can have 2 mapping files  to map the pojo to the tables in DB
+class(Object), generally have 3 properties like Identity(variable names), State(Values of variables) Behaviour(Methods to access variables), But in general we have to save only the values to the database, but in hibernate date transformation id made as objects(which contails all 3 properties), so here hibernate take care of storing and retreiving only the values of the variables.
+
+
+sample xml mapping:
+
+<hibernate-mapping>
+	<class name="POJO class name" table="table name in database">
+		<id name="variable name" column="column name in database" type="java/hibernate type" />// this is for the unique ID or uto generated id in table
+		<property name="variable1 name" column="column name in database" type="java/hibernate type" />
+		<property name="variable2 name" column="column name in database" type="java/hibernate type" />
+	</class>
+</hibernate-mapping>
+
+
+
+Configuration file:
+
+Configuration file is the main file which contains the the database connections, mapping to the mapping xmls, some hibernate properties
+
+each database has separate configuratin file
+the configuration file can be of XML or we can have the configuration properties in application.properties file
+** there is no annotation based configuration files.
+
+sample configuration xml file
+
+<hibernate-configuration>
+<session-factory>
+ 
+<!-- Related to the connection START -->
+<property name="connection.driver_class">Driver Class Name </property>
+<property name="connection.url">URL </property>
+<property name="connection.user">user </property>
+<property name="connection.password">password</property>
+<!-- Related to the connection END -->
+ 
+<!-- Related to hibernate properties START -->
+<property name="show_sql">true/false</property>
+<property name="dialet">Database dialet class</property>
+<property name="hbm2ddl.auto">create/update or what ever</property>
+<!-- Related to hibernate properties END-->
+ 
+<!-- Related to mapping START-->
+<mapping resource="hbm file 1 name .xml" / >
+<mapping resource="hbm file 2 name .xml" / >
+<!-- Related to the mapping END -->
+ 
+</session-factory>
+</hibernate-configuration>
+
+
+Hibernate supports Inheritance, Associations, Collections
+In hibernate if we save the derived class object,  then its base class object will also be stored into the database, it means hibernate supporting inheritance
+Hibernate supports relationships like One-To-Many,One-To-One, Many-To-Many-to-Many, Many-To-One
+This will also supports collections like List,Set,Map
+In JDBC all exceptions are checked, so we need to have try, catch throws, but in hibernate, the exceptions are un-checked, there is a translator which converts the checked exceptions to unchecked in hibernaet.
+Hibernate has its own query language, i.e hibernate query language which is database independent
+So if we change the database, then also our application will works as HQL is database independent
+HQL contains database independent commands
+Hibernate has the capability to generate the auto generated primary keys
+In JDBC if we dont have any table and if we try to perform any operation(insert), then it will throw error View not found and if we do the same in Hibernate, it will create new table for us.
+Hibernate has caching feature which reduces the work of executing the queries again and again and thery by improves the performance of application.

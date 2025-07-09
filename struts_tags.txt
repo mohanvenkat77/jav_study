@@ -1,0 +1,137 @@
+<struts-config>
+<data-sources/>
+<form- beans/>
+<global-exceptions>
+<global- forwards/>
+<actionmappings/>
+<exception/>
+<controller/>
+<message-resources/>
+<plug-in/>
+<struts-config>
+
+
+The <data-sources/> tag is used to configure the databases connection details, the <data-source> element provides the ability to map multiple databases within the parent element <data-sources> in one place. An attribute named key allows the connections to be distinguished from one another. Within the <data-source> element is an element named <set-property> that defines
+
+property — The name of the data property
+
+value — The value of the data property
+
+<data-sources>
+   <data-source type=”org.apache.commons.dbcp.BasicDataSource” key=”dbSourceKey”>
+       <set-property property=”driverClassName” value=”com.mysql.jdbc.Driver” />
+       <set-property property=”url” value=”jdbc:mysql://localhost:3306/testDB” />
+       <set-property property=”username” value=”testusername” />
+       <set-property property=”password” value=”testpassword” />
+    </data-source>
+</data-sources>
+
+
+
+The <form- beans/>  tag is used to configure all the form beans of our application, under <form- beans/> we can find several <form- bean/> tags , each tag is used to configure one form bean. Each <form- bean/> tag have attributes like “name” and “type”.
+
+name – This name is used as reference in the action mappings , name attribute must have a unique bean name.
+
+type – The value is of type attribute should be a fully-qualified class name of the ActionForm class used with the form bean
+
+<form-beans> 
+ <form-bean name="LoginForm" type="com.connect2java.struts.LoginForm"/> 
+    .......
+    ........
+ <form-bean name="RegisterForm" type="com.connect2java.struts.RegisterForm"/>
+</form-beans>
+
+ 
+ 
+ This tag is used to forward the request based on the Action Forward return by the Action class ,If we have forwards with the same path in different actions, the we  can avoid duplication by declaring just one global-forward and all the actions can use it. <global-forwards> tag have attributes like “name ” and “path”
+
+name – value of ActionForward return by the Action class
+
+path – the name of view component or another path.
+
+<global-forwards>
+<forward name="success" path="success.jsp" />
+</global-forwards>
+
+
+
+
+This tag is same like <global-forwards> but here based the exception the request will forward. We can configure many exceptions here , for one exception case we need to use one <excetption> tage and each <excetption> have three attributes those are
+
+key – some key value configured in our project resources properties file.
+
+type – the type exception
+
+path –  the name of view component or another path.
+
+
+<global-exceptions>
+<excetption key="error.mesage" type="java.io.IOException" path="Error.jsp" />
+</global-exception>
+
+
+
+
+
+This tag is uses to configure multiple actions and for each action we uses one <action> tag. Each <action> tag have attributes those are
+
+path — value of the path the application maps to the action.
+type — The full qualified name of Action class.
+name — The name of the <form-bean> element that’s used with the action.
+scope – value of the scope.
+validate – true or false , if you want to validation for that formbean then the value is “true” otherwise “false”.
+
+<action-mappings>
+		<action name="RegisterForm" path="/register"
+			type="com.connect2java.struts.action.RegisterAction" scope="request"
+			input="/Register.jsp" Validate="false">
+			<forward name="failure" path="/Register.jsp" redirect="true" />
+			<forward name="success" path="/success.jsp" redirect="true" />
+		</action>
+	</action-mappings>
+
+	
+	
+The controller tag is used to define several global configuration settings for your Struts application. In earlier versions of Struts, many of these settings were configured via the Web deployment descriptor web.xml by specifying initialization parameters for Struts’ ActionServlet. However, when Struts added support for application modules in version 1.1, these settings were moved to the Struts configuration file so that they could be configured on a per-module basis.
+
+There are lot of attributes for this tag some of them are…
+bufferSize –  Specifies the input buffer size that will be used for file uploads.Defaults to 4096 bytes.
+className –  Specifies the fully qualified class name of the configuration object to instantiate for this controller definition.Defaults to                                org.apache.struts.config.ControllerConfig.
+contentType – Specifies the content type (and optional character encoding) that will be set on each HTTP response
+forwardPattern – Specifies the pattern for how the path attribute of forward tags is mapped to URLs.
+inputForward – Accepts “true” or “false” to dete whether or t the action tag’s input attribute will be treated as the name of a forward whose path will be used. If set to “false” (the default), the action tag’s input attribute will be taken as the literal path.Defaults to “false”.
+locale – Accepts “true” or “false” to dete whether or t a java.util.Locale object will be stored in users’ sessions.Defaults to “true”.
+maxFileSize – Specifies the maximum size, in bytes, for file uploads. Alternatively, if you add “K”, “M”, or “G” to the end of the value, it will be interpreted as kilobytes, megabytes, or gigabytes, respectively.Defaults to “250M”.
+processorClass – Specifies the fully qualified class name for the RequestProcessor subclass that will be used for this module.Defaults to org.apache.struts.action.RequestProcessor.
+tempDir – Specifies a temporary directory to use to store data during file uploads.
+
+<controller processorClass="com.connect2java.RequestProcessorClass" />
+
+ 
+ 
+ 
+ 
+ <message-resources> tag is uses to configure our Application resources properties file .
+
+sample configuration for <message-resource> tag.
+
+
+<message-resources parameter="ApplicationResources"/>
+
+
+
+The plug-in tag is used to define a plugin that Struts loads at application startup and unloads at application shutdown. Among other things, plugins are useful for loading persistent resources at application startup. Each plugin class must implement Struts’org.apache.struts.action.PlugIn interface. Upon application startup, the plugin’s init( ) method will be called. Upon application shutdown, the plugin’s destroy( ) method will be called.
+
+sample configuration for <plug-in/> tag.
+
+
+
+
+<plug-in className="org.apache.struts.validator.ValidatorPlugIn">
+  <set-property property="pathnames"
+                   value="/WEB-INF/validator-rules.xml,
+                          /WEB-INF/validation.xml">;
+</plug-in>
+
+ 
+ 

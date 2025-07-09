@@ -1,0 +1,81 @@
+Kibana:
+
+The best way to understand your data is to visualize it.
+
+Kibana is a data visualization tool used for visualizing the Elasticsearch documents and helps developers to have a quick insight into it. 
+Kibana dashboard offers various interactive diagrams, geospatial data, and graphs to visualize complex quires.
+
+In Kibana there are different methods for performing searches on data and most common search types:
+
+Free text searches --	It is used for searching a specific string
+Field-level searches --	It is used for searching for a string within a specific field
+Logical statements --	It is used to combine searches into a logical statement.
+Proximity searches --	It is used for searching terms within specific character proximity.
+
+
+Execute queries on data & visualize results in charts, tables, and maps
+Configurable dashboard to slice and dice logstash logs in elasticsearch
+Capable of providing historical data in the form of graphs, charts, etc.
+Real-time dashboards which is easily configurable
+Permits saving the dashboard and managing multiple dashboards
+
+Server up/ down time
+
+
+
+Data/logs form multiple services can be seen at one place. Centralized logging in order to identify problems with applications.
+
+
+The first part of using Kibana is to set up your data once you have ingested it into Elastic. 
+An index pattern tells Kibana what Elasticsearch index to analyze. The most common way to ingest logs is using Logstash
+Logstash is an open-source, centralized, events and logging manager
+
+Create indexes (ATG team), these indexes acts as the key for respective environment
+	ex: logstash-oic-ms-gxpbt
+		logstash-oic-ms-gxpet
+		logstash-xxxxxxx
+		
+		
+		
+1. log4j2.xml changes
+2. commands
+UI
+Filters
+visualization
+dashboard
+
+
+
+
+		
+Minimal requirement needed to activate logging through Kibana
+
+1. Need to log output to console, logging to console
+we have fluentD daemonsets configured to read those container logs and send to Elastic and to Kibana automatically.
+
+2. Run below kubectl comands
+	1. export https_proxy=http://www-proxy-hqdc.us.oracle.com:80
+	2. export http_proxy=http://www-proxy-hqdc.us.oracle.com:80
+	3. kubectl --kubeconfig Oal-kubeconfig-dev --namespace=oic-ms-gxpbt get pods (this will get all pods from namespace oic-ms-gxpbt), Oal-kubeconfig-dev is GXP dev config file
+	4. kubectl --kubeconfig Oal-kubeconfig-dev --namespace=logging get pods  (this will get all pods for logging, check for kibana pod)
+	5. Now portforward the kibana pod to port for accessing the kibana UI
+3. http://localhost:5601/    Kibana UI
+4. Navigate to "Discover" option where we see all logs for all services.
+5. filter using indexes(logstash-oic-ms-gxpbr*) and options like Pod name/ log level etc.
+
+Visialization:
+this is used to visualize the data in charts, tables, maps etc.
+here we can create many templates.
+
+Click on visialize
+then '+'
+and select visualization type (area, heatmap, vertical bars etc)
+and then add metrics as per the requirement
+
+
+
+Dashboard
+
+it is a collection of Visualization panels. And we can have many panels from different services.
+
+

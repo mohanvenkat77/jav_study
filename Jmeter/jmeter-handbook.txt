@@ -1,0 +1,68 @@
+
+jmeter -n -t [jmx file] -l [results file] -e -o [Path to web report folder]
+./jmeter -n -t 
+/Users/bogaur/Bodhvi/ft-inco-5952-FileScan-PI12/Load-Test/JMeter/GXPBT/Dynamic_File_Names/CECBT-Load-Test.jmx 
+-l /Users/bogaur/Bodhvi/ft-inco-5952-FileScan-PI12/Load-Test/Load-Test-Results/GXPBT-Mar-15-FileNameChange-CECBT/CECBT-Load-Test.csv 
+-e -o /Users/bogaur/Bodhvi/ft-inco-5952-FileScan-PI12/Load-Test/Load-Test-Results/GXPBT-Mar-15-FileNameChange-CECBT/WebReport-CECBT
+
+./jmeter -n -t /Users/svissams/Desktop/Work/flp-loadtest/filestore-LoadTest1XPeakLoad.jmx -l /Users/svissams/Desktop/Work/flp-loadtest/csvpath/CECBT-Load-Test.csv -e -o /Users/svissams/Desktop/Work/flp-loadtest/loadtest-results
+
+
+Apache JMeter
+The Apache JMeter application is open source software, a 100% pure Java application designed to load test functional behavior and measure performance.
+
+Download & Install Jmeter
+=========================
+Make sure you have the compatible Java version available in the system.
+Download the latest version of Jmeter which is compatible to your OS https://jmeter.apache.org/download_jmeter.cgi
+Extract the contents.
+
+/bin: Contains JMeter script file for starting JMeter
+
+Navigate to /bin location and run ./jmeter.
+svissams@svissams-mac bin % ./jmeter => This would open GUI of Jmeter. We can create a new jmx file / open existing jmx file to configure load test.
+
+Installing Ultimate Thread Group plugin:
+========================================
+Click on the link https://jmeter-plugins.org/wiki/UltimateThreadGroup/ and download Ultimate Thread Group JMeter Plugin
+Unzip the folder
+Copy the file jmeter-plugins-cmn-jmeter-<version>.jar to lib folder of Apache JMeter
+apache-jmeter-<version> –>lib –> Paste jmeter-plugins-cmn-jmeter-<version>.jar
+Copy the files jmeter-plugins-casutg-<version>.jar and jmeter-plugins-manager-<version>.jar to ext folder of Apache JMeter
+apache-jmeter-<version> –>lib –>ext -> Paste jmeter-plugins-casutg-<version>.jar and jmeter-plugins-manager-<version>.jar
+Launch the JMeter in GUI mode
+
+To run load test:
+=================
+Once you open GUI, you'll encounter a message as below in the terminal.
+
+svissams@svissams-mac bin % ./jmeter
+
+Don't use GUI mode for load testing !, only for Test creation and Test debugging.
+For load testing, use CLI Mode (was NON GUI):
+   jmeter -n -t [jmx file] -l [results file] -e -o [Path to web report folder]
+& increase Java Heap to meet your test requirements:
+   Modify current env variable HEAP="-Xms1g -Xmx1g -XX:MaxMetaspaceSize=256m" in the jmeter batch file
+Check : https://jmeter.apache.org/usermanual/best-practices.html
+
+Sample command to run load test
+./jmeter -n -t /Users/svissams/Desktop/Work/flp-loadtest/filestore-LoadTest1XPeakLoad.jmx -l /Users/svissams/Desktop/Work/flp-loadtest/csvpath/CECBT-Load-Test.csv -e -o /Users/svissams/Desktop/Work/flp-loadtest/loadtest-results
+
+Make sure to keep the web report folder empty. Otherwise, you'll face errors to run load test.
+
+./jmeter -n -t /Users/svissams/Desktop/Work/flp-loadtest/mine.jmx -l /Users/svissams/Desktop/Work/flp-loadtest/csvpath/Load-Test-12Apr.csv -e -o /Users/svissams/Desktop/Work/flp-loadtest/loadtest-results-6Jul
+
+
+GSI_API_DATA	900 2mB	JSON 3req/min oauth
+DRM_HIERARCHY	50	
+ACCOUNT_CODE	50 xlsx 38KB       "sizeLimit": 10, "countLimit": 10,
+CPT_COMP_HIERARCHY 50 XLSX 135KB   "sizeLimit": 10,"countLimit": 10, 40 files violate file count
+
+
+/oalapp/services/oalcn-svc-gateway/api/flupldr/filestores
+
+
+./jmeter -n -t /Users/svissams/Desktop/Work/flp-loadtest/loadDB-plugin.jmx -l /Users/svissams/Desktop/Work/flp-loadtest/csvpath/Load-Test-23Jun.csv -e -o /Users/svissams/Desktop/Work/flp-loadtest/loadtest-results-12July
+
+./jmeter -n -t /Users/svissams/Desktop/Work/flp-loadtest/test-raju.jmx -l /Users/svissams/Desktop/Work/flp-loadtest/csvpath/Load-Test-15July.csv -e -o /Users/svissams/Desktop/Work/flp-loadtest/loadtest-results-15July
+

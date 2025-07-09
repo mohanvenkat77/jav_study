@@ -1,0 +1,221 @@
+Kubectl for UAT, PROD, DEV
+
+1. 	export HTTP_PROXY=http://www-proxy-hqdc.us.oracle.com:80
+	export HTTPS_PROXY=http://www-proxy-hqdc.us.oracle.com:80
+	
+2.	export KUBECONFIG=/Users/bogaur/Bodhvi/4Aug-cn-template.git-project-full/Kubernetes-config-files/kubeconfig-dev (FOR DEV)
+	OR
+	KUBECONFIG=/Users/bogaur/Bodhvi/4Aug-cn-template.git-project-full/Kuberenetes-config-files/kubeconfig-uat (FOR UAT)
+	OR
+	KUBECONFIG= /Users/bogaur/Bodhvi/4Aug-cn-template.git-project-full/Kubernetes-config-files/kubeconfig-prod (FOR PROD)
+	
+	
+3. To get contexts:
+	kubectl config get-contexts
+	
+4. Set config:
+	//For Dev:
+	kubectl config use-context context-cywezdcmizd
+	OR For UAT:
+	kubectl config use-context context-c2gcy3emuzd
+	OR For prod:
+	kubectl config use-context context-c4gezdegezt
+
+
+5. Run kubectl commands
+	kubectl get pods -n oic-ms-gxpdt
+	kubectl -n oic-ms-gxpdt describe pod pod_name
+	
+6. Command to check for services violating kyverno policies
+kubectl describe polr -n oic-ms-gxpdt | grep "Result: \+fail" -B10
+	
+	
+	
+
+Command to config map
+kubectl -n oic-ms-gxpdt get configmap epm-prv-config-map -o yaml
+
+Command to get secrets
+kubectl -n oic-ms-gxpdt get secrets oic-secrets -o yaml   
+
+
+Command to get logs
+kubectl -n oic-ms-gxpdt logs oal-fileupload-service-6fbd95f4b9-jx8kq
+kubectl -n oic-ms-gxpdt logs -c oal-fileupload-service oal-fileupload-service-6fbd95f4b9-jx8kq
+
+
+
+***************************** KUBECTL deplopyment commands from deployment logs *****************
+16:20:01  + kubectl version
+16:20:01  Client Version: version.Info{Major:"1", Minor:"14", GitVersion:"v1.14.3", GitCommit:"5e53fd6bc17c0dec8434817e69b04a25d8ae0ff0", GitTreeState:"clean", BuildDate:"2019-06-06T01:44:30Z", GoVersion:"go1.12.5", Compiler:"gc", Platform:"linux/amd64"}
+16:20:01  Server Version: version.Info{Major:"1", Minor:"23", GitVersion:"v1.23.4", GitCommit:"0b25cacbeba0b73f720022544dd02ffe9e67017e", GitTreeState:"clean", BuildDate:"2022-03-16T11:33:38Z", GoVersion:"go1.17.7 BoringCrypto", Compiler:"gc", Platform:"linux/amd64"}
+[Pipeline] sh
+16:20:01  + kubectl delete deployment oal-fileupload-service --namespace=oic-ms-gxpdt
+16:20:01  + true
+[Pipeline] sleep
+16:20:02  Sleeping for 30 sec
+[Pipeline] sh
+16:20:32  + kubectl delete service oal-fileupload-service --namespace=oic-ms-gxpdt
+16:20:32  + true
+[Pipeline] sh
+16:20:32  + kubectl delete servicemonitor oal-fileupload-service --namespace=oic-ms-gxpdt
+16:20:32  + true
+[Pipeline] sh
+16:20:33  + kubectl apply -f ./eclipse/CNFileUpload/src/main/resources/k8/deployment.yaml --namespace=oic-ms-gxpdt
+16:20:33  deployment.apps/oal-fileupload-service created
+[Pipeline] sh
+16:20:34  + kubectl apply -f ./eclipse/CNFileUpload/src/main/resources/k8/service.yaml --namespace=oic-ms-gxpdt
+16:20:37  service/oal-fileupload-service created
+[Pipeline] sh
+16:20:37  + kubectl apply -f ./eclipse/CNFileUpload/src/main/resources/k8/service-monitor.yaml --namespace=oic-ms-gxpdt
+16:20:38  servicemonitor.monitoring.coreos.com/oal-fileupload-service created
+[Pipeline] }
+16:20:38  [kubernetes-cli] kubectl configuration cleaned up
+
+***************************** KUBECTL deplopyment commands from deployment logs -- end *****************
+
+
+	
+	
+	
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+				kubeconfig-dev
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+apiVersion: v1
+kind: Config
+preferences: {}
+
+# Define the cluster
+clusters:
+- cluster:
+    certificate-authority-data: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURqRENDQW5TZ0F3SUJBZ0lVTjRUMEhFN2lDOVAwZ0FnM2pyZHhiRWxudDlNd0RRWUpLb1pJaHZjTkFRRUwKQlFBd1hqRUxNQWtHQTFVRUJoTUNWVk14RGpBTUJnTlZCQWdUQlZSbGVHRnpNUTh3RFFZRFZRUUhFd1pCZFhOMAphVzR4RHpBTkJnTlZCQW9UQms5eVlXTnNaVEVNTUFvR0ExVUVDeE1EVDBSWU1ROHdEUVlEVlFRREV3WkxPRk1nClEwRXdIaGNOTVRrd05URXdNREEwT1RBd1doY05NalF3TlRBNE1EQTBPVEF3V2pCZU1Rc3dDUVlEVlFRR0V3SlYKVXpFT01Bd0dBMVVFQ0JNRlZHVjRZWE14RHpBTkJnTlZCQWNUQmtGMWMzUnBiakVQTUEwR0ExVUVDaE1HVDNKaApZMnhsTVF3d0NnWURWUVFMRXdOUFJGZ3hEekFOQmdOVkJBTVRCa3M0VXlCRFFUQ0NBU0l3RFFZSktvWklodmNOCkFRRUJCUUFEZ2dFUEFEQ0NBUW9DZ2dFQkFMT3B6MFZubjVwM0orRUpTK1k3TTkycmNwMkMxa3pucXAwdEZZN00KUWhxaXlDY3dFQ2NDK2JzYVFKVHRuY2V3VkEwdSt5S3dUYUlML3pqeWVaeWduRFJqUUpnMDZBQnJQYkJ4MTdzZAozMFI5TE12Q1BhY3NjNm81SmF1NWEzYVErL1RHV3czUk9WeWlJaG00OXI1MjB4YkNOQlRRY3dnYjZDemwzQnJZClEyaUd0MW5RQ2NHZFIxUlpQcmxIaEVVb05qMzJBZHN4eVJyQ3c5Nk1JVWFRYjNzOUVXVXQ0ZTJLRmVOWDFTSE8KSDdZQkZDd1NibkFnSGlGK2hKeHRhUW9UV28zNDlzZjFaQ2lDR2dZQUxMODdKWkozMkkxeXo5ZnlVemEwckFMbwpGVkZjSkVIVnZwTVNxbHdSWWZuZVNNQ21hZ2t0VW9tRENjODJvUndHZ3IrQktQTUNBd0VBQWFOQ01FQXdEZ1lEClZSMFBBUUgvQkFRREFnRUdNQThHQTFVZEV3RUIvd1FGTUFNQkFmOHdIUVlEVlIwT0JCWUVGRm1nQlkrYjJ6eEoKUnBDT2RsZXl0Mk1LMlhGbE1BMEdDU3FHU0liM0RRRUJDd1VBQTRJQkFRQ3hlWUlSMS9UeXFJS3FvWVl3d25LTwpuT1MzaXRQeWVkU2ZxRmtGTFdBR2UxMFo3cXQzOWZKVDdtRUpoMnk1bGlyY3dCTkVjL25LdG1VZGdUZnZMTlBTCjFKQllyTU01L0FoU0dVaUJKNDFRNWI5Z0xHUEsrRHVYYlcxZmwrSXlJTlBqOFBQT2tzbnkrMklxaEM4SnFrdGoKOGlxVVI1ZVdRZzE0N2xsbGNBa205d1cwKzRPekdJNWk5Z1lYZ0NPaERtQmxoUHdXMG8xOGdOemRVYk5zTEpUVwpGR21yYW5hMjdiVkY4MG01Zm9SNzgrdkdHVXlUdzdZbFNkZE55U3pCOVl3aDU2Yk45UStOd1pIQ2dkWjlTS05BCm40OGwzU1pKUGZoblphWjlnWXVBSU85aVZtUzQvNEsxa2FtbDhvZ3VOanBzVDhlaGhLM0xkemgyaisvaTI3Z2EKLS0tLS1FTkQgQ0VSVElGSUNBVEUtLS0tLQo=
+    server: https://cywezdcmizd.us-ashburn-1.clusters.oci.oraclecloud.com:6443
+  name: cluster-cywezdcmizd
+
+# Define the user
+users:
+- name: gxp-non-prod-readonly-sa
+  user:
+    as-user-extra: {}
+    client-key-data: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURqRENDQW5TZ0F3SUJBZ0lVTjRUMEhFN2lDOVAwZ0FnM2pyZHhiRWxudDlNd0RRWUpLb1pJaHZjTkFRRUwKQlFBd1hqRUxNQWtHQTFVRUJoTUNWVk14RGpBTUJnTlZCQWdUQlZSbGVHRnpNUTh3RFFZRFZRUUhFd1pCZFhOMAphVzR4RHpBTkJnTlZCQW9UQms5eVlXTnNaVEVNTUFvR0ExVUVDeE1EVDBSWU1ROHdEUVlEVlFRREV3WkxPRk1nClEwRXdIaGNOTVRrd05URXdNREEwT1RBd1doY05NalF3TlRBNE1EQTBPVEF3V2pCZU1Rc3dDUVlEVlFRR0V3SlYKVXpFT01Bd0dBMVVFQ0JNRlZHVjRZWE14RHpBTkJnTlZCQWNUQmtGMWMzUnBiakVQTUEwR0ExVUVDaE1HVDNKaApZMnhsTVF3d0NnWURWUVFMRXdOUFJGZ3hEekFOQmdOVkJBTVRCa3M0VXlCRFFUQ0NBU0l3RFFZSktvWklodmNOCkFRRUJCUUFEZ2dFUEFEQ0NBUW9DZ2dFQkFMT3B6MFZubjVwM0orRUpTK1k3TTkycmNwMkMxa3pucXAwdEZZN00KUWhxaXlDY3dFQ2NDK2JzYVFKVHRuY2V3VkEwdSt5S3dUYUlML3pqeWVaeWduRFJqUUpnMDZBQnJQYkJ4MTdzZAozMFI5TE12Q1BhY3NjNm81SmF1NWEzYVErL1RHV3czUk9WeWlJaG00OXI1MjB4YkNOQlRRY3dnYjZDemwzQnJZClEyaUd0MW5RQ2NHZFIxUlpQcmxIaEVVb05qMzJBZHN4eVJyQ3c5Nk1JVWFRYjNzOUVXVXQ0ZTJLRmVOWDFTSE8KSDdZQkZDd1NibkFnSGlGK2hKeHRhUW9UV28zNDlzZjFaQ2lDR2dZQUxMODdKWkozMkkxeXo5ZnlVemEwckFMbwpGVkZjSkVIVnZwTVNxbHdSWWZuZVNNQ21hZ2t0VW9tRENjODJvUndHZ3IrQktQTUNBd0VBQWFOQ01FQXdEZ1lEClZSMFBBUUgvQkFRREFnRUdNQThHQTFVZEV3RUIvd1FGTUFNQkFmOHdIUVlEVlIwT0JCWUVGRm1nQlkrYjJ6eEoKUnBDT2RsZXl0Mk1LMlhGbE1BMEdDU3FHU0liM0RRRUJDd1VBQTRJQkFRQ3hlWUlSMS9UeXFJS3FvWVl3d25LTwpuT1MzaXRQeWVkU2ZxRmtGTFdBR2UxMFo3cXQzOWZKVDdtRUpoMnk1bGlyY3dCTkVjL25LdG1VZGdUZnZMTlBTCjFKQllyTU01L0FoU0dVaUJKNDFRNWI5Z0xHUEsrRHVYYlcxZmwrSXlJTlBqOFBQT2tzbnkrMklxaEM4SnFrdGoKOGlxVVI1ZVdRZzE0N2xsbGNBa205d1cwKzRPekdJNWk5Z1lYZ0NPaERtQmxoUHdXMG8xOGdOemRVYk5zTEpUVwpGR21yYW5hMjdiVkY4MG01Zm9SNzgrdkdHVXlUdzdZbFNkZE55U3pCOVl3aDU2Yk45UStOd1pIQ2dkWjlTS05BCm40OGwzU1pKUGZoblphWjlnWXVBSU85aVZtUzQvNEsxa2FtbDhvZ3VOanBzVDhlaGhLM0xkemgyaisvaTI3Z2EKLS0tLS1FTkQgQ0VSVElGSUNBVEUtLS0tLQo=
+    token: eyJhbGciOiJSUzI1NiIsImtpZCI6IiJ9.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW50Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9uYW1lc3BhY2UiOiJkZWZhdWx0Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZWNyZXQubmFtZSI6Imd4cC1ub24tcHJvZC1yZWFkb25seS1zYS10b2tlbi1iOHNqZCIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VydmljZS1hY2NvdW50Lm5hbWUiOiJneHAtbm9uLXByb2QtcmVhZG9ubHktc2EiLCJrdWJlcm5ldGVzLmlvL3NlcnZpY2VhY2NvdW50L3NlcnZpY2UtYWNjb3VudC51aWQiOiIwYjg0Zjk0YS0yMzNiLTExZWEtODExMS0wYTU4MGFlZDM1MzIiLCJzdWIiOiJzeXN0ZW06c2VydmljZWFjY291bnQ6ZGVmYXVsdDpneHAtbm9uLXByb2QtcmVhZG9ubHktc2EifQ.qnt1eJalkZagRhJQUloTJx-YAOFw_1IwqesGXK02_wFo2RzIZuM1u2BRb2XVUisD8Zi56CR5ujvOADLUDXUyPcqhcI2TciAzN1GkpJ3dk_ehT-26gU9tbU3eAzgL_HB-id2pmAf3G8BnfulOHaOyzjEXn9eSDKwMNPqW7s_ERKRZPNfGUy-WPa28-APo3frXM3xDixuAXm4JnxTaos9mTHDFsFjW58wGaiSjegW02fWQV9vxyun_4fnNqGG9lOuaDBP1Ub9Je0FWlootplv6dIUgSPGzyKPQ2S9iQ3ICcCU-gbOs_XvhY-9DuRQpKDpTnI-93_-EdDYS7ZrytVZ2PQ
+    # Define the context: linking a user to a cluster
+contexts:
+- context:
+    cluster: cluster-cywezdcmizd
+    #namespace: <<testns>>
+    user: gxp-non-prod-readonly-sa
+  name: context-cywezdcmizd
+
+# Define current context
+current-context: context-cywezdcmizd
+
+
+
+
+
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+				kubeconfig-dev-gxpdt , this is with write access, others are read only
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+apiVersion: v1
+clusters:
+- cluster:
+    certificate-authority-data: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURqRENDQW5TZ0F3SUJBZ0lVTjRUMEhFN2lDOVAwZ0FnM2pyZHhiRWxudDlNd0RRWUpLb1pJaHZjTkFRRUwKQlFBd1hqRUxNQWtHQTFVRUJoTUNWVk14RGpBTUJnTlZCQWdUQlZSbGVHRnpNUTh3RFFZRFZRUUhFd1pCZFhOMAphVzR4RHpBTkJnTlZCQW9UQms5eVlXTnNaVEVNTUFvR0ExVUVDeE1EVDBSWU1ROHdEUVlEVlFRREV3WkxPRk1nClEwRXdIaGNOTVRrd05URXdNREEwT1RBd1doY05NalF3TlRBNE1EQTBPVEF3V2pCZU1Rc3dDUVlEVlFRR0V3SlYKVXpFT01Bd0dBMVVFQ0JNRlZHVjRZWE14RHpBTkJnTlZCQWNUQmtGMWMzUnBiakVQTUEwR0ExVUVDaE1HVDNKaApZMnhsTVF3d0NnWURWUVFMRXdOUFJGZ3hEekFOQmdOVkJBTVRCa3M0VXlCRFFUQ0NBU0l3RFFZSktvWklodmNOCkFRRUJCUUFEZ2dFUEFEQ0NBUW9DZ2dFQkFMT3B6MFZubjVwM0orRUpTK1k3TTkycmNwMkMxa3pucXAwdEZZN00KUWhxaXlDY3dFQ2NDK2JzYVFKVHRuY2V3VkEwdSt5S3dUYUlML3pqeWVaeWduRFJqUUpnMDZBQnJQYkJ4MTdzZAozMFI5TE12Q1BhY3NjNm81SmF1NWEzYVErL1RHV3czUk9WeWlJaG00OXI1MjB4YkNOQlRRY3dnYjZDemwzQnJZClEyaUd0MW5RQ2NHZFIxUlpQcmxIaEVVb05qMzJBZHN4eVJyQ3c5Nk1JVWFRYjNzOUVXVXQ0ZTJLRmVOWDFTSE8KSDdZQkZDd1NibkFnSGlGK2hKeHRhUW9UV28zNDlzZjFaQ2lDR2dZQUxMODdKWkozMkkxeXo5ZnlVemEwckFMbwpGVkZjSkVIVnZwTVNxbHdSWWZuZVNNQ21hZ2t0VW9tRENjODJvUndHZ3IrQktQTUNBd0VBQWFOQ01FQXdEZ1lEClZSMFBBUUgvQkFRREFnRUdNQThHQTFVZEV3RUIvd1FGTUFNQkFmOHdIUVlEVlIwT0JCWUVGRm1nQlkrYjJ6eEoKUnBDT2RsZXl0Mk1LMlhGbE1BMEdDU3FHU0liM0RRRUJDd1VBQTRJQkFRQ3hlWUlSMS9UeXFJS3FvWVl3d25LTwpuT1MzaXRQeWVkU2ZxRmtGTFdBR2UxMFo3cXQzOWZKVDdtRUpoMnk1bGlyY3dCTkVjL25LdG1VZGdUZnZMTlBTCjFKQllyTU01L0FoU0dVaUJKNDFRNWI5Z0xHUEsrRHVYYlcxZmwrSXlJTlBqOFBQT2tzbnkrMklxaEM4SnFrdGoKOGlxVVI1ZVdRZzE0N2xsbGNBa205d1cwKzRPekdJNWk5Z1lYZ0NPaERtQmxoUHdXMG8xOGdOemRVYk5zTEpUVwpGR21yYW5hMjdiVkY4MG01Zm9SNzgrdkdHVXlUdzdZbFNkZE55U3pCOVl3aDU2Yk45UStOd1pIQ2dkWjlTS05BCm40OGwzU1pKUGZoblphWjlnWXVBSU85aVZtUzQvNEsxa2FtbDhvZ3VOanBzVDhlaGhLM0xkemgyaisvaTI3Z2EKLS0tLS1FTkQgQ0VSVElGSUNBVEUtLS0tLQo=
+    server: https://cywezdcmizd.us-ashburn-1.clusters.oci.oraclecloud.com:6443
+  name: cluster-cywezdcmizd
+contexts:
+- context:
+    cluster: cluster-cywezdcmizd
+    namespace: oic-ms-gxpdt
+    user: oic-ms-gxpdt-user
+  name: oic-ms-gxpdt-context
+current-context: oic-ms-gxpdt-context
+kind: Config
+preferences: {}
+users:
+- name: oic-ms-gxpdt-user
+  user:
+    token: eyJhbGciOiJSUzI1NiIsImtpZCI6Im9Cd1pES2NxQmUteWQ3aDkzR2xIRUgwUnNFcHhHMlJ5ZWhLZlZRTmJ2TW8ifQ.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW50Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9uYW1lc3BhY2UiOiJvaWMtbXMtZ3hwZHQiLCJrdWJlcm5ldGVzLmlvL3NlcnZpY2VhY2NvdW50L3NlY3JldC5uYW1lIjoib2ljLW1zLWd4cGR0LXVzZXItdG9rZW4tYno3aG4iLCJrdWJlcm5ldGVzLmlvL3NlcnZpY2VhY2NvdW50L3NlcnZpY2UtYWNjb3VudC5uYW1lIjoib2ljLW1zLWd4cGR0LXVzZXIiLCJrdWJlcm5ldGVzLmlvL3NlcnZpY2VhY2NvdW50L3NlcnZpY2UtYWNjb3VudC51aWQiOiJkZDc4MjkxYy05NjRmLTQ5OGUtYTU5Zi0xMGQzZjJhYTRiNmEiLCJzdWIiOiJzeXN0ZW06c2VydmljZWFjY291bnQ6b2ljLW1zLWd4cGR0Om9pYy1tcy1neHBkdC11c2VyIn0.O01TRlK9KVnCfPIiWzJ1gtdMh7BA_VKbImrJ7KbX56_3ePqces5gOoTtS44PScZ6GyzOxpKLJUJczWvt8hohTgwbjZ3abs10UsqdIiok-scjxTo_zBM6T1H5v-HV-O5-a5PBMYudwZlmZN9Mh4f5Pmz6UnP2i67MsLPz2B9TDo-HdLKgNo1h6mh7JlsdQUOLyef5rK15nZa5nsBQ0ZEaI9FAQwPRNlXjuAsd7czMjGpbWNlkMi0S8Exwtv00hK9nqi0zeFXVdzQ0cb-giH-BpV_i3uLJw22d88ID_GlVSsLpKVFHN_P7GY7DpVGXFVX31YkyNi2e1ZTD_rS89Cf06w
+
+
+
+
+
+
+
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+				kubeconfig-uat
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+apiVersion: v1
+kind: Config
+preferences: {}
+
+# Define the cluster
+clusters:
+- cluster:
+    certificate-authority-data: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURqRENDQW5TZ0F3SUJBZ0lVSlpmeEtmSlJMeUhxVW1KUFJUS0h3NlNDUUxNd0RRWUpLb1pJaHZjTkFRRUwKQlFBd1hqRUxNQWtHQTFVRUJoTUNWVk14RGpBTUJnTlZCQWdUQlZSbGVHRnpNUTh3RFFZRFZRUUhFd1pCZFhOMAphVzR4RHpBTkJnTlZCQW9UQms5eVlXTnNaVEVNTUFvR0ExVUVDeE1EVDBSWU1ROHdEUVlEVlFRREV3WkxPRk1nClEwRXdIaGNOTWpBd01UTXhNakExT0RBd1doY05NalV3TVRJNU1qQTFPREF3V2pCZU1Rc3dDUVlEVlFRR0V3SlYKVXpFT01Bd0dBMVVFQ0JNRlZHVjRZWE14RHpBTkJnTlZCQWNUQmtGMWMzUnBiakVQTUEwR0ExVUVDaE1HVDNKaApZMnhsTVF3d0NnWURWUVFMRXdOUFJGZ3hEekFOQmdOVkJBTVRCa3M0VXlCRFFUQ0NBU0l3RFFZSktvWklodmNOCkFRRUJCUUFEZ2dFUEFEQ0NBUW9DZ2dFQkFOcTNMcEgrTDkyVjVFbDF5dnY2aWhBVlpTZHNPUURCTTd6Zm5qT3QKb3FjQ2ZWbEZReWZZUkV3MktvY1BTbkhVdFZVcmlYdENwVHhCMGxlNkhUTGphRDFFRWtTUlVMTnJabU1sbExEMwo0d3hzbHh6bG1IZkEvYjZsd2NmNXRSaFpTdk9wOGpnKy9lQ3dSYW1LNEJhTkw2Sm9hWXhKK2RLb0I5MklwNWJPCjdFQ09sZzlwL0FDemhNYjh6K1BQd0F3TGR3YW9DOW9iSVVXdUVPVWViN3NaL3doemp6TS81NnlSZjJjNHR4d1IKSXBWOGFnNHp2d2tjcDJidEdldmtyZ0lVNzkxWCtYK1pWa3lLNTR2Vm1NZVhoOFdYZEdLN2p5WXRvRnBXWFh5UwpsaHdUaFFSTmtFSjNudEdkOUlBVGpKbVRtdTNqRnFiNFIrVnVHVDhLWWZZZ0svMENBd0VBQWFOQ01FQXdEZ1lEClZSMFBBUUgvQkFRREFnRUdNQThHQTFVZEV3RUIvd1FGTUFNQkFmOHdIUVlEVlIwT0JCWUVGTXZPOFFjRnArTmUKZFQvY0pnaEdqVDZld2RiK01BMEdDU3FHU0liM0RRRUJDd1VBQTRJQkFRQjBTT05lZGlqbGE0MllXYkRDMzFWeQpIZHZUY3NDSVl0ZklqNEVUKzFLaDE3RkNsTWRhQzlOWG1icWxBNUdLSkpwbFdsM2xYY1VSNUN6YzBXSGJ4eVlJCk5nVGNwTms5VkxST0JEU204R1Jod3hkbWhmVXRyWkkza2hrZnp2WDZwek96RWJTdFZzR09PYXdpWkcyUjNMaEwKMHFzdndjZkxZMCtlSnp2MzBaa0FQY2V5cUduS3Bsc2RKZFN0Z3dBWEhPQW1KY1dDM2JXNGZUMnJucStZVGR3LwpHcW5sS3dnNmFyUnF2emsrS05wNllNQy9UMmgzUkFFSmczNmx5ZURSZFBuYWVucUJZMmhIUVBYK2ROSkd4VFB1CjRNb3d6TjBqUUJIQUZFVXJtT3o4dWtueitCVFMwL3JFSDFrc0ZZYmgzRGVVeVdzb2h1NmlxS0w5ZFRWWmFxb1MKLS0tLS1FTkQgQ0VSVElGSUNBVEUtLS0tLQo=
+
+    server: https://138.1.49.144:6443
+  name: cluster-c2gcy3emuzd
+
+# Define the user
+users:
+- name: oal-readonly-sa
+  user:
+    as-user-extra: {}
+    client-key-data: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURqRENDQW5TZ0F3SUJBZ0lVSlpmeEtmSlJMeUhxVW1KUFJUS0h3NlNDUUxNd0RRWUpLb1pJaHZjTkFRRUwKQlFBd1hqRUxNQWtHQTFVRUJoTUNWVk14RGpBTUJnTlZCQWdUQlZSbGVHRnpNUTh3RFFZRFZRUUhFd1pCZFhOMAphVzR4RHpBTkJnTlZCQW9UQms5eVlXTnNaVEVNTUFvR0ExVUVDeE1EVDBSWU1ROHdEUVlEVlFRREV3WkxPRk1nClEwRXdIaGNOTWpBd01UTXhNakExT0RBd1doY05NalV3TVRJNU1qQTFPREF3V2pCZU1Rc3dDUVlEVlFRR0V3SlYKVXpFT01Bd0dBMVVFQ0JNRlZHVjRZWE14RHpBTkJnTlZCQWNUQmtGMWMzUnBiakVQTUEwR0ExVUVDaE1HVDNKaApZMnhsTVF3d0NnWURWUVFMRXdOUFJGZ3hEekFOQmdOVkJBTVRCa3M0VXlCRFFUQ0NBU0l3RFFZSktvWklodmNOCkFRRUJCUUFEZ2dFUEFEQ0NBUW9DZ2dFQkFOcTNMcEgrTDkyVjVFbDF5dnY2aWhBVlpTZHNPUURCTTd6Zm5qT3QKb3FjQ2ZWbEZReWZZUkV3MktvY1BTbkhVdFZVcmlYdENwVHhCMGxlNkhUTGphRDFFRWtTUlVMTnJabU1sbExEMwo0d3hzbHh6bG1IZkEvYjZsd2NmNXRSaFpTdk9wOGpnKy9lQ3dSYW1LNEJhTkw2Sm9hWXhKK2RLb0I5MklwNWJPCjdFQ09sZzlwL0FDemhNYjh6K1BQd0F3TGR3YW9DOW9iSVVXdUVPVWViN3NaL3doemp6TS81NnlSZjJjNHR4d1IKSXBWOGFnNHp2d2tjcDJidEdldmtyZ0lVNzkxWCtYK1pWa3lLNTR2Vm1NZVhoOFdYZEdLN2p5WXRvRnBXWFh5UwpsaHdUaFFSTmtFSjNudEdkOUlBVGpKbVRtdTNqRnFiNFIrVnVHVDhLWWZZZ0svMENBd0VBQWFOQ01FQXdEZ1lEClZSMFBBUUgvQkFRREFnRUdNQThHQTFVZEV3RUIvd1FGTUFNQkFmOHdIUVlEVlIwT0JCWUVGTXZPOFFjRnArTmUKZFQvY0pnaEdqVDZld2RiK01BMEdDU3FHU0liM0RRRUJDd1VBQTRJQkFRQjBTT05lZGlqbGE0MllXYkRDMzFWeQpIZHZUY3NDSVl0ZklqNEVUKzFLaDE3RkNsTWRhQzlOWG1icWxBNUdLSkpwbFdsM2xYY1VSNUN6YzBXSGJ4eVlJCk5nVGNwTms5VkxST0JEU204R1Jod3hkbWhmVXRyWkkza2hrZnp2WDZwek96RWJTdFZzR09PYXdpWkcyUjNMaEwKMHFzdndjZkxZMCtlSnp2MzBaa0FQY2V5cUduS3Bsc2RKZFN0Z3dBWEhPQW1KY1dDM2JXNGZUMnJucStZVGR3LwpHcW5sS3dnNmFyUnF2emsrS05wNllNQy9UMmgzUkFFSmczNmx5ZURSZFBuYWVucUJZMmhIUVBYK2ROSkd4VFB1CjRNb3d6TjBqUUJIQUZFVXJtT3o4dWtueitCVFMwL3JFSDFrc0ZZYmgzRGVVeVdzb2h1NmlxS0w5ZFRWWmFxb1MKLS0tLS1FTkQgQ0VSVElGSUNBVEUtLS0tLQo=
+    token: eyJhbGciOiJSUzI1NiIsImtpZCI6IiJ9.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW50Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9uYW1lc3BhY2UiOiJkZWZhdWx0Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZWNyZXQubmFtZSI6Im9hbC1yZWFkb25seS1zYS10b2tlbi1obXIyZyIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VydmljZS1hY2NvdW50Lm5hbWUiOiJvYWwtcmVhZG9ubHktc2EiLCJrdWJlcm5ldGVzLmlvL3NlcnZpY2VhY2NvdW50L3NlcnZpY2UtYWNjb3VudC51aWQiOiI0OTMxYzU1MS02ODE0LTExZWEtYmQ5Yy0wYTU4MGFlZGZjNGMiLCJzdWIiOiJzeXN0ZW06c2VydmljZWFjY291bnQ6ZGVmYXVsdDpvYWwtcmVhZG9ubHktc2EifQ.Ny852-knO_8RWlfQQHXB6Bzm7N07c0_eceVX-UUiIi2QAFiyMYD4953EKhxE0I6nRYlYSOhqTvC1vC4iXMmZC8PaI4QswnaYV5uLpKCIvJRDjujiEmxcD25bRkr-Ce_N4wzUJ3llhHm9nlkxuLimenbivm8lN1EMWrrutGQHlmWhXpV1qVrH6h2x1HG0QSfWFh1KMtqvdeTXfWP7gVKqntOdTbi71B5vkYavSOa8gMj3s3Oy048U_dItRlemSAb1Rk6fJW4JmoaEblD73BYgUQ0Uog3mbzPjKuIUufWJS0nnXQ7lKgnmY-GzSvEc4-WNBZNHgx-REiKIt4MEk93uxQ
+# Define the context: linking a user to a cluster
+contexts:
+- context:
+    cluster: cluster-c2gcy3emuzd
+    #namespace: <<testns>>
+    user: oal-readonly-sa
+  name: context-c2gcy3emuzd
+
+# Define current context
+current-context: context-c2gcy3emuzd
+
+
+
+
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+				kubeconfig-prod
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+apiVersion: v1
+kind: Config
+preferences: {}
+
+# Define the cluster
+clusters:
+- cluster:
+    certificate-authority-data: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURqRENDQW5TZ0F3SUJBZ0lVVktnS2svMHRFVWxXUnJ1U29TSkFXR0tEN3Rrd0RRWUpLb1pJaHZjTkFRRUwKQlFBd1hqRUxNQWtHQTFVRUJoTUNWVk14RGpBTUJnTlZCQWdUQlZSbGVHRnpNUTh3RFFZRFZRUUhFd1pCZFhOMAphVzR4RHpBTkJnTlZCQW9UQms5eVlXTnNaVEVNTUFvR0ExVUVDeE1EVDBSWU1ROHdEUVlEVlFRREV3WkxPRk1nClEwRXdIaGNOTVRrd09EQXhNakF4T1RBd1doY05NalF3TnpNd01qQXhPVEF3V2pCZU1Rc3dDUVlEVlFRR0V3SlYKVXpFT01Bd0dBMVVFQ0JNRlZHVjRZWE14RHpBTkJnTlZCQWNUQmtGMWMzUnBiakVQTUEwR0ExVUVDaE1HVDNKaApZMnhsTVF3d0NnWURWUVFMRXdOUFJGZ3hEekFOQmdOVkJBTVRCa3M0VXlCRFFUQ0NBU0l3RFFZSktvWklodmNOCkFRRUJCUUFEZ2dFUEFEQ0NBUW9DZ2dFQkFLbDhIQUlhYTFiM3RDeERDMENVVi9LanZmQ1hmV1E4V0ZCdzNrcTMKSUZQNDZMMFRBRWNWNEgvUDNxU1RVWTFMM24xT0txT2NEeFhkbUxpUnJJQ1hqc2Q5eUlEQnJkakNRYUt5YXNtTAppbmxtd3B6RjNYdGJIL0ZFaFdYZ2FIOTlQM2p4Z0tEbWE0QlNXckVSNytWeGdMZkk1MDI4M1pyVnMzYTdBMk9ICmFocEpSbXBPbmxaNzJpUXB3QmRxS0VSekU2M3dKd2swb2h4MFJpcVdwdUhwZ1VHeWFXNkZvaXBrYUQrTFB0MHAKY1lLZjY0Z0pKSlRLYlN3L0hDdElqdGxVclkwcE1BWFAwR005RGttUzV0Tk0xN1hjSk91NmVDVGhkZkxsZkFvLwpCdTl0bjllN25CMlVpS2l0RTl5aWx3NWdESmh2YjJnMWxaZmkyditLWmtKWUVNOENBd0VBQWFOQ01FQXdEZ1lEClZSMFBBUUgvQkFRREFnRUdNQThHQTFVZEV3RUIvd1FGTUFNQkFmOHdIUVlEVlIwT0JCWUVGQ21TWHhvU04zWXMKTVNSQ0lqNDFjVVIyNnFxUk1BMEdDU3FHU0liM0RRRUJDd1VBQTRJQkFRQkxxV2h0YXIrSWRlNjJKZWxpcmJCdQppTEV2UTNIb0VPQiszcXB6Si9ET0xHd2lVQkhseE5OOVlrU0wvQmJ5RFFwUzJTcXZKT0RSd2R0RGtkSURqRFl1CnBnYzVMb1E2UFZadXVXUldhMll5WCt2SmVTcjhqL1VFb2VmNGFIQ0JtT1h3TlB5ZitoYm84TU5Wa295YWdyalAKRjlRNWVlZHdPa0I2TXNGTjZEMmlKbGFmdER3UzVSWFdPaWhTa0MwUjV0Ui9qeVl4NmQ5eHVYMGppU0pTMitWdQovNlQ5eHQyTWZtall4MVRQOGFDUDdpT0g1MSsyYUxDQk9MVnlNckRDMUVzOTk4OFlOV2NFVldsemh1T0JMN0o4Ckt6VGJPWVU2eGFDeDNJYXF4QUtSUnY4ckRobUJWeXl5ZG1YYU4xT0pyYnlOc2JDUDNoZGpicTZZOUs0TU9kT2YKLS0tLS1FTkQgQ0VSVElGSUNBVEUtLS0tLQo=
+    server: https://c4gezdegezt.us-ashburn-1.clusters.oci.oraclecloud.com:6443
+  name: cluster-c4gezdegezt
+
+# Define the user
+users:
+- name: gxp-prod-sa
+  user:
+    as-user-extra: {}
+    client-key-data: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURqRENDQW5TZ0F3SUJBZ0lVVktnS2svMHRFVWxXUnJ1U29TSkFXR0tEN3Rrd0RRWUpLb1pJaHZjTkFRRUwKQlFBd1hqRUxNQWtHQTFVRUJoTUNWVk14RGpBTUJnTlZCQWdUQlZSbGVHRnpNUTh3RFFZRFZRUUhFd1pCZFhOMAphVzR4RHpBTkJnTlZCQW9UQms5eVlXTnNaVEVNTUFvR0ExVUVDeE1EVDBSWU1ROHdEUVlEVlFRREV3WkxPRk1nClEwRXdIaGNOTVRrd09EQXhNakF4T1RBd1doY05NalF3TnpNd01qQXhPVEF3V2pCZU1Rc3dDUVlEVlFRR0V3SlYKVXpFT01Bd0dBMVVFQ0JNRlZHVjRZWE14RHpBTkJnTlZCQWNUQmtGMWMzUnBiakVQTUEwR0ExVUVDaE1HVDNKaApZMnhsTVF3d0NnWURWUVFMRXdOUFJGZ3hEekFOQmdOVkJBTVRCa3M0VXlCRFFUQ0NBU0l3RFFZSktvWklodmNOCkFRRUJCUUFEZ2dFUEFEQ0NBUW9DZ2dFQkFLbDhIQUlhYTFiM3RDeERDMENVVi9LanZmQ1hmV1E4V0ZCdzNrcTMKSUZQNDZMMFRBRWNWNEgvUDNxU1RVWTFMM24xT0txT2NEeFhkbUxpUnJJQ1hqc2Q5eUlEQnJkakNRYUt5YXNtTAppbmxtd3B6RjNYdGJIL0ZFaFdYZ2FIOTlQM2p4Z0tEbWE0QlNXckVSNytWeGdMZkk1MDI4M1pyVnMzYTdBMk9ICmFocEpSbXBPbmxaNzJpUXB3QmRxS0VSekU2M3dKd2swb2h4MFJpcVdwdUhwZ1VHeWFXNkZvaXBrYUQrTFB0MHAKY1lLZjY0Z0pKSlRLYlN3L0hDdElqdGxVclkwcE1BWFAwR005RGttUzV0Tk0xN1hjSk91NmVDVGhkZkxsZkFvLwpCdTl0bjllN25CMlVpS2l0RTl5aWx3NWdESmh2YjJnMWxaZmkyditLWmtKWUVNOENBd0VBQWFOQ01FQXdEZ1lEClZSMFBBUUgvQkFRREFnRUdNQThHQTFVZEV3RUIvd1FGTUFNQkFmOHdIUVlEVlIwT0JCWUVGQ21TWHhvU04zWXMKTVNSQ0lqNDFjVVIyNnFxUk1BMEdDU3FHU0liM0RRRUJDd1VBQTRJQkFRQkxxV2h0YXIrSWRlNjJKZWxpcmJCdQppTEV2UTNIb0VPQiszcXB6Si9ET0xHd2lVQkhseE5OOVlrU0wvQmJ5RFFwUzJTcXZKT0RSd2R0RGtkSURqRFl1CnBnYzVMb1E2UFZadXVXUldhMll5WCt2SmVTcjhqL1VFb2VmNGFIQ0JtT1h3TlB5ZitoYm84TU5Wa295YWdyalAKRjlRNWVlZHdPa0I2TXNGTjZEMmlKbGFmdER3UzVSWFdPaWhTa0MwUjV0Ui9qeVl4NmQ5eHVYMGppU0pTMitWdQovNlQ5eHQyTWZtall4MVRQOGFDUDdpT0g1MSsyYUxDQk9MVnlNckRDMUVzOTk4OFlOV2NFVldsemh1T0JMN0o4Ckt6VGJPWVU2eGFDeDNJYXF4QUtSUnY4ckRobUJWeXl5ZG1YYU4xT0pyYnlOc2JDUDNoZGpicTZZOUs0TU9kT2YKLS0tLS1FTkQgQ0VSVElGSUNBVEUtLS0tLQo=
+    token: eyJhbGciOiJSUzI1NiIsImtpZCI6IiJ9.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW50Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9uYW1lc3BhY2UiOiJkZWZhdWx0Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZWNyZXQubmFtZSI6Imd4cC1wcm9kLXNhLXRva2VuLW05NDhrIiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZXJ2aWNlLWFjY291bnQubmFtZSI6Imd4cC1wcm9kLXNhIiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZXJ2aWNlLWFjY291bnQudWlkIjoiZjhjMzE0MGQtMjMzMi0xMWVhLThhZGUtMGE1ODBhZWRhZTcyIiwic3ViIjoic3lzdGVtOnNlcnZpY2VhY2NvdW50OmRlZmF1bHQ6Z3hwLXByb2Qtc2EifQ.u9nmc3x2n___Kd9QkM9Tv57ycz9fN8ne1VcC_IcPnq2mqG8sVPL0-nTNIDgoorpBbvIOsZNT_XKlpFDfnMzWYz_dtBDksn1jzxCJhygJ5TYLyIsGSI9hAgYZQdH1ot3XZntD1qvKtrXCNpIfKdDhO1EXln2ixrWCzJ8f_6Xz8f-jcJ6jFuZfDGJtnRT5eFH7AcQD_yYi9dUg_7dHwIJLUANhCN48YJp6_zIGwCtcUN2bY-OkIA7D67b4iwjSMhXDJonrzszGeJhX9ZpZp3bnMa6aTIUWsttmOpGAjiOccplRmmFMDjJrVCt-avCZUlRegDYzxO2P3_aoS772WUfTJg
+    # Define the context: linking a user to a cluster
+contexts:
+- context:
+    cluster: cluster-c4gezdegezt
+    #namespace: <<testns>>
+    user: gxp-prod-sa
+  name: context-c4gezdegezt
+
+# Define current context
+current-context: context-c4gezdegezt

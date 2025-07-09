@@ -1,0 +1,624 @@
+solid principles
+kafka duplicate messages
+spring
+spring boot
+java
+Microservices
+Hibernate 
+dml vs ddl
+truncate vs delete vs drop
+rank, order by salary problem
+bean vs autowired
+service vs component
+configuration
+@RestController vs @Controller
+spring boot security
+
+
+
+
+
+
+What annotations are used to create an Interceptor?
+A prominent functionality of Spring Boot, Interceptor uses the annotated class @Component, and it implements the interface HandlerInterceptor.
+
+The interface contains 3 main methods, which are:preHandle(), postHandle(), afterExecution()
+
+The preHandle() Method − preHandle() is used for intercepting the request prior to the implementation of the handler. If preHandle() returns a “true” boolean value, developers can continue with handler execution. If preHandle() returns a “false” boolean value, developers should stop the handler execution. 
+
+@Override
+    public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o) throws Exception {
+        logger.info(" Pre handle ");
+        if(httpServletRequest.getMethod().equals("GET"))
+            return true;
+        else
+            return false;
+    }
+	
+	
+The postHandle() Method − postHandle() is used for intercepting a request following the implementation of the handler. It allows the manipulation of the ModelAndView Object before users render it.
+
+postHandle() implementation looks like:
+
+@Override
+    public void postHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o, ModelAndView modelAndView) throws Exception {
+        logger.info(" Post handle ");
+        if(modelAndView.getModelMap().containsKey("status")){
+            String status = (String) modelAndView.getModelMap().get("status");
+            if(status.equals("SUCCESS!")){
+                status = "Authentication " + status;
+                modelAndView.getModelMap().put("status",status);
+            }
+        }
+    }
+	
+	
+The afterCompletion() Method − A HandlerInterceptor callback approach, the afterCompletion() method is used when the entire request gets completed.
+
+afterCompletion() looks like:
+
+@Override
+    public void afterCompletion(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o, Exception e) throws Exception {
+        logger.info(" After Completion ");
+    }
+}
+
+
+
+What are Profiles in Spring Boot?
+Profiles in the Spring framework enables users to map components and beans to specific profiles, such as the Development (dev) profile, Production (prod) profile, or the Test profile. 
+In Spring Boot, the annotation @Profile is used to map components and beans to a certain profile. 
+Developers can also set up profiles using the SpringApplication, for instance, SpringApplication.setAdditionalProfiles("dev");
+
+
+What differentiates Spring Data JPA and Hibernate?
+A Java Persistence API (JPA) implementation, Hibernate facilitates Object-Relational Mapping (ORM), allowing users to store, retrieve, map, and update application data to and from Java objects and relational databases. Hibernate maps the data types in Java to SQL (Structured Query Language) data types, and the classes in java to the database tables, relieving developers from scripting data persistence SQL programs. 
+A Spring Data sub-project, Spring Data JPA, on the other hand, gives abstraction over the DAL (Data Access Layer) applying JPA and Object–Relational Mapping implementations, such as Hibernate. Spring Data JPA facilitates the smooth implementation of JPA repositories, and it intends to improve the overall implementation of DAL to a great extent.
+
+Hibernate is a JPA implementation, while Spring Data JPA is a JPA data access abstraction. Spring Data JPA cannot work without a JPA provider.
+Spring Data offers a solution to the DDD Repository pattern or the legacy GenericDao custom implementations. It can also generate JPA queries on your behalf through method name conventions.
+With Spring Data, you may use Hibernate, EclipseLink, or any other JPA provider. A very interesting benefit of using Spring or Java EE is that you can control transaction boundaries declaratively using the @Transactional annotation.
+Spring JDBC is much more lightweight, and it's intended for native querying, and if you only intend to use JDBC alone, then you are better off using Spring JDBC to deal with the JDBC verbosity.
+Therefore, Hibernate and Spring Data are complementary rather than competitors.
+
+There are 3 different things we are using here :
+
+JPA : Java persistence api which provide specification for persisting, reading, managing data from your java object to relations in database.
+Hibernate: There are various provider which implement jpa. Hibernate is one of them. So we have other provider as well. But if using jpa with spring it allows you to switch to different providers in future.
+Spring Data JPA : This is another layer on top of jpa which spring provide to make your life easy.
+
+
+
+
+
+@RestController vs @Controller
+The @RestController annotation in Spring MVC is nothing but a combination of the @Controller and the @ResponseBody annotation. It was added into Spring 4.0 to make the development of RESTful Web Services in Spring framework easier.
+the fundamental difference between a web application and a REST API is that the response from a web application is a generally view of HTML + CSS + JavaScript while REST API just return data in form of JSON or XML. This difference is also obvious in the @Controller and the @RestController annotation. The job of the @Controller is to create a Map of model object and find a view but the @RestController simply returns the object and object data is directly written into HTTP response as JSON or XML.
+This can also be done with the traditional @Controller and the use of the @ResponseBody annotation but since this is the default behavior of RESTful Web services, Spring introduced @RestController which combined the behavior of @Controller and @ResponseBody together.
+
+The @RestController annotation in Spring MVC is nothing but a combination of the @Controller and the @ResponseBody annotation. It was added into Spring 4.0 to make the development of RESTful Web Services in Spring framework easier. If you are familiar with the REST web services you know that the fundamental difference between a web application and a REST API is that the response from a web application is a generally view of HTML + CSS + JavaScript while REST API just return data in form of JSON or XML. This difference is also obvious in the @Controller and the @RestController annotation. The job of the @Controller is to create a Map of model object and find a view but the @RestController simply returns the object and object data is directly written into HTTP response as JSON or XML.
+
+This can also be done with the traditional @Controller and the use of the @ResponseBody annotation but since this is the default behavior of RESTful Web services, Spring introduced @RestController which combined the behavior of @Controller and @ResponseBody together.
+
+In short, the following two code snippets are equal in Spring MVC:
+
+@Controller
+@ResponseBody
+public class MVCController { 
+   .. your logic
+}
+
+@RestController
+public class RestFulController { 
+  .... your logic
+}
+
+@Controller is used to mark classes as Spring MVC Controller.	@RestController annotation is a special controller used in RESTful Web services, and it’s the combination of @Controller and @ResponseBody annotation.
+In @Controller, we can return a view in Spring Web MVC.	In @RestController, we can not return a view.
+In @Controller, we need to use @ResponseBody on every handler method.	In @RestController, we don’t need to use @ResponseBody on every handler method.
+
+
+
+
+
+
+Below are the four key components of spring-boot:
+Spring Boot auto-configuration.
+Spring Boot CLI.
+Spring Boot starter POMs.
+Spring Boot Actuators.
+
+
+
+
+Why Spring Boot over Spring?
+Below are some key points which spring boot offers but spring doesn’t:
+Starter POM.
+Version Management.
+Auto Configuration.
+Component Scanning.
+Embedded server.
+InMemory DB.
+Actuators
+
+
+
+How does Spring Boot works?
+Spring Boot automatically configures your application based on the dependencies you have added to the project by using annotation. The entry point of the spring boot application is the class that contains @SpringBootApplication annotation and the main method.
+Spring Boot automatically scans all the components included in the project by using @ComponentScan annotation.
+\
+
+
+
+
+
+What does the @SpringBootApplication annotation do internally?
+The @SpringBootApplication annotation is equivalent to using @Configuration, @EnableAutoConfiguration, and @ComponentScan with their default attributes. Spring Boot enables the developer to use a single annotation instead of using multiple. But, as we know, Spring provided loosely coupled features that we can use for each annotation as per our project needs.
+
+
+
+
+How does a spring boot application get started?
+Just like any other Java program, a Spring Boot application must have a main method. This method serves as an entry point, which invokes the SpringApplication#run method to bootstrap the application.
+
+@SpringBootApplication 
+public class MyApplication { 
+   
+       public static void main(String[] args) {    
+    
+             SpringApplication.run(MyApplication.class);        
+               // other statements     
+       } 
+}
+
+
+
+
+
+
+What is Spring Initializer?
+Spring Initializer is a web application that helps you to create an initial spring boot project structure and provides a maven or gradle file to build your code. It solves the problem of setting up a framework when you are starting a project from scratch.
+
+
+
+
+
+What is Spring Boot CLI and what are its benefits?
+Spring Boot CLI is a command-line interface that allows you to create a spring-based java application using Groovy.
+
+Example: You don’t need to create getter and setter method or access modifier, return statement. If you use the JDBC template, it automatically loads for you.
+
+
+
+
+
+What are the most common Spring Boot CLI commands?
+-run, -test, -grap, -jar, -war, -install, -uninstall, --init, -shell, -help.
+
+
+
+
+What is Spring Boot dependency management?
+Spring Boot dependency management is used to manage dependencies and configuration automatically without you specifying the version for any of that dependencies.
+
+
+
+Can we create a non-web application in Spring Boot?
+Yes, we can create a non-web application by removing the web dependencies from the classpath along with changing the way Spring Boot creates the application context.
+
+
+
+Can we override or replace the Embedded tomcat server in Spring Boot?
+Yes, we can replace the Embedded Tomcat server with any server by using the Starter dependency in the pom.xml file. Like you can use spring-boot-starter-jetty as a dependency for using a jetty server in your project.
+
+
+
+Can we disable the default web server in the Spring boot application?
+Yes, we can use application.properties to configure the web application type i.e spring.main.web-application-type=none.
+
+
+
+How to disable a specific auto-configuration class?
+You can use exclude attribute of @EnableAutoConfiguration if you want auto-configuration not to apply to any specific class.
+
+//use of exclude
+@EnableAutoConfiguration(exclude={className})
+
+
+
+
+
+What is the difference between RequestMapping and GetMapping?
+RequestMapping can be used with GET, POST, PUT, and many other request methods using the method attribute on the annotation. Whereas getMapping is only an extension of RequestMapping which helps you to improve on clarity on request.
+
+@RequestMapping is on class and have common context for all methods exposed inside controller (/bgjobs)
+@getMapping -- is on method (value = "{id}")
+
+now over all apis endpoints */bgjobs/1234
+
+
+
+
+
+
+How to get the list of all the beans in your Spring boot application?
+Spring Boot actuator “/Beans” is used to get the list of all the spring beans in your application.
+
+
+
+30. How to check the environment properties in your Spring boot application?
+Spring Boot actuator “/env” returns the list of all the environment properties of running the spring boot application.
+
+
+31. How to enable debugging log in the spring boot application?
+Debugging logs can be enabled in three ways -
+
+We can start the application with --debug switch.
+We can set the logging.level.root=debug property in application.property file.
+We can set the logging level of the root logger to debug in the supplied logging configuration file
+by actuator, uisng post /loggers
+
+
+
+
+Where do we define properties in the Spring Boot application?
+You can define both application and Spring boot-related properties into a file called application.properties. You can create this file manually or use Spring Initializer to create this file. You don’t need to do any special configuration to instruct Spring Boot to load this file, If it exists in classpath then spring boot automatically loads it and configure itself and the application code accordingly.
+
+
+
+
+
+What is dependency Injection?
+The process of injecting dependent bean objects into target bean objects is called dependency injection.
+
+Setter Injection: The IOC container will inject the dependent bean object into the target bean object by calling the setter method.
+Constructor Injection: The IOC container will inject the dependent bean object into the target bean object by calling the target bean constructor.
+Field Injection: The IOC container will inject the dependent bean object into the target bean object by Reflection API.
+
+
+
+What is an IOC container?
+IoC Container is a framework for implementing automatic dependency injection. It manages object creation and its life-time and also injects dependencies into the class.
+
+
+
+What is Spring Initializer? why should you use it?
+One of the difficult things to start with a framework is initial setup, particularly if you are starting from scratch and you don't have a reference setup or project. Spring Initializer addresses this problem in Spring Boot.
+
+It's nothing but a web application which helps you to create initial Spring boot project structure and provides Maven or Gradle build file to build your code.
+
+
+Can you control logging with Spring Boot? How?
+Yes, we can control logging with Spring Boot by specifying log levels on application.properties file. Spring Boot loads this file when it exists in the classpath, and it can be used to configure both Spring Boot and application code.
+
+Spring Boot uses Commons Logging for all internal logging, and you can change log levels by adding the following lines in the application.properties file:
+
+logging.level.org.springframework=DEBUG
+logging.level.com.demo=INFO
+
+Read more: https://www.java67.com/2018/06/top-15-spring-boot-interview-questions-answers-java-jee-programmers.html#ixzz7ZJsPXIQb
+
+
+
+What is the Spring data repository? (answer)
+Answer: Spring data repository is a very important feature of JPA. It helps in reducing a lot of boilerplate code. Moreover, it decreases the chance of errors significantly. This is also the key abstraction that is provided using the Repository interface. It takes the domain class to manage as well as the id type of the domain class as Type Arguments.
+
+
+
+What is JPA?
+Answer: JPA stands for Java Persistence API. It is a Java specification used to persist data between the relational database and Java objects. It acts as a bridge between object-oriented domain models and relational databases.  Since interaction with database from Java application is very common, JPA was created to standardize this interaction. 
+
+There are many popular JPA implementations available in the Java world like Hibernate. You can further see these Spring Data JPA using Hibernate course to learn more about how to use Hibernate with Spring Data JPA in Java application. 
+
+
+Why is an interface not a class?
+Answer: Interface is not a class because it does not contain concrete methods. It can contain only abstract methods.
+
+
+
+
+Can we perform actual tasks like access, persist, and manage data with JPA?
+Answer: No, we can't because JPA is only a Java specification.
+
+Read more: https://www.java67.com/2021/01/spring-data-jpa-interview-questions-answers-java.html#ixzz7ZJtGU0sy
+
+
+
+
+How can we create a custom repository in Spring data JPA?
+Answer: To create a custom repository, we have to extend it to any of the following interfaces:
+a) Repository
+b) PagingAndSortingRepository
+c) CrudRepository
+d) JpaRepository
+e) QueryByExampleRepository
+
+Read more: https://www.java67.com/2021/01/spring-data-jpa-interview-questions-answers-java.html#ixzz7ZJtKmW9i
+
+
+
+What is @Query used for? (example)
+Answer:  Spring Data API provides many ways to define SQL query which can be executed and Query annotations one of them. The @Query is an annotation that is used to execute both JPQL and native SQL queries.
+
+Read more: https://www.java67.com/2021/01/spring-data-jpa-interview-questions-answers-java.html#ixzz7ZJtQum9o
+
+
+
+How can we enable Spring Data JPA features?
+Answer: To enable Spring data JPA features, first we have to define a configuration class and then, we can use @EnableJpaRepositoties annotation with it. This annotation will enable the features.
+
+Read more: https://www.java67.com/2021/01/spring-data-jpa-interview-questions-answers-java.html#ixzz7ZJtioRih
+
+
+
+
+
+Differentiate between findById() and getOne().
+Answer: The findById() is available in CrudRepository while getOne() is available in JpaRepository. The findById() returns null if record does not exist while the getOne() will throw an exception called EntityNotFoundException. 
+
+Read more: https://www.java67.com/2021/01/spring-data-jpa-interview-questions-answers-java.html#ixzz7ZJtrRIjq
+
+
+
+Are you able to participate in a given transaction in Spring while working with JPA?(https://teletype.in/@andrewgolovko/BNiIaZtg41t)
+Yes, JPA in Spring uses JpaTransactionManager, which supports cases when DataSource is used directly, so it allows mixing JPA and JDBC code under one transaction.
+
+When using Spring Framework on Java EE platform, it is possible to reuse existing transactions as well by using JtaTransactionManager, which will delegate transaction management to Java EE container.
+
+
+
+
+which PlatformTransactionManager(s) can you use with JPA?
+Usage of JpaTransactionManager in case of multiple Databases / Transactional Resources / Entity Managers will cause each transaction, span only one resource, this is why JtaTransactionManager is required in this case.
+
+JtaTransactionManager – recommended when working with multiple databases and Entity Managers, or when working with multiple databases and other transactional resources, for example one transaction needs to span Database and JMS Topic
+
+
+
+
+
+
+What do you have to configure to use JPA with Spring? How does Spring Boot make this easier?
+
+If we want to use JPA with MySQL database, we need the mysql-connector-java dependency. We'll also need to define the DataSource configuration.
+
+We can do this in a @Configuration class or by using standard Spring Boot properties.
+@Bean
+public DataSource dataSource() {
+    DriverManagerDataSource dataSource = new DriverManagerDataSource();
+
+    dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
+    dataSource.setUsername("mysqluser");
+    dataSource.setPassword("mysqlpass");
+    dataSource.setUrl(
+      "jdbc:mysql://localhost:3306/myDb?createDatabaseIfNotExist=true"); 
+    
+    return dataSource;
+}
+To configure the data source using a properties file, we have to set properties prefixed with spring.datasource:
+
+spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+spring.datasource.username=mysqluser
+spring.datasource.password=mysqlpass
+spring.datasource.url=
+  jdbc:mysql://localhost:3306/myDb?createDatabaseIfNotExist=true
+  
+Spring Boot will automatically configure a data source based on these properties.
+
+
+
+
+
+
+
+How are Spring Data repositories implemented by Spring at runtime
+by using @Repository
+
+
+
+
+@Component is a generic stereotype for any Spring-managed component.
+@Service annotates classes at the service layer.
+@Repository annotates classes at the persistence layer, which will act as a database repository.
+
+
+@Component
+We can use @Component across the application to mark the beans as Spring's managed components. Spring will only pick up and register beans with @Component, and doesn't look for @Service and @Repository in general.
+
+They are registered in ApplicationContext because they are annotated with @Component:
+
+
+@Service and @Repository are special cases of @Component. They are technically the same, but we use them for the different purposes.
+
+@Repository’s job is to catch persistence-specific exceptions and re-throw them as one of Spring’s unified unchecked exceptions.
+
+For this, Spring provides PersistenceExceptionTranslationPostProcessor, which we are required to add in our application context (already included if we're using Spring Boot):
+
+We mark beans with @Service to indicate that they're holding the business logic. Besides being used in the service layer, there isn't any other special use for this annotation.
+
+
+
+
+
+
+@Bean and @Autowired do two very different things. The other answers here explain in a little more detail, but at a simpler level:
+
+@Bean tells Spring 'here is an instance of this class, please keep hold of it and give it back to me when I ask'.
+
+@Autowired says 'please give me an instance of this class, for example, one that I created with an @Bean annotation earlier'.
+
+
+
+@Bean is an annotation based configuration and hence is used in @Configuration based class.
+This is an explicit way of defining a bean and is also used on the methods defined in configuration class.
+
+@Component
+
+This is used in classes which you create in your app. This will only work after you enable component scan on the package that contains your class.
+With component scan, Spring framework will scan the classpath and add all the classes that are marked with a @Component annotation.
+-This is also called the automated way of binding and discovering your bean.
+
+
+
+Difference between @Bean and @Autowired
+Scenario: We have a jar file which contains different services ex - Address check service, credit check service etc. This jar file is shared by many different applications/companies Ex - AT&T wants to use Address validator service while FICO wants to use only credit check service.
+
+If you use @Component on those service classes and use component scan in the application, then both AT&T and FICO applications will end up detecting credit check in case of AT&T and address validator in case of FICO. As a result, you would face one of the two problems -
+
+You will end up adjusting the filter on the component scan.
+In case you have classes sharing the same name by any chance then you would have to add qualifier otherwise application would complain that it found more than two classes were found with same bean name and will fail to run.
+Hence, in this scenario, you should use @Bean
+
+
+A simple way to decide between @Component and @Bean is that
+
+if you want to use third-party classes or jar then use @Bean.
+If you are writing your own classes for your application then use Component.
+If you want to use a third party class or jar that is not written using Spring Component then use @Bean.
+
+
+
+
+
+Difference between get() vs load() method in Hibernate? (detailed answer)
+This is one of the most frequently asked Hibernate interview questions, I have seen it several times. The key difference between the get() and load() method is that load() will throw an exception if an object with an id passed to them is not found, but get() will return null.
+
+Another important difference is that load can return proxy without hitting the database unless required (when you access any attribute other than id) but get() always go to the database, so sometimes using load() can be faster than the get() method.
+
+Use the load() method, if you know the object exists, and the get() method if you are not sure about the object's existence.
+
+Read more: https://www.java67.com/2016/02/top-20-hibernate-interview-questions.html#ixzz7ZJxHIdSg
+
+
+
+
+
+What is the N+1 SELECT problem in Hibernate? (detailed answer)
+The N+1 SELECT problem is a result of lazy loading and load-on-demand fetching strategy. In this case, Hibernate ends up executing N+1 SQL queries to populate a collection of N elements.
+
+For example, if you have a List of N Items where each Item has a dependency on a collection of Bid objects. Now if you want to find the highest bid for each item then Hibernate will fire 1 query to load all items and N subsequent queries to load Bid for each item.
+
+So in order to find the highest bid for each item your application ends up firing N+1 queries.  It's one of the important Hibernate interview questions and I suggest reading chapter 13 of Java Persistence with Hibernate to understand this problem in more detail.
+
+Read more: https://www.java67.com/2016/02/top-20-hibernate-interview-questions.html#ixzz7ZJxU2SsB
+
+
+
+
+What are some strategies to solve the N+1 SELECT problem in Hibernate? (detailed answer)
+This is the follow-up question of the previous Hibernate interview question. If you answer the last query correctly then you would be most likely asked this one.
+
+Here are some strategies to solve the N+1 problem:
+1) pre-fetching in batches, will reduce the N+1 problem to N/K + 1 problem where  K is the size of the batch
+2) subselect fetching strategy
+3) disabling lazy loading
+
+Read more: https://www.java67.com/2016/02/top-20-hibernate-interview-questions.html#ixzz7ZJxeEdvk
+
+
+
+
+What is the difference between the save() and persist() method in Hibernate? (detailed answer)
+The main difference between the save() and persist() method is that, save returns a Serializable object while the return type of the persist() method is void, so it doesn't return anything.
+
+Read more: https://www.java67.com/2016/02/top-20-hibernate-interview-questions.html#ixzz7ZJxiiP7d
+
+
+
+
+What is the requirement for a Java object to become a Hibernate entity object? (detailed answer)
+It should not be final and must provide a default, no-argument constructor
+
+
+What is the difference between the first and second-level cache in Hibernate? (detailed answer)
+This is again a follow-up to the previous Hibernate interview question. The first level cache is maintained at the Session level while the second level cache is maintained at a SessionFactory level and shared by all sessions. You can read these books to learn more about caching in Hibernate.
+
+
+
+Does Hibernate Session interface thread-safe in Java? (detailed answer)
+No, the Session object is not thread-safe in Hibernate and intended to be used within a single thread in the application.
+
+
+Does SessionFactory thread-safe in Hibernate? (detailed answer)
+SessionFactory is both Immutable and thread-safe and it has just one single instance in the Hibernate application. It is used to create a Session object and it also provides caching by storing SQL queries stored by multiple sessions.
+
+The second-level cache is maintained at the SessionFactory level. This can be a difficult and tricky question for less experienced Java developers who are not familiar with thread-safety and Immutability.
+
+
+Read more: https://www.java67.com/2016/02/top-20-hibernate-interview-questions.html#ixzz7ZJy7wGHZ
+
+
+
+
+
+
+
+What is the difference between Session and SessionFactory in Hibernate? (detailed answer)
+This is another popular Hibernate interview question, mostly at a telephonic round of interviews.
+
+The main difference between Session and SessionFactory is that the former is a single-threaded, short-lived object while the latter is Immutable and shared by all Session.
+
+It also lives until the Hibernate is running. Another difference between Session and SessionFactory is that the former provides first-level cache while SessionFactory provides the Second level cache.
+
+Read more: https://www.java67.com/2016/02/top-20-hibernate-interview-questions.html#ixzz7ZJyFfY40
+
+
+
+
+hat is the criterion query in hibernate? (detailed answer)
+Criteria is a simplified API for retrieving entities by composing Criterion objects also known as Criterion query.
+
+This is a very convenient approach for functionality like "search" screens where you can filter data on multiple conditions as shown in the following example:
+
+List books = session.createCriteria(Book.class)
+.add(Restrictions.like("name", "java%") )
+.add(Restrictions.like("published_year", "2015"))
+.addOrder(Order.asc("name") )
+.list();
+
+
+
+
+When do you use merge() and update() in Hibernate? (detailed answer)
+This is one of the tricky Hibernate interview questions. You should use update() if you are sure that the Hibernate session does not contain an already persistent instance with the same id and use merge() if you want to merge your modifications at any time without considering the state of the session
+
+
+
+How do you log SQL queries issued by the Hibernate framework in Java applications?
+You can use the show_sql property to log SQL queries issued by the Hibernate framework, Just add the following line in your Hibernate configuration file:
+
+<property name=”show_sql”> true </property>
+
+
+
+
+What are the three states of a Hibernate Persistence object can be? (detailed answer)
+The Hibernate persistent or entity object can live in the following three states:
+1) transient
+2) persistent
+3) detached
+
+Read more: https://www.java67.com/2016/02/top-20-hibernate-interview-questions.html#ixzz7ZJynEn9w
+
+
+
+
+New objects created in the Java program but not associated with any hibernate Session are said to be in the transient state.
+
+On the other hand, an object which is associated with a Hibernate session is called a Persistent object. While an object which was earlier associated with the Hibernate session but currently it's not associated is known as a detached object.
+
+You can call the save() or persist() method to store those objects into the database and bring them into the Persistent state. Similarly, you can re-attach a detached object to hibernate sessions by calling either the update() or saveOrUpdate() method.
+
+Read more: https://www.java67.com/2016/02/top-20-hibernate-interview-questions.html#ixzz7ZJyuWbzO
+
+
+
+
+Which cache is used by Session Object in Hibernate? First-level or second-level cache? (detailed answer)
+A Session object uses the first-level cache. As I told you before the second-level cache is used at the SessionFactory level. This is a good question to check if the Candidate has been working in hibernate or not. If he has not worked in Hibernate for a long time then he would get confused in this question.
+
+Read more: https://www.java67.com/2016/02/top-20-hibernate-interview-questions.html#ixzz7ZJz1AaXy
+
+
+
+

@@ -1,0 +1,22 @@
+
+connection to ET from local
+1. save below script as .sh and add valid oal key in same where the script is saved
+#GXPET ssh file. 
+#10.3.192.52:1521 --> DB(local port 7204)
+#10.3.160.65:7003 --> BIP(local port 7205)
+#10.3.160.67:7002 --> WLS(local port 7206)
+ssh -i oalkey.pem -L 7204:10.3.192.52:1521 -L 7205:10.3.160.65:7003 -L 7206:10.3.160.67:7002 oaluser@130.35.155.106
+
+
+2. run the script as below
+
+sh filename example: sh GXPET_ssh_script.sh
+
+
+3. local properties modify connection values as below 
+spring.datasource.url=jdbc:oracle:thin:@//localhost:7204/pgxpet.dpdbfront1.oal.oraclevcn.com
+spring.datasource.driver-class-name=oracle.jdbc.OracleDriver
+spring.datasource.username=OALGENERIC[OALCN]
+spring.datasource.password=TiVUcT0s5
+
+

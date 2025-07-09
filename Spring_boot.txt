@@ -1,0 +1,201 @@
+Spring boot with Restful
+
+
+flow:
+
+postman -- Controller-- Service -- Service Impl -- DAO -- Database and back to Postman
+
+1. spring boot has embeded tomcat
+2. Main class with @SpringBootApplication
+
+@SpringBootApplication (scanBasePackages={ "com.mds.*"})// make the complete application as Spring boot and scanBasePackages will scans for the components in the mentioned packages
+@MapperScan("com.mds.mapper.productprofile.") // path for the mybatis mapper interface, mybatis used for DB operations
+@EnableCaching // enables ehcache for the application
+public class MdsSpringBootApplication {
+	
+	@Autowired // auto wiring for the related beans to give the objects at run time
+	private Environment env; // Environment is already existing class in Spring which is used to get the values for JNDI etc.. sample given below
+	
+	public static void main(String[] args) {
+		SpringApplication.run(MdsSpringBootApplication.class, args);
+	}
+	
+}
+
+
+resource.setName(env.getProperty("db.jndiName"));
+				resource.setType(DataSource.class.getName());
+				resource.setProperty("driverClassName", env.getProperty("db.driverClassName"));
+				resource.setProperty("url", env.getProperty("db.url")); 
+				resource.setProperty("password", env.getProperty("db.password"));
+                resource.setProperty("username", env.getProperty("db.username"));
+				
+				
+In software engineering, dependency injection is a technique whereby one object (or static method) supplies the dependencies of another object. A dependency is an object that can be used (a service). An injection is the passing of a dependency to a dependent object (a client) that would use it. The service is made part of the client's state.[1] Passing the service to the client, rather than allowing a client to build or find the service, is the fundamental requirement of the pattern
+
+
+Controller
+------------
+
+@RestController // in built '@', which makes the complete class as the controller and this is the initial point for Rest flow
+public class ProductProfileController {
+
+	private final Logger logger = LoggerFactory.getLogger(this.getClass()); // loggers used for Debug, Error.. etc
+	@Autowired // The Spring container can autowire relationships between collaborating beans without using <constructor-arg> and <property> elements, DI
+	private ProductProfileService productProfileService;
+	@PostMapping(path = "/MDSProductProfile/LoanFinancialInformationSystem/cancelLoan", consumes = "application/json", produces = "application/json") // type of request is Post, and the path is the path given in the postman and consumes, produces are the type of data which accepts and produces by the service
+	apart from this @PostMapping, we can have other as @RequestMapping(method = RequestMethod.GET), here we need to mention explicitily the method type aswell
+	
+	
+    public ResponseEntity<HttpResponseFormat> cancelProfile(@RequestBody HttpRequestFormat httpRequestFormat) { // @requestbody is the request sent from the postman or UI to the service
+	}
+}
+
+
+@Service, @Controller
+Both are different specializations of @Component annotation
+@Service annotation is used in your service layer and annotates classes that perform service tasks, often you don't use it but in many case you use this annotation to represent a best practice. For example, you could directly call a DAO class to persist an object to your database but this is horrible. It is pretty good to call a service class that calls a DAO. This is a good thing to perform the separation of concerns pattern.
+
+@Controller annotation is an annotation used in Spring MVC framework (the component of Spring Framework used to implement Web Application). The @Controller annotation indicates that a particular class serves the role of a controller. The @Controller annotation acts as a stereotype for the annotated class, indicating its role. The dispatcher scans such annotated classes for mapped methods and detects @RequestMapping annotations
+
+@controller class handles all the HTTP Request toward "/path" and in particular the get method is the method called to handle all the GET HTTP Request toward the folder "/path"
+
+@Services hold business logic and call method in repository layer
+
+
+Service is as interface and it will have all the methods declarations of all the operations to be prefermed and this service is autowired in Controller
+ex: @Autowired // The Spring container can autowire relationships between collaborating beans without using <constructor-arg> and <property> elements, DI
+	private ProductProfileService productProfileService;
+ProductProfileService is service
+
+Service impl will have the business logic with the implementations of all methods of Interface/
+
+
+@Component is the most generic Spring annotation. A Java class decorated with @Component is found during classpath scanning and registered in the context as a Spring bean. @Service, @Repository, and @Controller are specializations of @Component, which are used for more specific cases.
+
+@ComponentScan ensures that the classes decorated with @Component are found and registered as Spring beans. @ComponentScan is automatically included with @SpringBootApplication.
+
+@Bean serves a similar purpose as @Component. It is not autodetected. Methods decorated with @Bean produce a bean to be managed by the Spring container during configuration stage.
+
+@Component // @Component is found during classpath scanning and registered in the context as a Spring bean 
+public class ProductProfileServiceImpl implements ProductProfileService {
+
+	private final Logger logger = LoggerFactory.getLogger(this.getClass());
+
+	@Autowired
+	ProductProfileDAO productProfileDAO; // DAO is autowired and we have all operation of Database here
+}
+
+
+@Component // acts as component the DAO
+@CacheConfig(cacheNames = "profiles") // caching of all DB operations  under particular name "profiles"
+public class ProductProfileDAO {
+
+	@Autowired //  sqlSession is used for mapper interface of Mybatis to perform the DB operations and the same is autowired and setting same in constructor.
+	private final SqlSession sqlSession;
+
+	private final Logger logger = LoggerFactory.getLogger(this.getClass());
+
+	String dataReturnedFromDB = null;
+
+	public ProductProfileDAO(SqlSession sqlSession) {
+		super();
+		this.sqlSession = sqlSession;
+	}
+	
+	/**
+	 * This method is used to update status as cancel in database
+	 * 
+	 * @param loanNumber
+	 * @return integer based on success or failure of cancel operation
+	 */
+	public int cancelProfile(String loanNumber) {
+
+		try {
+			Map<String, Object> params = new HashMap<String, Object>();
+			params.put("loanNumber", loanNumber);
+			sqlSession.selectOne("cancelLoan", params); // cancelLoan is the method name in the mapper interface and acts as ID in mapper XML to perform respective DB operations (see below for Mapper Interface and mapper XML)
+			return (int) params.get("count1"); // count1 is the out param returned from the DB procedure after successful execution of procedure, the OUT of procedure is inserted into the Map which we pass for the DB operation and can retreive the same using map.get(key) // key is the out param of procedure
+		} catch (Exception e) { 
+
+			throw e;
+
+		}
+	}
+}
+
+the below is the bean and its variables acts as the json values which we send from postman
+
+public class AgencyDetails {
+
+	@JsonProperty("loanNumberwithCountry")
+	private String loanNumberwithCountry;
+	@JsonProperty("specialFeatures")
+	private String specialFeatures;
+	@JsonProperty("borrowerCode")
+	private int borrowerCode;
+	@JsonProperty("executingAgencyCode")
+	private int executingAgencyCode;
+	@JsonProperty("representativeCode")
+	private int representativeCode;
+}
+	
+	@Mapper // mapper interface which acts as  the mybatis mapper and used for the database operations
+public interface ProductProfileMapper {
+
+	int cancelLoan(Integer loanNumber);
+}
+
+now the operation performed by above method is shown in the mapper xml file as below
+
+<mapper namespace="com.mds.mapper.productprofile.ProductProfileMapper"> //namespace is the location of mapper interface
+	<select id="cancelLoan" statementType="CALLABLE"> // id is same as the method name and same as sqlSession.selectOne("cancelLoan", params); in DAO
+		{
+		CALL CANCEL_LOAN( // call is used to call the stored proc in the DB with the in/out params
+		#{loanNumber,mode=IN,jdbcType=VARCHAR },
+		#{count1,mode=OUT,jdbcType=INTEGER }
+		)}
+	</select>
+
+	// the mapper used for the select all records 
+	
+	<select id="fetchCategoryDetails" parameterMap="category_map" // parameterMap is the type of result we receive from DB
+		statementType="CALLABLE">
+		{call VIEWCATEGORYDETAILS(?, ?)}
+	</select>
+
+	<parameterMap id="category_map" // used in above 5th line to map the result
+		type="com.mds.domain.productprofile.CategoryDetailsMap">
+		<parameter property="loanNumber" jdbcType="VARCHAR" mode="IN" />
+		<parameter property="categoryDetails" jdbcType="CURSOR"
+			mode="OUT" resultMap="resultCategory" /> // out is list of beans, used resultMap
+	</parameterMap>
+
+	<resultMap id="resultCategory" type="com.mds.domain.productprofile.CategoryDetails"> // this is the bean class, which internally maps the Output to the bean
+		<result property="refNumber" column="REF_NUMBER" /> // property is the bean's variable and column is the column in DB
+		<result property="name" column="NAME" />
+		<result property="bankFinancing" column="BANK_FINANCING" />
+		<result property="catAmount" column="CAT_AMOUNT" />
+		<result property="eaCode" column="EA_CODE" />
+		<result property="categoryCode" column="CATEGORY_CODE" />
+		<result property="abscei" column="ABSCEI" />
+		<result property="catInd" column="CAT_IND" />
+		<result property="withTax" column="WITH_TAX" />
+	</resultMap>
+	
+	//
+</mapper>
+
+Stored procedure;
+
+create or replace PROCEDURE "VIEWCATEGORYDETAILS" (
+    loanNumber IN VARCHAR2, // Acts as IN param for SP
+    CATEGORY_CUR OUT SYS_REFCURSOR // Out and we are using SYS_REFCURSOR as the result is list of all records in table
+    )
+is 
+     
+begin
+     dbms_output.put_line('before'); // just like syso
+     open CATEGORY_CUR for SELECT * from MDS_CATEGORY_DETAILS where LOAN_NUMBER=loanNumber; // opening curser and then the result of operation is pushing into the curser
+     dbms_output.put_line('after'); 
+end;

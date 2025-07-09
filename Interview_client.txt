@@ -1,0 +1,180 @@
+session vs session factory in hibernate:
+	SessionFactory objects are one per application and Session objects are one per client.
+	SessionFactory is to create and manage Sessions. Session is to provide a CRUD interface for mapped classes, and also access to the more versatile Criteria API.
+	SessionFactory is thread safe where as Session is not thread safe
+	SessionFactory is a factory class for Session objects. It is available for the whole application while a Session is only available for particular transaction.
+	Session is short-lived while SessionFactory objects are long-lived. SessionFactory provides a second level cache and Session provides a first level cache.
+	SessionFactory is an interface. SessionFactory can be created by providing Configuration object, which will contain all DB related property details pulled from either hibernate.cfg.xml file or hibernate.properties file. SessionFactory is a factory for Session objects.
+	We can create one SessionFactory implementation per database in any application. If your application is referring to multiple databases, then you need to create one SessionFactory per database.
+	The SessionFactory is a heavyweight object; it is usually created during application start up and kept for later use. The SessionFactory is a thread safe object and used by all the threads of an application.
+	A Session is used to get a physical connection with a database. The Session object is lightweight and designed to be instantiated each time an interaction is needed with the database. Persistent objects are saved and retrieved through a Session object.
+	The session objects should not be kept open for a long time because they are not usually thread safe and they should be created and destroyed them as needed. The main function of the Session is to offer, create, read, and delete operations for instances of mapped entity classes.
+	sessionfactory is an immutable object and it will be created as a singleton while the server initializes itself.
+	
+	Session:
+	It is one instance per client/thread/one transaction.
+	It is not thread-safe.
+	It is lightweight.
+	sessions will be opened using sessionfactory.openSession() and some database operations will be done finally session will be closed using session.close().
+	A session obtains a database connection lazily (i.e. only when required).
+	
+	// by hibernate.cfg.xml
+	public static Session getCurrentSessionFromConfig() {
+  // SessionFactory in Hibernate 5 example
+  Configuration config = new Configuration();
+  config.configure();
+  // local SessionFactory bean created
+  SessionFactory sessionFactory = config.buildSessionFactory();
+  Session session = sessionFactory.getCurrentSession();
+  return session;
+}
+
+// without xml file
+
+public static Session getCurrentSession() {
+  // Hibernate 5.4 SessionFactory example without XML
+  Map<String, String> settings = new HashMap<>();
+  settings.put("connection.driver_class", "com.mysql.jdbc.Driver");
+  settings.put("dialect", "org.hibernate.dialect.MySQL8Dialect");
+  settings.put("hibernate.connection.url", 
+    "jdbc:mysql://localhost/hibernate_examples");
+  settings.put("hibernate.connection.username", "root");
+  settings.put("hibernate.connection.password", "password");
+  settings.put("hibernate.current_session_context_class", "thread");
+  settings.put("hibernate.show_sql", "true");
+  settings.put("hibernate.format_sql", "true");
+
+  ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
+                                    .applySettings(settings).build();
+
+  MetadataSources metadataSources = new MetadataSources(serviceRegistry);
+  // metadataSources.addAnnotatedClass(Player.class);
+  Metadata metadata = metadataSources.buildMetadata();
+
+  // here we build the SessionFactory (Hibernate 5.4)
+  SessionFactory sessionFactory = metadata.getSessionFactoryBuilder().build();
+  Session session = sessionFactory.getCurrentSession();
+  return session;
+}
+
+//JPA entities
+public static SessionFactory getCurrentSessionFromJPA() {
+  // JPA and Hibernate SessionFactory example
+  EntityManagerFactory emf = 
+      Persistence.createEntityManagerFactory("jpa-tutorial");
+  EntityManager entityManager = emf.createEntityManager();
+  // Get the Hibernate Session from the EntityManager in JPA
+  Session session = entityManager.unwrap(org.hibernate.Session.class);
+  SessionFactory factory = session.getSessionFactory();
+  return factory;
+}
+
+hibernate.dialect: This property makes Hibernate generate the appropriate SQL for the chosen database.
+hibernate.connection.driver_class: The JDBC driver class.
+hibernate.connection.url: The JDBC URL to the database instance.
+hibernate.connection.username: The database username.
+hibernate.connection.password: The database password.
+hibernate.connection.pool_size: Limits the number of connections waiting in the Hibernate database connection pool.	
+hibernate.connection.autocommit: Allows autocommit mode to be used for the JDBC connection.
+
+
+<?xml version = "1.0" encoding = "utf-8"?>
+<!DOCTYPE hibernate-configuration SYSTEM 
+"http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+   <session-factory>
+   
+      <property name = "hibernate.dialect">
+         org.hibernate.dialect.MySQLDialect
+      </property>
+      
+      <property name = "hibernate.connection.driver_class">
+         com.mysql.jdbc.Driver
+      </property>
+      
+      <!-- Assume test is the database name -->
+      
+      <property name = "hibernate.connection.url">
+         jdbc:mysql://localhost/test
+      </property>
+      
+      <property name = "hibernate.connection.username">
+         root
+      </property>
+      
+      <property name = "hibernate.connection.password">
+         root123
+      </property>
+      
+      <!-- List of XML mapping files -->
+      <mapping resource = "Employee.hbm.xml"/>
+      
+   </session-factory>
+</hibernate-configuration
+
+
+A Session is used to get a physical connection with a database. The Session object is lightweight and designed to be instantiated each time an interaction is needed with the database. Persistent objects are saved and retrieved through a Session object.
+
+The session objects should not be kept open for a long time because they are not usually thread safe and they should be created and destroyed them as needed. The main function of the Session is to offer, create, read, and delete operations for instances of mapped entity classes.
+
+Instances may exist in one of the following three states at a given point in time −
+
+transient − A new instance of a persistent class, which is not associated with a Session and has no representation in the database and no identifier value is considered transient by Hibernate.
+
+persistent − You can make a transient instance persistent by associating it with a Session. A persistent instance has a representation in the database, an identifier value and is associated with a Session.
+
+detached − Once we close the Hibernate Session, the persistent instance will become a detached instance.
+
+Session session = factory.openSession();
+Transaction tx = null;
+
+try {
+   tx = session.beginTransaction();
+   // do some work
+   ...
+   tx.commit();
+}
+
+catch (Exception e) {
+   if (tx!=null) tx.rollback();
+   e.printStackTrace(); 
+} finally {
+   session.close();
+}
+
+
+
+
+	
+Eager vs Lazy loading
+
+
+1st level vs 2nd level cache in Hibernate
+
+
+
+save vs update vs merge
+
+load vs get
+
+Twelve-Factor Methodology
+
+	1. Codebase : an app should be tracked in a single code repository and must not share that repository with any other apps.
+	2. Dependencies: 
+	3. Configurations
+	4. Backing Services : Backing services are services that the application depends on for operation. For instance a database or a message broker. A twelve-factor app should treat all such backing services as attached resources
+	5. Build, Release and Run
+		Build Stage: This is where we take the codebase, perform static and dynamic checks, and then generate an executable bundle like a JAR. Using a tool like Maven, this is quite trivial:
+			mvn clean compile test package
+		Release Stage: This is the stage where we take the executable bundle and combine this with the right configurations. Here, we can use Packer with a provisioner like Ansible to create Docker images:
+			packer build application.json
+		Run Stage: Finally, this is the stage where we run the application in a target execution environment. If we use Docker as the container to release our application, running the application can be simple enough:
+				docker run --name <container_id> -it <image_id>
+		Finally, we don't necessarily have to perform these stages manually. This is where Jenkins comes in as pretty handy with their declarative pipeline.
+	6. Processes
+	7. Port Binding
+	8. Concurrency
+	9. Disposability: Application processes can be shut down on purpose or through an unexpected event. In either case, a twelve-factor app is supposed to handle it gracefully. In other words, an application process should be completely disposable without any unwanted side-effects. Moreover, processes should start quickly
+	10. Dev/Prod Parity
+	11. Logs
+	12. Admin Processes

@@ -1,0 +1,54 @@
+Forms in angular:
+
+
+2 types:
+
+Template driven-- small or medium forms, here all validations and data binding done in template itself
+Model driven or reactive:  used for large size forms, here validations and data binding done in scripts
+
+need to import "FormsModule" for Template forms and ReactiveFormsModule for Model forms
+and we need to add same in imports of app.module
+
+
+we can use build in validators in Reactivemodel
+we will be using formbuilders for reactive forms
+ whole from is called as fromgroup (need to import fromgroup) to group from elements (text fields etc...)
+import validator for inbuild validations
+form builder is used to build the form
+
+
+custom validators:
+
+
+
+
+to make from as a fromgroup, use [formGroup]="formname" in form tag
+
+the formname is the one used in the component
+
+formControlName directive is used to bind the form inputs with the component values
+
+registrationForm.controls.firstname.errors---> if any errors after validations
+
+
+formgroup has get method used to fetch the values: registerForm.get('firstName').value
+
+
+
+
+
+Creating services
+
+services are used to have some re-usable code for the whole application
+
+
+when we create the service we need to inject in the constructor of the component in order to use the service in particular component
+@Injectable() decorator makes the class as a service and can be used in other components
+
+
+services can also be injected by including the service name in providers[] of module
+
+or by injecting the service in the constructor of a component
+
+
+

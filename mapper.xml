@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="LoginData">
+	<!-- get Role using normal query -->
+
+	<select id="getRoleByLoginCredentials" resultType="String"
+		parameterType="java.util.HashMap"> SELECT
+		role FROM logincredentials WHERE
+		USERNAME='${username}' AND PASSWORD =
+		'${password}'
+	</select>
+
+
+
+	<!-- get role by Using procedure -->
+	<select id="getRoleByLoginCredentials1" resultType="String"
+		parameterType="java.util.HashMap" statementType="CALLABLE">
+		{call
+		LOGINCREDENTIALS_PROC1(
+		#{username,jdbcType=VARCHAR, mode=IN},
+		#{password, jdbcType=VARCHAR, mode=IN},
+		#{role,jdbcType=VARCHAR,
+		mode=OUT}
+		)}
+	</select>
+
+
+	<update id="updateCredentials">
+		update DBO.logincredentials set USERNAME=#{userName},
+		PASSWORD=#{password}
+		where LOGINID=#{loginId} ;
+	</update>
+	<insert id="insertIntoDisburdement" parameterType="com.demo.model.LoanDetails"
+		useGeneratedKeys="true" keyProperty="disbursementId">
+
+		INSERT INTO LoanDisbursement
+		(loanNumber,applicationNumber,clNumber,currAmtRequested,currAmtContract,applicationDate,dateApplRecdByADB,dateApprovedByRM,processorId,retroactiveFinancing,clientPortalNumber,typeOfDisbursement,advanceType,paymentCode,periodCovered,statusCode,remark,accessToken)
+		VALUES (#{loanNumber},
+		#{applicationNumber}, #{clNumber},
+		#{currAmtRequested},#{currAmtContract},
+		#{applicationDate},#{dateApplRecdByADB},#{dateApprovedByRM},#{processorId},
+		#{retroactiveFinancing}, #{clientPortalNumber},
+		#{typeOfDisbursement},#{advanceType}, #{paymentCode},
+		#{periodCovered},#{statusCode}, #{remark}, #{accessToken})
+		<selectKey keyProperty="disbursementId" resultType="java.lang.Integer"
+			order="AFTER">
+			select LOANDISBURSEMENT_SEQ2.CURRVAL as disbursementId from
+			dual
+		</selectKey>
+	</insert>
+	<select id="getAllLoanDetails" resultType="com.demo.model.LoanDetails">
+		SELECT * FROM
+		LoanDisbursement
+	</select>
+
+</mapper>

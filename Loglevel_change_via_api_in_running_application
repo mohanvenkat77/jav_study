@@ -1,0 +1,43 @@
+@GetMapping(value = "/getLoggers")
+  public String getLoggers() {
+
+    Logger logger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
+    //LoggerContext loggerContext = (LoggerContext) LoggerFactory.getILoggerFactory();
+    //loggerContext.getLogger("ROOT");
+    //log.info("Test {}", logger.getName());
+
+    log.info("Log configurations {} ", loggingSystem.getLoggerConfigurations().get(1).getName());
+    log.info("test {}", loggingSystem.getLoggerConfiguration("comm"));
+    loggingSystem.setLogLevel("com", LogLevel.ERROR);
+    log.info("test {}", loggingSystem.getLoggerConfiguration("com"));
+    //loggingSystem.setLogLevel();
+
+
+    //log.info("Loggers is {}", loggerContext.getLogger("oal.*"));
+
+    return "success";
+  }
+  
+  
+  
+1. by using *.actuator/loggers endpoint (get and post) working in DEV
+	get: https://gxpdt.oracle.com/oalapp/services/oalcn-flupldr/v1.0/actuator/loggers
+	post: https://gxpdt.oracle.com/oalapp/services/oalcn-flupldr/v1.0/actuator/loggers/{package-name}
+	body 
+	{
+	    "configuredLevel": "DEBUG"
+	}
+2. Expose new rest API to modify the log level and this api can be accessed by user with specific role.
+	Optional RequestParams (loggerName/packageName and logLevel) 
+3. Spring Admin UI
+	Requires spring server admin dependencies
+	 
+	 
+	 
+	 
+	 
+	 
+	 1. E2E code with timer metrics for BG
+	 2. Grafana code changes for BG job timer
+	 3. E2E test
+	 

@@ -1,0 +1,37 @@
+optional
+nullable
+callable
+functional 
+streams, parallel streams
+filters
+map, flatmap
+count, sum, sort etc operations in streams
+arrays
+array list
+linked list
+maps
+hashmap
+set
+hashset
+trees, graphs, stacks, queue
+comparator, comparable
+sort in collections vs sort in streams
+Multithreading
+strings
+exception handling
+OOPs concepts
+Spring boot vs spring
+annotations used
+@bean, enable auto configurations etc
+Rest web services 
+	Get, Post, Put, Patch, Delete
+	what is idempotenet
+	what is address (url)
+Kafka
+Microservices
+DB
+	Salary
+	Public vs Private functions in oracle
+	procedures vs functions
+	triggers, views, cursors
+	in build functions like min, max, substr, daysbetween etc

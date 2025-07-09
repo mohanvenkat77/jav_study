@@ -1,0 +1,210 @@
+1. How do you secure API's ?
+
+2. Sort Employee records by Salary. Find employee(s) whose name is Venkatesh
+	//Sort by Name
+          bookList.stream()
+          .sorted(
+               (book1, book2) -> book1.getName().compareToIgnoreCase(book2.getName()) 
+          )
+          .forEach(
+               book-> System.out.println(book)
+          );
+
+          // Create Comparators for Name, Author & Cost fields respectively
+          System.out.println("\nSort list of book objects by name then by author then by cost");
+          Comparator<Book> sortByName = (b1, b2) -> b1.getName().compareToIgnoreCase(b2.getName());
+          Comparator<Book> sortByAuthor = (b1, b2) -> b1.getAuthor().compareToIgnoreCase(b2.getAuthor());
+          Comparator<Book> sortByCost = (b1, b2) -> Double.compare(b1.getCost(), b2.getCost());
+
+          //Sort by Name then Sort by Author then sort by Cost
+          bookList.stream()
+          .sorted(
+               sortByName
+               .thenComparing(sortByAuthor)
+               .thenComparing(sortByCost)
+          )
+          .forEach(
+                book-> System.out.println(book)
+          );
+		  
+		  Comparator.reverseOrder() -- reverse order
+		  Comparator.naturalOrder() -- The naturalOrder() method of Comparator Interface in Java returns a comparator that use to compare Comparable objects in natural order. The returned comparator by this method is serializable and throws NullPointerException when comparing null.
+		  
+		  List<Employee> employeeList = repo.getAllEmployees();
+		  employeeList.stream().sorted((e1, e2) -> e1.getEmployeeName().compareTo(e2.getEmployeeName())).forEach(e -> Sout(e));
+		  empList.stream()
+		.sorted((em1, em2) -> em1.getEmployeeName().compareTo(em2.getEmployeeName()))
+		.filter(em3 -> em3.getEmployeeName().equalsIgnoreCase("Jyothi"))
+		.forEach(s -> System.out.println(s.toString()));
+
+3. Find duplicate in an array of numbers
+
+4. Merge 2 sorted arrays
+
+
+1. Remove duplicates from Sorted array and also unsorted array
+
+2. Convert number to String equivalent. Ex: 123 - One hundred and Twenty three
+
+3. Validate an IP Address -
+
+4. Syntax checker - Ex: {([])}
+
+
+What is java8 features
+
+What is default method
+
+What is functional interface
+
+What is streams and example program
+
+What is flat map
+
+Collection frames work
+
+Internal implimentation of map
+
+List
+
+Arraylist
+
+Memory model of java
+
+Transaction management, security, modules, jpa, Exception handling in spring boot, what is Microservice architecture, what is Rest and Soap, what are the annotations in spring boot, Jpa methods for custom query, core java sample program output
+
+ 
+
+Concurrencyhashmap putpose
+
+Functionalinterface importance
+
+Use of list.stream().collect(collectors.groupby(....)); various conditions used in groupby class
+
+Mircoservices which design pattern will be used
+
+How many types of functionalinterfaces
+
+What are the dependency projects u have used in springboot and explain
+
+How to add exception in springboot
+
+How to add jboss in springboot
+
+N+1 problem
+
+Spring security
+
+Java performance tunning
+
+What is stream concept and purpose of it
+
+1.     What is the purpose of collections
+
+2.     What is the purpose of streams api
+
+3.     What is the difference between Interface and abstract class and when you go for interface and when you go for abstract class
+
+4.     What is the difference between final and abstract
+
+5.     Can we create object for interface and abstract class
+
+6.     What is aggregation and what is composition
+
+7.     What is decorator design pattern and when you go for decorator pattern
+
+8.     What is singleton design pattern and what are the steps you follow for it
+
+9.     What is transient and when you use
+
+10.  How you will handle exception in spring boot and how you will handle exception in core java
+
+11.  I have array of ten integer elements, using streams api how you will multiply first five elements with 5.
+
+12.  I have a string ‘This is Naga’, if you use stream api on this string how many time steams go into this.
+
+13.  If I have 5 employee objects and I have overridden equals and hashcode methods and hascode method returns 1 always, what is the size of a map if I add all 5 objects into map.
+
+14.  Explain your current project
+
+2. List of collections used
+
+3. How exceptions are handled
+
+4. Throw and Throws
+
+5. Final, Finally, Finalize
+
+6. Spring IOC
+
+7. Spring boot advantages
+
+8. JPA repository
+
+9. First level second level cache  in hibernate
+
+10. Union vs Union all
+
+11. Spring security
+
+12. Spring transactions
+
+13. Custom directives
+
+14. Get and post in angular
+
+What is a stream in java 8?
+
+What is the functional interface? Where you used in the current project.
+
+Internal functionality of hash map?
+
+Difference between list and arraylist.
+
+What is a collection?
+
+What is the contract between hashcode method and equals method.
+
+What is the difference between checked and unchecked exceptions?
+
+What is a component?
+
+What is typescript?
+
+What is ECMA6 script?
+
+Why we used typescript instead of javascript?
+
+Explain aboout component communication?
+
+How to remove duplicate in array?
+
+Explain your ui dashboard in current project and what are the component used in it?
+
+What is route?
+
+1. how hash map is working internally
+
+2.Sql query to fetch only employee id, name ,department name from employee and department table.
+
+3.Many to many relationship in hibernate.
+
+4.Spring bean lifecycle.
+
+5. Why default method in the functional interface.
+
+6. how to configure DB in springboot.
+
+ Abstraction and Interface difference.
+
+1. Project Architecture, Stack used in the project
+
+2. Java 8 concepts
+
+3. Data Encapsulation Concepts in Core Java
+
+4. Static and Non Static concepts in core java
+
+5. Differences between Spring and Spring Boot
+
+6. Apache Kafka - Usecase in the project where and why it has been used ?

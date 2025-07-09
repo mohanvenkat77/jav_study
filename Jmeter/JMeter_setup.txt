@@ -1,0 +1,49 @@
+# Pre-requisites to run Load test for Metadata Service           
+ 
+### Referene page : [Steps to do Load testing with Jmeter](https://confluence.oraclecorp.com/confluence/display/OALMS/How+to+do+Load+testing+with+Jmeter)
+ 
+1. *This Load testing depends on **Mock service** for mocking dependent service (file uploader, scheduler,Epm-Drm and Essbase Marketplace), for that there need to make following changes in OalepmMetadataService properties file.*
+ 
+### Metadata Service Changes 
+ 
+- [Login to OalepmMetadataService ALM repository](https://alm.oraclecorp.com/oal/#projects/gxp/scm/OalepmMetadataService.git/commits/?revision=epm-build)
+- clone the current deployed epm-build and make following changes in "oalepm_mdt_properties.sql" properties file.
+File Path : /auto-sql-sqlplus/phase-10/OALEPM/oalepm_mdt_properties.sql
+ 
+Change following 3 properties :
+ 
+Before:
+```java
+oalcn.oalcn_config_setup.merge_config('oalepm-metadata-service','uat1','oalepm-metadata.metadata-service.oalepm-drm.baseurl','https://gxpdt.oracle.com/oalapp/services/oalcn-svc-gateway/api/epm-drm');
+ 
+oalcn.oalcn_config_setup.merge_config('oalepm-metadata-service','uat1','oalepm-metadata.essbase.hostUrl','epmat.oracle.com');
+ 
+oalcn.oalcn_config_setup.merge_config('oalepm-metadata-service',null,'file-upload-service.endpoint.filestores','oalapp/services/oalcn-svc-gateway/api/flupldr/filestores');
+```
+After:
+```java
+oalcn.oalcn_config_setup.merge_config('oalepm-metadata-service','uat1','oalepm-metadata.metadata-service.oalepm-drm.baseurl','https://gxpdt.oracle.com/oalapp/services/oalepm-mock');
+ 
+oalcn.oalcn_config_setup.merge_config('oalepm-metadata-service','uat1','oalepm-metadata.essbase.hostUrl','gxpdt.oracle.com/oalapp/services/oalepm-mock');
+ 
+oalcn.oalcn_config_setup.merge_config('oalepm-metadata-service',null,'file-upload-service.endpoint.filestores','oalapp/services/oalepm-mock/fileuploader/v1.0/filestores');
+```
+ 
+- Commit and Push the changes to epm-build and deploy the service in GXPDT dev env.
+ 
+---
+---
+ 
+##                   Follow the steps to run the Load Test Plan using JMeter                             
+ 
+ 
+1. Install the latest version of Apache JMeter in your system -> download the Binaries -> apache-jmeter-.zip file.(https://jmeter.apache.org/download_jmeter.cgi)
+Unzip the folder and open a terminal at bin folder.
+2. Now, in the terminal type the command ./jmeter
+3. This will start the JMeter in GUI mode.
+4. Open the jmx script downloaded from Repository in JMeter.
+    File Path : /Load Test/Load_testing_Script_for_MDT_Service.jmx
+5. Each Thread group has its description and load mentioned for which it is sending request.
+6. For Metadata Service Load Test, Enable Thread Group from 1 to 6 .
+7. You can now start the Load Test. To do so, you would first want to make sure each of the requests are individually running successfully as expected. To do that, go to the Thread group -> right click -> Add -> Listener -> View Result Tree. On a trial run with the GUI (click the green arrow button on the top toolbar) you should see at least one successful run for each request in the Listener Except for check request which loops in till previous request succeed.
+

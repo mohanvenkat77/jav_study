@@ -1,0 +1,141 @@
+anything datatype cases
+what value will it be acceoted when used in template string
+
+
+var a : anything;
+a="abc";
+a=123;
+a=true;
+b:string;
+b=`this is a templated string
+	$(a) now here what value is displayed`
+
+
+enum test
+
+enum months(jan,feb,mar,apr,may,jun);
+//by default the values are 0,1,2,..
+suppose if we change the value as
+(jan=15,feb,mar,apr,may,jun); now feb will be 16 and so on..
+qn: what happens if we use as below
+(jan,feb,mar=25,apr=15,may,jun);
+what if we provide the values as strings instead of numeric
+
+tuple. array with diff data types
+test cases 
+
+var x:[string, number]=["hi",123]// correct
+			=[123,""]// incorrect
+			=["hi",123,12,"hello"....]// correct, checks for only 1st 2 things
+
+perform randoom tests on same
+
+
+
+arrow functions
+optional and default parameters tests,
+
+default
+function name(fn:string, age:numer=55):string{
+
+return fn+age;
+}
+
+name("abc")//test
+name("abc",88)//test
+name("abc", undefined)
+if the default is at 1st parameter, then in calling method the 1st should be undefined
+
+function name(age:numer=55, fn:string):string{}
+
+name(undefined,"");//correct
+
+
+
+optional
+
+name(fn:string,ln?:string)-- optinal and optional can only be at last parameter.
+all parameters can be optional--test
+
+
+rest parameter (...)
+
+rest cannot be used with optional parameter
+name(fn:string,ln:string, ...score:string[]):string{}
+
+name("cc","vv","","","","");
+
+
+
+
+
+
+
+
+
+
+day-2:
+=====================================
+
+interface profile{
+
+name:string;
+id:number
+}
+
+properties cannot be initialized in interface
+
+var x:profile={name:"nani",id:123};//valid
+var x:profile={name:"nani",emailid:"nani@in.com"};//invalid
+var x:profile={name:"nani"};//invalid
+
+var x:profile={name:"nani",emailid:"nani@in.com",id:123};//valid
+
+
+
+
+duck-typing:
+test for accessing the extra parameter.
+
+optional parameter in interface, test
+if we are passing the optional value also in calling function, then the type check will be done, if diff type is passed then error is thrown.test cases
+
+
+as we cannot initialize the propewrties in interface, so there is no concept of default values in interface
+
+
+extending interfaec testes, can have same properties in both interface and extend, can we have optional ...
+
+
+
+
+interface product{
+productId:number;
+}
+
+class display{
+productname:string="test";
+productid:number=1234;
+}
+var x:product=new display();
+
+x.number// displays number
+n.productname// throws error.
+
+check this (hope concept is same as runtime poly)
+
+
+class and constructor concepts and test on same.
+
+static examples (check with java type of test in javatpoint counter logics)
+
+static variables can be accessed in static and non-static methods
+static methods can access only static variables and also static methods
+
+check whether static block is there or not in ts.
+
+
+namespace theory 
+module theory
+
+and also testes on both

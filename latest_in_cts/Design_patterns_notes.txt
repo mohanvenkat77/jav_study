@@ -1,0 +1,76 @@
+Design patterns
+Design patterns is a commmon re-usable solution for a common problem.
+These helps us in creating more maintainable, re-usable, flexible & scalable code
+Types:
+1. Creational patterns: this pattern talks about creatioin of objets
+	a. SingleTon
+		It ensures that only single instance is available throughout the application providing global access to this object
+		Creation:
+			1. Private constructor: So object cannot be created for this
+			2. Static method which return the instance of the class
+			Example: LogManager class
+				class example {
+				private static Example example; // static variable to hold the object
+				private Example(); // priate constructor
+				public static Example getInstance() { // static method
+					if(example == null) // if null, then create
+						example = new Example()
+					return example;
+				}
+				
+	b. Factory pattern
+		This pattern is typically helpful when it's necessary to separate the construction of an object from its implementation.
+		With the use of this design pattern, objects can be produced without having to define the exact class of object to be created
+		Here an interface is used to create an object, and the subclasses decide which class to instantiate.
+		Example: Interface, its implementation
+			Interface A {
+			void display
+			}
+			class B implements A
+			class C implements A
+			
+			
+			now A a = new B() // Factory pattern to create an object
+			
+	c. Builder Pattern
+		to construct a complex object step by step.
+		Method Chaining: In java, Method Chaining is used to invoke multiple methods on the same object which occurs as a single statement
+		we can use @Builder or getters/setters on objects
+		Employee.builder().build();
+		or
+		new Employee().setName().setAge().setEmail();
+	d. Abstract Factory:
+		The Abstract Factory Pattern is a way of organizing how you create groups of things that are related to each other.
+	e. Proto type
+		this pattern enables the creation of new objects by copying an existing object. Prototype allows us to hide the complexity of making new instances from the client. The existing object acts as a prototype and contains the state of the object.
+		
+		
+2. Structural patterns: Structural design patterns are concerned with how classes and objects can be composed, to form larger structures. The structural design patterns simplifies the structure by identifying the relationships.
+	a. Adpater pattern/ Wrapper:
+	Adapter is a structural design pattern that allows objects with incompatible interfaces to collaborate.
+	You can create an adapter. This is a special object that converts the interface of one object so that another object can understand it. Because of incompatible interfaces, it serves as a bridge between two classes that would not otherwise be able to communicate. The adapter approach is very helpful when attempting to incorporate third-party libraries or legacy code into a new system
+	
+	b. Bridge pattern
+		A bridge pattern allows separation between abstractions and implementations so that they can be developed independently from each other but still have a way, or bridge, to coexist and interact 
+		There are 2 parts in Bridge design pattern : 
+			Abstraction
+			Implementation
+		An example of this in Java would be the JDBC API. It acts as a link between the database such as Oracle, MySQL, and PostgreSQL, and their particular implementations.
+
+		The JDBC API is a set of standard interfaces such as Driver, Connection, and ResultSet, to name a few. This enables different database vendors to have their separate implementations.
+		
+	c. Composit
+	d. Decorator
+	
+3. Behavioural patterns: Behavioral design patterns are concerned with the interaction and responsibility of objects.
+In these design patterns, the interaction between the objects should be in such a way that they can easily talk to each other and still should be loosely coupled.
+	
+	a. Chain of responsibility: Chain of responsibility pattern is used to achieve loose coupling in software design where a request from the client is passed to a chain of objects to process them. 
+	Later, the object in the chain will decide themselves who will be processing the request and whether the request is required to be sent to the next object in the chain or not.
+	
+	b. Command method
+	
+	c. Interpreter method
+	
+	d. Observer method: that defines a one-to-many dependency between objects. When one object (the subject) changes state, all its dependents (observers) are notified and updated automatically. It primarily deals with the interaction and communication between objects, specifically focusing on how objects behave in response to changes in the state of other objects.The observer pattern is also known as Dependents or Publish-Subscribe
+	Subjects are the objects that maintain and notify observers about changes in their state, while Observers are the entities that react to those changes.

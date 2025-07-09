@@ -1,0 +1,149 @@
+Oracle
+
+Database a storage where data of application is stored.
+Oracle is a database management system which is used for operations on data of database.
+
+	Tablespace: logical storage unit in DB. Default tablespaces are SYSTEM, USER, TEMP.
+	SYSTEM table, Created when the database is created
+	NAMESPACE:A namespace in a database is a logical grouping of resources or tables that helps organize and manage objects
+	SCHEMA: A schema name is a name that represents a collection of database objects, or schema, within a database
+	DML: DATA MANIPULATION (INSERT, DELETE, UPDATE, SELECT)
+	DDL: DATA DEFINATION (CREATE, ALTER, DROP, TRUNCATE, RENAME)
+	DCL: DATA CONTROL (grant, revoke)
+	Transaction control statements: COMMIT, ROLLBACK
+	
+	
+	Create:
+		Create table table_name (col_1 dataType (null/not null).... constraint anyname primary_key(col))
+	Primary key: It is a single column or combination of colus to form unique key in a table and it cannot be null. Table can have only one PK and by default index is crrated on PK
+	
+	Create table table_name as(select * from other table)
+	VARCHAR: Datatype of teh column, by default 2000 bytes
+	varchar2: same as varchar but size is 4000 and releases extra space which is not occupied
+	NVL: when the 1st param is null, then returns next. nvl(a,b);
+			If both the inputs are NULL, then there is no output for this function.
+			
+	NVL2: NVL2(expr1, expr2, expr3)
+		Evaluates expr1, if not null then returns 2 else 3
+	DECODE: it is like the if-else-if
+		decode(a, b, c,d,f,g,h) -- if a equals to b, then retruns c, if a equals to d then returns f ...
+	COALESCE: takes multiple expressions, eveluates 1st expression, if not null then returns the 1st, else collease on the next exprs
+		n simple words COALESCE() function returns the first non-null expression in the list, if all are null, then retruns null.
+	LNNVL:
+		This is one of the function of SQL which is used in SQL. This is used to convert True to False and False to True
+		LNNVL (Condition) // if condition is TRUE, it will return False and vice-verca
+	
+	Oracle
+		CLAUSES:
+			FROM, GROUPBY, HAVING, ORDERBY, DISTINCT
+		OPERATOR
+			UNION, UNIONALL, INTERSECT, MINUS
+		
+	ALTER:
+		Used to alter the table structure
+		like adding/dropping/modifying/renaming columns of table
+	DROP:
+		Drop is used to drop the table completely including its structure and cnnot be rolled back. it is DDL, Structure is removed. Cannot be rollbacked
+		DROP [schema_name].TABLE table_name  
+			[ CASCADE CONSTRAINTS ] It is optional. If specified, it will drop all referential integrity constraints as well. 
+			[ PURGE ]; // When used purge, space is release
+	DELETE:
+		DELETE statement is used to remove or delete a single record or multiple records or all records from a table. Removes specific rows from a table while keeping the table structure intact. Can be rolledback (DML)
+		
+	TRUNCATE:
+		remove all records from a table. It works same as DELETE statement but without specifying a WHERE clause. It is generally used when you don't have to worry about rolling back. Structure remains 
+		Faster
+		
+		
+	Constraints:constraints are used to maintain the integrity of a database by ensuring that data is stored correctly.
+		Primary Key: combination of Unique+not null.
+		Foreign key: Primary key of table1 acts as foreign key for table2 where there is a link b/w 2 tables
+		Unique key: Ensures that all values in a column are different
+		not null: ensures that columns cannot have non null values
+		CHECK: used to check the limt say table has age and we can have CHECK(age>=18)
+		DEFAULT: when the value of col is null, then this default is assigned, City varchar(255) DEFAULT 'Sandnes'
+		
+	INDEX: Indexes are used to retrieve data from the database more quickly than otherwise. The users cannot see the indexes, they are just used to speed up searches/queries
+	
+		
+	
+	JOINS:
+		INNER: table1 inner join table1 on (condition). returns common b/w both
+		OUTER
+			LEFT: table1 Left table2 on (). retruns all data from table1 and common from table2 with matched condition
+			RIGHT: vice-verca of LEFT
+			FULL: both tables data, places NULL where condition is not met
+		EQUI: table1, table2 where condition instead if on and
+		SELF: same table1,table1
+		CROSS: Cartician product of tables
+		ANTI: Anti-join between two tables returns rows from the first table where no matches are found in the second table. It is opposite of a semi-join. An anti-join returns one copy of each row in the first table for which no match is found.
+		SEMI: A semi-join returns one copy of each row in first table for which at least one match is found.
+		Semi-joins are written using the EXISTS construct.
+		
+		
+	Procedure:
+		It is a sequence of pl/sql statements or block of code.
+		create or replace procedure name(col in, col1 IN, col out, col inOut) 
+			IN: It is a default parameter. It passes the value to the subprogram.
+			OUT: It must be specified. It returns a value to the caller.
+			IN OUT: It must be specified. It passes an initial value to the subprogram and returns an updated value to the caller.
+			The procedure can return a value using “IN OUT” and “OUT” arguments.
+			While procedures cannot be called from function.
+			A procedure can be used to read and modify data. 
+			While it can’t be operated in the SELECT statement.
+
+
+	FUNCTION: 
+		A function is a subprogram that is used to return a single value. You must declare and define a function before invoking it. It can be declared and defined at a same time or can be declared first and defined later in the same block.
+		fUNCTION HAS RETURN STATEMENT
+		The function can be called using Stored Procedure.
+		A function used only to read data.	
+		A function can be operated in the SELECT statement.	
+		
+	CURSOR:
+		A cursor is a pointer to a private SQL area that stores information about the processing of a SELECT or DML statements like INSERT, UPDATE, DELETE or MERGE.
+		Cursor is a mechanism which facilitates you to assign a name to a SELECT statement and manipulate the information within that SQL statement. 
+		
+		Cursor c as select * from table
+		open c
+		fecth c into object
+		perform operations
+		clode c
+		
+	TRIGGER:
+		Triggers is a event based operation on oracle. Like when some operation happen then if we want to perform other action, then we use triggers
+		Like when deleted a row from table, then inform team
+			Action: deleting row
+			trigger: informing team
+		BEFORE and AFTER event triggers
+			create or replace trigger name before\after insert/delete/update on table for each row
+			declare
+			begin
+			
+			exception
+			when exception
+			end
+			
+		drop trigger trigger_name
+		Alter trigger trigger_name disbale/enable
+		
+		
+	RANK
+		rank is used to assign a rank for all records based on the condition
+		RANK() OVER ([ query_partition_clause ] order_by_clause)
+		select *, rank() over(if any partition order by col) rn form table;
+		
+		SELECT col, RANK() OVER (ORDER BY col) my_rank
+		SELECT product_name, 
+		list_price, category_id, RANK() OVER(
+			PARTITION BY department
+			ORDER BY list_price DESC) 
+			price_rank
+	FROM 
+		products
+FROM 
+	rank_demo;
+	PARTITION:
+		When table is created we can create a partition based on the column. so that data belongs to that colum goes to one partition
+		Say partition on time colume with month
+		so each month data goes to different partitions on 

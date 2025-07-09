@@ -1,0 +1,62 @@
+kafka important
+	------------------------------	------------------------------	------------------------------	------------------------------	------------------------------	------------------------------	------------------------------	------------------------------	------------------------------	------------------------------	------------------------------	------------------------------	------------------------------	------------------------------	------------------------------	------------------------------	------------------------------	------------------------------	------------------------------	------------------------------
+1. @Component
+@ConfigurationProperties("test.topic")
+@Getter
+public class TopicNames {
+    private java.util.Map<String, String> name = new HashMap<>();
+}
+
+
+
+get all topics with key value pair to map which follows the pattern test.topic.name.*=topic-name
+
+
+	------------------------------	------------------------------	------------------------------	------------------------------	------------------------------	------------------------------	------------------------------	------------------------------	------------------------------	------------------------------	------------------------------	------------------------------	------------------------------	------------------------------	------------------------------	------------------------------	------------------------------
+
+2. kafka listener to listen to all topics
+
+@KafkaListener(id = "id", topics = "#{topicNames.getName().values()}",
+
+            containerFactory = "factory"
+    )
+	
+	
+	instead of specifying all topics individually, we can make  use of  already existing configurationproperty get value from map which is the topics
+	
+	
+		------------------------------	------------------------------	------------------------------	------------------------------	------------------------------	------------------------------	------------------------------	------------------------------	------------------------------	------------------------------	------------------------------	------------------------------	------------------------------	------------------------------	------------------------------	------------------------------
+	
+	kafka custom config
+	
+	
+	
+	bin/kafka-console-producer.sh --topic <topic-name> --bootstrap-server localhost:9092
+
+	bin/kafka-console-consumer.sh --topic <topic-name>  --from-beginning --bootstrap-server localhost:9092
+
+
+
+	bin/kafka-console-producer.sh --bootstrap-server streaming.us-ashburn-1.oci.oraclecloud.com:9092 --topic <topic-name>  --producer.config bin/oss-client-ssl.properties
+
+	bin/kafka-console-consumer.sh --bootstrap-server streaming.us-ashburn-1.oci.oraclecloud.com:9092 --topic <topic-name>  --consumer.config bin/oss-client-ssl.properties
+
+
+
+	bin/kafka-console-consumer.sh --bootstrap-server streaming.us-ashburn-1.oci.oraclecloud.com:9092 --topic <topic-name> --consumer.config bin/oss-client-ssl.properties
+
+
+	bin/kafka-console-consumer.sh --topic <topic-name>  --from-beginning --bootstrap-server streaming.us-ashburn-1.oci.oraclecloud.com:9092
+
+
+
+
+	bin/kafka-topics.sh --bootstrap-server streaming.us-ashburn-1.oci.oraclecloud.com:9092 --create --topic <topic-name>  bin/oss-client-ssl.properties
+
+
+	
+	
+	
+	
+	
+	------------------------------	------------------------------	------------------------------	------------------------------	------------------------------	------------------------------	------------------------------	------------------------------	------------------------------	------------------------------	------------------------------	------------------------------	------------------------------	------------------------------

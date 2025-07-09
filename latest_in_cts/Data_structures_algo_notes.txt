@@ -1,0 +1,127 @@
+Data structures:
+	A data structure is a storage that is used to store the data and perform oprtaions on data. Like processing, Manipulating, organising etc.
+	Data structures are important as we can organize, process, manipulate date as per the need. Like Instering, removing, sorting, searching etc.
+	Types: 
+		Linear: in this the data is arranges sequentially or linearly.
+			a. Static data Structure: Static data structure has a fixed memory size. It is easier to access the elements in a static data structure
+				Arrays
+			b. Dynamic: In dynamic data structure, the size is not fixed
+				Stack
+				queue
+				LinkedList
+				
+		Non-Linear: data is not stored in sequential manner,  In a non-linear data structure, we can’t traverse all the elements in a single run only
+			Trees
+			Graphs
+			Heap
+			Hash
+	Advantages:
+		Better performance of application with DS
+		Effecient data organisation
+		code reusability
+		code simplicity
+		Flexible & Scalable
+		
+		
+	Types:
+		Array: 
+			Array is a linear DS where the data is organised in sequential way.
+			It is a fixed size ds to store/organize the similar data in it. when we create an Array we need to specify the size
+			int[] a  = new int[10];
+			
+			Waste of memory when the total size is not filled
+			Quick access of data at any index usinf .atIndex option
+			Homogeneous elements are stored (sama data type data is stored)
+		
+		ArrayList:
+			Dynamic data structure, without any size and it is part of Java collection framework
+			Dynamic size
+			low performance in inserting & deletion
+			manipulation is Slow
+			Fast in searching, sorting
+			Internally used Dynamic Array
+			better for sorting
+			default capacity of 10 is assigned when initiaized
+			non synchronozed
+		Vector:
+			Same as Array list but it is synchronozed
+		LinkedList:
+			A linked list is a linear data structure in which elements are stored in separate objects called nodes. A reference link to the following node in the sequence is included in each node's data element. The list's final node links to null, indicating that the list has ended
+			Fast in insertion & deletion
+			Fast in manipulation
+			Better for inserting, deleting
+			Slow insearching
+			Internally used Doubly linked list
+			no default size
+			non synchronozed
+		Doubly Linked list:
+			Complex type of linked list in which node contains pointer to previous & next node. This as 2 parts NODE-DATA-NODE
+		
+		Note: when read operations are more, go for ArrayList, when write operations are more go for LinkedList
+			
+		STACK: LIFO (Last In First Out)
+			push/pop used to insert/delete 
+			peek(to get top element)
+			limited access
+			can access only top element
+			
+		Queue: FIFO(First In First Out)
+			enquq(.offer)/deque(.poll)
+			peek
+			size
+			empty check 
+		PriorityQueue<String> queue=new PriorityQueue<String>();  It holds the elements or objects which are to be processed by their priorities. PriorityQueue doesn't allow null values to be stored in the queue
+		
+		Deque d = new ArrayDeque();  n Deque, we can remove and add the elements from both the side. Deque stands for a double-ended queue which enables us to perform the operations at both the ends
+		
+		
+		SET interface:
+			Set is used to store unordered unique data 
+			at max one null value
+			
+			a. HashSet: HashSet class implements Set Interface. It represents the collection that uses a hash table for storage. Hashing is used to store the elements in the HashSet. It contains unique items.
+			HashSet stores the elements by using a mechanism called hashing.
+			Allows null value
+			HashSet class is non synchronized.
+			best for searching
+			One drawback is that HashSet does not guarantee the order of its elements
+			
+			b. LinkedHashSet: Like HashSet, It also contains unique elements. It maintains the insertion order and permits null elements.
+			java LinkedHashSet class is non-synchronized.
+			
+			c. TreeSet: Like HashSet, TreeSet also contains unique elements. However, the access and retrieval time of TreeSet is quite fast. The elements in TreeSet stored in ascending order.
+			Java TreeSet class doesn't allow null element
+			Java TreeSet class is non synchronized.
+			TreeSet is being implemented using a binary search tree, which is self-balancing just like a Red-Black Tree. Therefore, operations such as a search, remove, and add consume O(log(N)) time. The reason behind this is there in the self-balancing tree. It is there to ensure that the tree height never exceeds O(log(N)) for all of the mentioned operations. Therefore, it is one of the efficient data structures in order to keep the large data that is sorted and also to do operations on it.
+			
+			To make it as Synchronozed, the set must be wrapped with the help of the Collections.synchronizedSet() method. It is advised to use the method during creation time in order to avoid the unsynchronized access of the set. 
+			TreeSet treeSet = new TreeSet();   
+			Set syncrSet = Collections.synchronziedSet(treeSet);  
+			
+		MAP:
+			Map is a ds in which the data is stored as key,value pairs. It is part of Java collection framework and it is implemented based in Hashing technique
+			.put/.get/.containsKey/.containsValue/.size/.empty/.keySet
+			A Map doesn't allow duplicate keys, but you can have duplicate values. HashMap and LinkedHashMap allow null keys and values, but TreeMap doesn't allow any null key or value.
+			
+			
+			map.entrySet()  
+      //Returns a sequential Stream with this collection as its source  
+      .stream()  
+      //Sorted according to the provided Comparator  
+      .sorted(Map.Entry.comparingByKey(Comparator.reverseOrder()))  
+      //Performs an action for each element of this stream  
+      .forEach(System.out::println);  
+	  
+	  
+	  map.entrySet()  
+      //Returns a sequential Stream with this collection as its source  
+      .stream()  
+      //Sorted according to the provided Comparator  
+      .sorted(Map.Entry.comparingByKey())  
+      //Performs an action for each element of this stream  
+      .forEach(System.out::println); 
+	  
+	  similar for compareByValue
+	  
+	  
+	  
