@@ -25,7 +25,7 @@
     * use of lamda expressions,streams,Functional interface,Method refernces,Optional classes,ForEach loop in iterable,Base64 encoding and decoding,parallel Streams, File handling and Datetime claasses
 6. what are difference between primitive dtypes and objects
     * primitive dtypes stores actual value where objects stores the reverence
-    * pdtypes consumes less memory and objects consumes less memory.
+    * pdtypes consumes less memory and objects consumes more memory.
     * we have limited pdtypes (int,chars,float,double,long,byte,short,boolean) and we can create unlimited objects.
     * pdtypes are easy and fast to access then the objects.
 7. what is opps?
@@ -47,7 +47,7 @@
 
 10. what are the limitations of opps?
     * it is not suitable for small problems
-    * the program should think of solving problems in terms of objects
+    * the programer should think of solving problems in terms of objects
     * requires intensive testing.
 11. what are difference between opps and structural programing
     * opps are based on objects and classses rather then functions and stored procedures whereas structural programing is divided into functions and logical structure to a  program
@@ -142,8 +142,8 @@ class Bike implements Vehicle {
 }
 ```
 16. what is abstract method 
-    * a method declared within the abstact class is a abstact method.
-    * if a class is using abstarct method the class must be declared as true
+    * a method which is defined but not implemented within the abstact class is called abstact method
+    * if a class is using abstarct method the class must be declared as abstarct class
 ```
 abstract class Shape {
     abstract void draw(); // abstract method
@@ -202,7 +202,7 @@ public class Main {
 }
 ```
 18. what is difference between abstarction and encapsulation
-* Abstraction is used to hide the unnecessary information from the user whereas encapsulation is used to hide the data and functionality from the outsider
+* Abstraction is used to hide the unnecessary information to the user whereas encapsulation is used to hide the data and functionality from the outsider
 * we achive abstarction by the abstact class or interface class . we achive encapsulation by making the data as private and providing getters and setters for them.
 
 19. what is inheritence in java
@@ -358,7 +358,7 @@ public class Main {
         1. when a derived class has the same function as the child class, then the child class method is oveeriden.
 21. what is Method overloading
     * Method overloading is a concept where two or more methods can have the same name but differ in parameters. this is called copile time polymorphism, it is achived in three ways
-        1. hangeing in number of parameters
+        1. change in number of parameters
         2. change in data types of parameters
         3. changeing the sequence of data types in parameters
 ```
@@ -397,7 +397,7 @@ public class Calculator {
 }
 ```
 22. what is method overriding
-    * Method Overriding is a concept of OOPs. It means if a subclass and superclass have the same arguments, then the argument of the subclass overrides the argument/method of the superclass. Method Overriding is related to Run-Time Polymorphism. The method overriding can be done when
+    * Method Overriding is a concept of OOPs. It means if a subclass and superclass have the same method with parameters, then the method of the subclass overrides the method of the superclass. Method Overriding is related to Run-Time Polymorphism. The method overriding can be done when
 
     1. The arguments of both parent and child are the same.
     2. private, static, and final methods cant be overridden.
@@ -515,15 +515,18 @@ public class Example {
 }
 ```
 27. what is stack and heap memory?
-    * stack and heap are the memories allocated by the JVM. stack is aplace where varibles and object references are stored. and Heap is a palce where objects,methods and its instance varibles are stored.
-    * local varibles doest have default valeus when undefined and class varibles have default values when undefined.
+    * stack and heap are the memories allocated by the JVM. stack is aplace where local varibles and object references are stored. and Heap is a palce where objects,methods and its instance varibles and static fields are stored.
+    * local varibles does nott have default valeus when undefined and class varibles have default values when undefined.
     * static fields are stored in heap and local varibles are stored in stack
     * only method invocation and its partial results are stored in stack but method stored in heap.
+    * Memory is allocated for stack in last in first out manner
+    * Memory is managed by garbage collector in Heap
+
 
 28. what is virtual method?
     * a virtual method is defined in a base class can be overideen in child class
     * it supports runtime polymorphism
-    * in java alll non static methods are virtual by default.
+    * in java all non static methods are virtual by default.
 ```
 class Animal {
     void speak() {
@@ -550,7 +553,17 @@ public class Main {
     * a constructor is a special method in java which has the same name as the class and no return type and used to initialize the object.
     * constructor is invoked at the time of object creation.
     * default constructor set the deault values to the object.
-    * constructor will return the current class instance
+    * constructor will return the current class instance = The new keyword returns the object reference
+    So when you do:
+Car c=newCar()
+The new Car() expression:
+Allocates memory in the heap
+Calls the constructor
+Returns a reference to the new object
+That reference is stored in variable c
+So the constructor does not return the object in the code, but the object creation process does.
+
+
 ```
 // A simple class demonstrating the concept of constructors
 public class Student {
@@ -673,7 +686,7 @@ class Dog extends Animal {
 }
 ```
 
-32.  what is affregationn?
+32.  what is aggregation?
     * Aggregation is a type of association that represents a HAS- A relationship between two classes.
     * - It’s a one-way relationship: One class has another class.
 ```
@@ -932,7 +945,7 @@ int j=a;//unboxing, now compiler will write a.intValue() internally
 ```
 
 37. what is Strictfp?
-    * Java strictfp keyword ensures that you will get the same result on every platform if you perform operations in the floating-point variable. The precision may differ from platform to platform that is why java programming language have provided the strictfp keyword, so that you get same result on every platform. So, now you have better control over the floating-point arithmetic.
+    * Java strictfp keyword ensures that you will get the same result on every platform if you perform operations in the floating-point variable. The precision may differ from platform to platform that is why java programming language have provided the strictfp keyword, so that you get same result on evey platform. So, now you have better control over the floating-point arithmetic.
     * The strictfp keyword can be applied on methods, classes and interfaces.
     * The strictfp keyword cannot be applied on abstract methods, variables or constructors.
 
