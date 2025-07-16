@@ -1,0 +1,4 @@
+in lamda expressions the varible once defined it is final.
+
+in Functional interface you will call the static method with the interface name only in child class
+
