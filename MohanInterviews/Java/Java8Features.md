@@ -237,7 +237,7 @@ Absolutely, Mohan! Here's a comprehensive `.md` file that dives deep into **Java
 
 ## 📌 What Are Lambda Expressions?
 
-Lambda expressions are **anonymous functions** introduced in **Java 8**. They allow you to treat functionality as a method argument or pass behavior as data — enabling **functional programming** in Java.
+Lambda expressions are **anonymous functions** introduced in **Java 8**. They allow you to treat functionality as a method argument enabling **functional programming** in Java.
 
 ### ✅ Syntax
 ```java

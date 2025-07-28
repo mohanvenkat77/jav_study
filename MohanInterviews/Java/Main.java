@@ -1,3 +1,5 @@
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 class Parent {
@@ -6,7 +8,14 @@ class Parent {
 
         List<Integer> nums = List.of(1, 2, 3, 4);
 int sum = nums.stream().reduce(0, Integer::sum); // BinaryOperator
-System.out.println(sum);
+// System.out.println(sum);
+List<Integer> ls=Arrays.asList(1,3,4);
+ls.set(2,5);
+System.out.println(ls.get(2));
+int[] arr=ls.stream().mapToInt(Integer::intValue).toArray();
+System.out.println(arr[0]);
+Collections.reverse(ls);
+System.out.println(ls.get(0));
 // class Customer {
 //     public Customer(String string, List<String> of) {
 //         this.name=string;

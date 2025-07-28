@@ -616,7 +616,7 @@ public class Student {
     * it - Resolves ambiguity between instance variables and method parameters.
 
     * This.varible for varible, this.method() for method, this for constructor
-    * Call to this() must be the first statement in constructor. And this used to return current class instance
+    * Call to this() must be the first statement in constructor bcoz if this and super are  called after the any statement that menas we have used the object before it is fully initialized.(this & super mainly used to call the consturctor as constructor is used to initilize the object). And this used to return current class instance
 ```
 class Student {
     String name;
@@ -827,7 +827,8 @@ Student Name: Mohan, Age: 25
     * Final class : FInal class cannot be extended
     * Constructors are never inherited, so there's nothing to override.
 ```
-singleton example
+singleton example : It's a design pattern that ensures only a single instance of a class exists in the entire application. It's widely used in logging,manageing & db connections. etc.,
+
 public class MySingleton {
 
     // Step 1: Create a private static object of the class

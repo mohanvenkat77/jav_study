@@ -130,13 +130,6 @@ debug.stream()
 Java Streams empower you to write **clean**, **concise**, and **functional-style** code. Mastering them will elevate your programming fluency and help you build scalable, readable applications.
 
 
-Thanks, Mohan! Based on the latest insights, here's a **complete Markdown guide** covering:
-
-- 🧠 Java Collectors
-- ⚡ Parallel Streams
-- 🚀 Stream Performance Tips
-
----
 
 ## 📦 1. Java Collectors – Finalizing Stream Results
 
